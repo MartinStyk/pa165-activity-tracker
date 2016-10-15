@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -44,10 +45,10 @@ public class User {
     @NotNull
     private Sex sex;
 
-    @NotNull
+    @Min(1)
     private int height;
 
-    @NotNull
+    @Min(1)
     private int weight;
 
     public User() {
@@ -57,7 +58,7 @@ public class User {
         this.id = id;
     }
 
-    private User(UserBuilder userBuilder) {
+    private User(Builder userBuilder) {
         this.email = userBuilder.email;
         this.firstName = userBuilder.firstName;
         this.lastName = userBuilder.lastName;
@@ -149,7 +150,7 @@ public class User {
     /**
      * Inner builder class to make initializing entity more enjoyable
      */
-    public static class UserBuilder {
+    public static class Builder {
         private final String email;
         private String passwordHash;
         private String firstName;
@@ -159,41 +160,41 @@ public class User {
         private int height;
         private int weight;
 
-        public UserBuilder(String email) {
+        public Builder(String email) {
             this.email = email;
         }
 
-        public UserBuilder setPasswordHash(String passwordHash) {
+        public Builder setPasswordHash(String passwordHash) {
             this.passwordHash = passwordHash;
             return this;
         }
 
-        public UserBuilder setFirstName(String firstName) {
+        public Builder setFirstName(String firstName) {
             this.firstName = firstName;
             return this;
         }
 
-        public UserBuilder setLastName(String lastName) {
+        public Builder setLastName(String lastName) {
             this.lastName = lastName;
             return this;
         }
 
-        public UserBuilder setRole(UserRole role) {
+        public Builder setRole(UserRole role) {
             this.role = role;
             return this;
         }
 
-        public UserBuilder setSex(Sex sex) {
+        public Builder setSex(Sex sex) {
             this.sex = sex;
             return this;
         }
 
-        public UserBuilder setHeight(int height) {
+        public Builder setHeight(int height) {
             this.height = height;
             return this;
         }
 
-        public UserBuilder setWeight(int weight) {
+        public Builder setWeight(int weight) {
             this.weight = weight;
             return this;
         }
