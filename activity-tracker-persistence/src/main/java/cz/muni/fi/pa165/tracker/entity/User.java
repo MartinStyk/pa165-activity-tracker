@@ -4,8 +4,11 @@ import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 /**
  * Entity class representing user of application
@@ -36,6 +39,11 @@ public class User {
     @NotNull
     private String lastName;
 
+    @NotNull
+    @Past
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
+
     @Enumerated
     @NotNull
     private UserRole role;
@@ -44,10 +52,10 @@ public class User {
     @NotNull
     private Sex sex;
 
-    @NotNull
+    @Min(1)
     private int height;
 
-    @NotNull
+    @Min(1)
     private int weight;
 
     public User() {
@@ -57,11 +65,12 @@ public class User {
         this.id = id;
     }
 
-    private User(UserBuilder userBuilder) {
+    private User(Builder userBuilder) {
         this.email = userBuilder.email;
         this.firstName = userBuilder.firstName;
         this.lastName = userBuilder.lastName;
         this.passwordHash = userBuilder.passwordHash;
+        this.dateOfBirth = userBuilder.dateOfBirth;
         this.role = userBuilder.role;
         this.sex = userBuilder.sex;
         this.height = userBuilder.height;
@@ -116,6 +125,38 @@ public class User {
         this.role = role;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,7 +164,7 @@ public class User {
 
         User user = (User) o;
 
-        return !(email != null ? !email.equals(user.email) : user.email != null);
+        return !(email != null ? !email.equals(user.getEmail()) : user.getEmail() != null);
     }
 
     @Override
@@ -139,6 +180,7 @@ public class User {
                 ", passwordHash='" + passwordHash + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
                 ", role=" + role +
                 ", sex=" + sex +
                 ", height=" + height +
@@ -149,51 +191,57 @@ public class User {
     /**
      * Inner builder class to make initializing entity more enjoyable
      */
-    public static class UserBuilder {
+    public static class Builder {
         private final String email;
         private String passwordHash;
         private String firstName;
         private String lastName;
         private UserRole role;
+        private Date dateOfBirth;
         private Sex sex;
         private int height;
         private int weight;
 
-        public UserBuilder(String email) {
+        public Builder(String email) {
             this.email = email;
         }
 
-        public UserBuilder setPasswordHash(String passwordHash) {
+        public Builder setPasswordHash(String passwordHash) {
             this.passwordHash = passwordHash;
             return this;
         }
 
-        public UserBuilder setFirstName(String firstName) {
+        public Builder setFirstName(String firstName) {
             this.firstName = firstName;
             return this;
         }
 
-        public UserBuilder setLastName(String lastName) {
+        public Builder setLastName(String lastName) {
             this.lastName = lastName;
             return this;
         }
 
-        public UserBuilder setRole(UserRole role) {
+        public Builder setDateOfBirth(Date dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
+            return this;
+        }
+
+        public Builder setRole(UserRole role) {
             this.role = role;
             return this;
         }
 
-        public UserBuilder setSex(Sex sex) {
+        public Builder setSex(Sex sex) {
             this.sex = sex;
             return this;
         }
 
-        public UserBuilder setHeight(int height) {
+        public Builder setHeight(int height) {
             this.height = height;
             return this;
         }
 
-        public UserBuilder setWeight(int weight) {
+        public Builder setWeight(int weight) {
             this.weight = weight;
             return this;
         }
