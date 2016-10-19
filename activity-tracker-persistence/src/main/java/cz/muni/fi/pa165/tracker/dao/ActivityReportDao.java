@@ -2,17 +2,18 @@ package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.User;
+
 import java.util.List;
 
 /**
  * Interface represents data acces object of activity report
  * TODO findReportBySport and deleteRepotsBySport
- * 
+ *
  * @author Petra Ondřejková
  * @version 18.10.2016
  */
 public interface ActivityReportDao {
-    
+
     /**
      * Method that create activity report in DB
      *
@@ -75,7 +76,7 @@ public interface ActivityReportDao {
     /**
      * Method that finds all reports in DB
      *
-     * @return list of all activity reports 
+     * @return list of all activity reports
      */
     List<ActivityReport> findAll();
 }

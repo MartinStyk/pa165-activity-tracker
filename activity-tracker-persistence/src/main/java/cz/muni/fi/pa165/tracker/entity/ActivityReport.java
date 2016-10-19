@@ -5,15 +5,15 @@
  */
 package cz.muni.fi.pa165.tracker.entity;
 
-import java.time.LocalDate;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 /**
  * Entity class represents activity report in application
- * 
  * TODO hashCode, equals, compareTo
+ *
  * @author Petra Ondřejková
  * @version 18.10.2016
  */
@@ -21,31 +21,30 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "ActivityReports")
 public class ActivityReport {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-    
+
     @NotNull
     private Double time; // hour
-    
+
     @NotNull
     @Min(0)
     private Double burnedCalories;
-    
+
     @NotNull
     private LocalDate date;
-    
+
     //@NotNull
     //@ManyToOne(fetch = FetchType.EAGER)
     //private SportAtivity sportActivity;
 
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -85,5 +84,5 @@ public class ActivityReport {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-    
+
 }

@@ -8,10 +8,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Entity class representing user of application
+ * Entity class representing user of application.
  * TODO: Add relation to sport activity records once created
  *
  * @author Martin Styk
@@ -57,6 +60,9 @@ public class User {
 
     @Min(1)
     private int weight;
+
+    @OneToMany(mappedBy = "user")
+    private List<ActivityReport> activityReports = new ArrayList<>();
 
     public User() {
     }
@@ -157,6 +163,18 @@ public class User {
         this.weight = weight;
     }
 
+    public List<ActivityReport> getActivityReports() {
+        return Collections.unmodifiableList(activityReports);
+    }
+
+    public void addActivityReport(ActivityReport activityReport) {
+        activityReports.add(activityReport);
+    }
+
+    public void removeActivityReport(ActivityReport activityReport) {
+        activityReports.remove(activityReport);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -185,6 +203,7 @@ public class User {
                 ", sex=" + sex +
                 ", height=" + height +
                 ", weight=" + weight +
+                ", activityReports=" + activityReports +
                 '}';
     }
 
