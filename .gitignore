@@ -5,3 +5,4 @@
 **iml
 nb-configuration.xml
 *jar
+/target/

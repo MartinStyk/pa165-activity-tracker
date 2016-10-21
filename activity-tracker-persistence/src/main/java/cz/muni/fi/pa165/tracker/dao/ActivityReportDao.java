@@ -22,7 +22,7 @@ public interface ActivityReportDao {
     void create(ActivityReport activityReport);
 
     /**
-     * Method that find activity record by id
+     * Method that find activity report by id
      *
      * @param id of the report
      * @return activity report with given id
@@ -32,18 +32,18 @@ public interface ActivityReportDao {
     /**
      * Method that finds all reports of an user.
      *
-     * @param user whose record will be returned
+     * @param user whose report will be returned
      * @return collection of user's reports
      */
-    List<ActivityReport> findRecordsByUser(User user);
+    List<ActivityReport> findReportsByUser(User user);
 
     /**
-     * Method that finds records by Sport Activity
+     * Method that finds reports by Sport Activity
      *
      * @param activity which reports will be returned
      * @return collection of reports of activity
      */
-    //List<ActivityReport> findRecordsBySportActivity(SportActivity activity);
+    //List<ActivityReport> findReportsBySportActivity(SportActivity activity);
 
     /**
      * Method that deletes activity report form DB

@@ -6,14 +6,20 @@ import cz.muni.fi.pa165.tracker.entity.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Class represents implementation of dao activity report in application
- * TODO implements all method
+ * TODO implements methods with Sport
  *
  * @author Petra Ondřejková
  * @version 18.10.2016
  */
+@Repository
+@Transactional
 public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @PersistenceContext
@@ -21,31 +27,43 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public void create(ActivityReport activityReport) {
+        if(activityReport.getStartTime().isAfter(activityReport.getEndTime())){
+            throw new IllegalArgumentException("Start time must be before end time. ");
+        }
+        
+        if (activityReport.getBurnedCalories() < 0) {
+            throw new IllegalArgumentException("Burned calories are negative. ");
+        }
+        
         em.persist(activityReport);
     }
 
     @Override
     public ActivityReport findActivityReportByID(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose
-        // Tools | Templates.
+        return em.find(ActivityReport.class, id);
     }
 
     @Override
-    public List<ActivityReport> findRecordsByUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose
-        // Tools | Templates.
+    public List<ActivityReport> findReportsByUser(User user) {
+        try {
+            TypedQuery<ActivityReport> q = em.createQuery("SELECT a FROM ActivityReport a WHERE a.user = :user",
+                    ActivityReport.class).setParameter("user", user);
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
-    public void delete(ActivityReport actvityReport) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose
-        // Tools | Templates.
+    public void delete(ActivityReport activityReport) {
+        em.remove(findActivityReportByID(activityReport.getId()));
     }
 
     @Override
     public void deleteUserReports(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose
-        // Tools | Templates.
+        em.createQuery("DELETE FROM ActivityReport a WHERE a.user = :user")
+            .setParameter("user", user)
+            .executeUpdate(); 
     }
 
     @Override
@@ -55,8 +73,7 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public List<ActivityReport> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods,
-        // choose Tools | Templates.
+        TypedQuery<ActivityReport> q = em.createQuery("SELECT a FROM ActivityReport a", ActivityReport.class);
+        return q.getResultList();
     }
-
 }
