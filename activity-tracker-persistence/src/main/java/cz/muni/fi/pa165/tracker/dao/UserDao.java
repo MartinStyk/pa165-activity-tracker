@@ -11,14 +11,14 @@ import java.util.List;
 public interface UserDao {
 
     /**
-     * Stores new user into DB
+     * Stores new user into DB.
      *
      * @param user entity to be persisted
      */
     void create(User user);
 
     /**
-     * Updates already stored entity in the DB
+     * Updates already stored entity in the DB.
      *
      * @param user persisted entity to be updated
      * @return the merged object attached to the EntityManager
@@ -26,7 +26,7 @@ public interface UserDao {
     User update(User user);
 
     /**
-     * Returns the User entity attached to the given id
+     * Returns the User entity attached to the given id.
      *
      * @param id id of the entity
      * @return the User entity with given id
@@ -34,25 +34,24 @@ public interface UserDao {
     User findById(Long id);
 
     /**
-     * Returns all Users stored in the DB
+     * Returns all Users stored in the DB.
      *
      * @return all persisted User entities
      */
     List<User> findAll();
 
     /**
-     * Returns all Users with given email
+     * Returns all Users with given email.
      *
+     * @param email email of user to be found
      * @return User stored in DB with given email entry
-     * @throws IllegalArgumentException if passed email is null
      */
     User findByEmail(String email);
 
     /**
-     * Removes User entity from persistence context
+     * Removes User entity from persistence context.
      *
      * @param user to be removed
-     * @throws IllegalArgumentException if passed user is null or is not stored in DB
      */
     void remove(User user);
 }

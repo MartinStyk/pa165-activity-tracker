@@ -6,10 +6,15 @@ import cz.muni.fi.pa165.tracker.enums.UserRole;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
- * Entity class representing user of application
+ * Entity class representing user of application.
  * TODO: Add relation to sport activity records once created
  *
  * @author Martin Styk
@@ -37,6 +42,11 @@ public class User {
     @NotNull
     private String lastName;
 
+    @NotNull
+    @Past
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
+
     @Enumerated
     @NotNull
     private UserRole role;
@@ -51,6 +61,9 @@ public class User {
     @Min(1)
     private int weight;
 
+    @OneToMany(mappedBy = "user")
+    private List<ActivityReport> activityReports = new ArrayList<>();
+
     public User() {
     }
 
@@ -63,6 +76,7 @@ public class User {
         this.firstName = userBuilder.firstName;
         this.lastName = userBuilder.lastName;
         this.passwordHash = userBuilder.passwordHash;
+        this.dateOfBirth = userBuilder.dateOfBirth;
         this.role = userBuilder.role;
         this.sex = userBuilder.sex;
         this.height = userBuilder.height;
@@ -117,6 +131,50 @@ public class User {
         this.role = role;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public List<ActivityReport> getActivityReports() {
+        return Collections.unmodifiableList(activityReports);
+    }
+
+    public void addActivityReport(ActivityReport activityReport) {
+        activityReports.add(activityReport);
+    }
+
+    public void removeActivityReport(ActivityReport activityReport) {
+        activityReports.remove(activityReport);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,10 +198,12 @@ public class User {
                 ", passwordHash='" + passwordHash + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
                 ", role=" + role +
                 ", sex=" + sex +
                 ", height=" + height +
                 ", weight=" + weight +
+                ", activityReports=" + activityReports +
                 '}';
     }
 
@@ -156,6 +216,7 @@ public class User {
         private String firstName;
         private String lastName;
         private UserRole role;
+        private Date dateOfBirth;
         private Sex sex;
         private int height;
         private int weight;
@@ -176,6 +237,11 @@ public class User {
 
         public Builder setLastName(String lastName) {
             this.lastName = lastName;
+            return this;
+        }
+
+        public Builder setDateOfBirth(Date dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
             return this;
         }
 

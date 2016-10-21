@@ -2,11 +2,12 @@ package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 /**
@@ -14,18 +15,19 @@ import java.util.List;
  * @version 15.10.2016
  */
 @Repository
+@Transactional
 public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public void create(User user) throws ConstraintViolationException {
+    public void create(User user) {
         em.persist(user);
     }
 
     @Override
-    public User update(User user) throws ConstraintViolationException {
+    public User update(User user) {
         return em.merge(user);
     }
 
@@ -42,19 +44,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByEmail(String email) {
-        if (email == null) {
-            throw new IllegalArgumentException("Attempted to find user by null email");
+        // we don`t want to throw exception if user is not found - rather return null
+        try {
+            TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.email = :email",
+                    User.class).setParameter("email", email);
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         }
-        TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.email = :email",
-                User.class).setParameter("email", email);
-        return q.getSingleResult();
     }
 
     @Override
     public void remove(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Attempted to delete null entity.");
-        }
         em.remove(findById(user.getId()));
     }
 }

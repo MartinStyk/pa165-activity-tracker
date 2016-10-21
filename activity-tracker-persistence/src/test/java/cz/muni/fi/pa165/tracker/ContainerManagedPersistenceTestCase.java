@@ -8,10 +8,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
+import java.util.Date;
 
 /**
  * @author Martin Styk
@@ -35,10 +37,19 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
                 .setHeight(185)
                 .setWeight(80)
                 .build();
         userDao.create(nullUser);
+    }
+
+    /**
+     * Test passing null to dao
+     */
+    @Test(expectedExceptions = DataAccessException.class)
+    public void createNull() {
+        userDao.create(null);
     }
 
     /**
@@ -52,11 +63,11 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
                 .setHeight(185)
                 .setWeight(80)
                 .build();
         userDao.create(user);
-        userDao.findByEmail("aaa@b.com");
     }
 
     /**
@@ -70,6 +81,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
                 .setHeight(0)
                 .setWeight(80)
                 .build();
@@ -87,6 +99,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
                 .setHeight(1800)
                 .setWeight(-80)
                 .build();
@@ -104,6 +117,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
                 .setHeight(185)
                 .setWeight(80)
                 .build();
@@ -115,6 +129,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fdac")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
                 .setHeight(180)
                 .setWeight(70)
                 .build();
@@ -122,10 +137,28 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
     }
 
     /**
-     * Test that correct exception is thrown on not existing find attempt
+     * Test exception is not thrown on find for not existing user
      */
-    @Test(expectedExceptions = DataAccessException.class)
-    public void testFindNonExisting() {
+    public void testFindNonExistingByEmail() {
+        User user = new User.Builder("user@tracker.com")
+                .setFirstName("Marián")
+                .setLastName("Hossa")
+                .setPasswordHash("123fda")
+                .setRole(UserRole.REGULAR)
+                .setSex(Sex.MALE)
+                .setDateOfBirth(new Date())
+                .setHeight(185)
+                .setWeight(80)
+                .build();
+        userDao.create(user);
+        userDao.findByEmail("aaa@b.com");
+    }
+
+    /**
+     * Test exception is not thrown on find for not existing user
+     */
+    @Test
+    public void findNonExistingById() {
         User user = new User.Builder("user@tracker.com")
                 .setFirstName("Marián")
                 .setLastName("Hossa")
@@ -134,8 +167,10 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setSex(Sex.MALE)
                 .setHeight(185)
                 .setWeight(80)
+                .setDateOfBirth(new Date())
                 .build();
         userDao.create(user);
-        userDao.findByEmail("aaa@b.com");
+        User result = userDao.findById(100l);
+        Assert.assertNull(result);
     }
 }
