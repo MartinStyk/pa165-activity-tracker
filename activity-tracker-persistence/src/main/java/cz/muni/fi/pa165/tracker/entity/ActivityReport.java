@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.fi.pa165.tracker.entity;
 
+import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 /**
  * Entity class represents activity report in application
@@ -31,19 +26,48 @@ public class ActivityReport {
     private User user;
 
     @NotNull
-    private Double time; // hour
+    private LocalDateTime startTime;
+     
+    @NotNull
+    private LocalDateTime endTime;
 
     @NotNull
     @Min(0)
-    private Double burnedCalories;
-
-    @NotNull
-    private LocalDate date;
+    private Integer burnedCalories;
 
     //@NotNull
     //@ManyToOne(fetch = FetchType.EAGER)
     //private SportAtivity sportActivity;
+   
+    public ActivityReport() {
+    }
+    
+    public ActivityReport(Long id) {
+        this.id = id;
+    }
 
+    public ActivityReport(User user, LocalDateTime startTime, LocalDateTime endTime, Integer burnedCalories) {
+        this.user = user;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.burnedCalories = burnedCalories;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 
     public Long getId() {
         return id;
@@ -61,28 +85,12 @@ public class ActivityReport {
         this.user = user;
     }
 
-    public Double getTime() {
-        return time;
-    }
-
-    public void setTime(Double time) {
-        this.time = time;
-    }
-
-    public Double getBurnedCalories() {
+    public Integer getBurnedCalories() {
         return burnedCalories;
     }
 
-    public void setBurnedCalories(Double burnedCalories) {
+    public void setBurnedCalories(Integer burnedCalories) {
         this.burnedCalories = burnedCalories;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
 }
