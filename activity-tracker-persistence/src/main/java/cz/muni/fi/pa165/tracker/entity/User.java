@@ -124,7 +124,7 @@ public class User {
 
         User user = (User) o;
 
-        return !(email != null ? !email.equals(user.email) : user.email != null);
+        return !(email != null ? !email.equals(user.getEmail()) : user.getEmail() != null);
     }
 
     @Override
