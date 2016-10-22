@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
+import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * TODO findReportBySport and deleteRepotsBySport
  *
  * @author Petra Ondřejková
- * @version 18.10.2016
+ * @version 22.10.2016
  */
 public interface ActivityReportDao {
 
@@ -43,7 +44,7 @@ public interface ActivityReportDao {
      * @param activity which reports will be returned
      * @return collection of reports of activity
      */
-    //List<ActivityReport> findReportsBySportActivity(SportActivity activity);
+    List<ActivityReport> findReportsBySportActivity(SportActivity activity);
 
     /**
      * Method that deletes activity report form DB
@@ -64,12 +65,13 @@ public interface ActivityReportDao {
      *
      * @param activity by which the reports will be deleted
      */
-    // void deleteReportsBySportActivity(SportActivity activity);
+    void deleteReportsBySportActivity(SportActivity activity);
 
     /**
      * Method that updates activity report in DB
      *
      * @param activityReport report to be updated
+     * @return updates report
      */
     ActivityReport update(ActivityReport activityReport);
 

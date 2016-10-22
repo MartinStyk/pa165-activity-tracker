@@ -6,13 +6,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Entity class represents activity report in application
  * TODO hashCode, equals, compareTo
  *
  * @author Petra Ondřejková
- * @version 18.10.2016
+ * @version 22.10.2016
  */
 
 @Entity
@@ -39,9 +40,9 @@ public class ActivityReport {
     @Min(0)
     private Integer burnedCalories;
 
-    //@NotNull
-    //@ManyToOne(fetch = FetchType.EAGER)
-    //private SportAtivity sportActivity;
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    private SportActivity sportActivity;
 
     public ActivityReport() {
     }
@@ -50,10 +51,13 @@ public class ActivityReport {
         this.id = id;
     }
 
-    public ActivityReport(User user, LocalDateTime startTime, LocalDateTime endTime, Integer burnedCalories) {
+    public ActivityReport(User user, LocalDateTime startTime,
+            LocalDateTime endTime, SportActivity sportActivity,
+            Integer burnedCalories) {
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.sportActivity = sportActivity;
         this.burnedCalories = burnedCalories;
     }
 
@@ -95,6 +99,52 @@ public class ActivityReport {
 
     public void setBurnedCalories(Integer burnedCalories) {
         this.burnedCalories = burnedCalories;
+    }
+
+    public SportActivity getSportActivity() {
+        return sportActivity;
+    }
+
+    public void setSportActivity(SportActivity sportActivity) {
+        this.sportActivity = sportActivity;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.user);
+        hash = 17 * hash + Objects.hashCode(this.startTime);
+        hash = 17 * hash + Objects.hashCode(this.endTime);
+        hash = 17 * hash + Objects.hashCode(this.burnedCalories);
+        hash = 17 * hash + Objects.hashCode(this.sportActivity);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ActivityReport other = (ActivityReport) obj;
+        if (!Objects.equals(this.user, other.user)) {
+            return false;
+        }
+        if (!Objects.equals(this.startTime, other.startTime)) {
+            return false;
+        }
+        if (!Objects.equals(this.endTime, other.endTime)) {
+            return false;
+        }
+        if (!Objects.equals(this.burnedCalories, other.burnedCalories)) {
+            return false;
+        }
+        return Objects.equals(this.sportActivity, other.sportActivity);
     }
 
 }

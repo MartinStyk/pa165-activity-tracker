@@ -111,6 +111,7 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
         activityReport.setBurnedCalories(10);
         activityReport.setStartTime(testTime.getStart());
         activityReport.setEndTime(testTime.getEnd());
+        activityReport.setSportActivity(hockey);
         activityReportDao.create(activityReport);
     }
 
@@ -273,21 +274,21 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
     private ActivityReport getHossaReport1() {
         return new ActivityReport(marianHossa,
                 TestTime.CORRECT.getStart(),
-                TestTime.CORRECT.getEnd(),
+                TestTime.CORRECT.getEnd(),cycling,
                 10);
     }
 
     private ActivityReport getHossaReport2() {
         return new ActivityReport(marianHossa,
                 TestTime.CORRECT.getStart().minusDays(1),
-                TestTime.CORRECT.getEnd().minusDays(1),
+                TestTime.CORRECT.getEnd().minusDays(1),cycling,
                 1000);
     }
 
     private ActivityReport getSaganReport2() {
         return new ActivityReport(peterSagan,
                 TestTime.CORRECT.getStart().minusDays(10),
-                TestTime.CORRECT.getEnd().minusDays(1),
+                TestTime.CORRECT.getEnd().minusDays(1),cycling,
                 1990);
     }
 

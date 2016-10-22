@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
+import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.List;
  * TODO implements methods with Sport
  *
  * @author Petra Ondřejková
- * @version 18.10.2016
+ * @version 22.10.2016
  */
 @Repository
 @Transactional
@@ -34,7 +35,6 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
         if (activityReport.getBurnedCalories() < 0) {
             throw new IllegalArgumentException("Burned calories are negative. ");
         }
-
         em.persist(activityReport);
     }
 
@@ -46,7 +46,8 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
     @Override
     public List<ActivityReport> findReportsByUser(User user) {
         try {
-            TypedQuery<ActivityReport> q = em.createQuery("SELECT a FROM ActivityReport a WHERE a.user = :user",
+            TypedQuery<ActivityReport> q = em.createQuery(
+                    "SELECT a FROM ActivityReport a WHERE a.user = :user",
                     ActivityReport.class).setParameter("user", user);
             return q.getResultList();
         } catch (NoResultException e) {
@@ -73,7 +74,27 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public List<ActivityReport> findAll() {
-        TypedQuery<ActivityReport> q = em.createQuery("SELECT a FROM ActivityReport a", ActivityReport.class);
+        TypedQuery<ActivityReport> q = em.createQuery(
+                "SELECT a FROM ActivityReport a", ActivityReport.class);
         return q.getResultList();
+    }
+
+    @Override
+    public List<ActivityReport> findReportsBySportActivity(SportActivity activity) {
+        try {
+            TypedQuery<ActivityReport> q = em.createQuery(
+                    "SELECT a FROM ActivityReport a WHERE a.sportActivity = :sportActivity",
+                    ActivityReport.class).setParameter("sportActivity", activity);
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteReportsBySportActivity(SportActivity activity) {
+        em.createQuery("DELETE FROM ActivityReport a WHERE a.sportActivity = :sportActivity")
+                .setParameter("sportActivity", activity)
+                .executeUpdate();
     }
 }
