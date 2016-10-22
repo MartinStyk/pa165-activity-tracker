@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -26,6 +27,8 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
     @Inject
     private UserDao userDao;
 
+    private LocalDate dateOfBirht = LocalDate.of(1990,2,13);
+
     /**
      * Test that correct exception is thrown on @NotNull constrain violation
      */
@@ -37,7 +40,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(185)
                 .setWeight(80)
                 .build();
@@ -63,7 +66,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(185)
                 .setWeight(80)
                 .build();
@@ -81,7 +84,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(0)
                 .setWeight(80)
                 .build();
@@ -99,7 +102,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(1800)
                 .setWeight(-80)
                 .build();
@@ -117,7 +120,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(185)
                 .setWeight(80)
                 .build();
@@ -129,7 +132,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fdac")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(180)
                 .setWeight(70)
                 .build();
@@ -139,6 +142,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
     /**
      * Test exception is not thrown on find for not existing user
      */
+    @Test
     public void testFindNonExistingByEmail() {
         User user = new User.Builder("user@tracker.com")
                 .setFirstName("Marián")
@@ -146,7 +150,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setPasswordHash("123fda")
                 .setRole(UserRole.REGULAR)
                 .setSex(Sex.MALE)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .setHeight(185)
                 .setWeight(80)
                 .build();
@@ -167,7 +171,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setSex(Sex.MALE)
                 .setHeight(185)
                 .setWeight(80)
-                .setDateOfBirth(new Date())
+                .setDateOfBirth(dateOfBirht)
                 .build();
         userDao.create(user);
         User result = userDao.findById(100l);

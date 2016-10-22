@@ -2,20 +2,19 @@ package cz.muni.fi.pa165.tracker.entity;
 
 import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
+import cz.muni.fi.pa165.tracker.validation.PastDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Entity class representing user of application.
- * TODO: Add relation to sport activity records once created
  *
  * @author Martin Styk
  * @version 14.10.2016
@@ -43,9 +42,8 @@ public class User {
     private String lastName;
 
     @NotNull
-    @Past
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    @PastDate
+    private LocalDate dateOfBirth;
 
     @Enumerated
     @NotNull
@@ -64,6 +62,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ActivityReport> activityReports = new ArrayList<>();
 
+//    @ManyToOne
+//    private Team team;
+
     public User() {
     }
 
@@ -81,6 +82,7 @@ public class User {
         this.sex = userBuilder.sex;
         this.height = userBuilder.height;
         this.weight = userBuilder.weight;
+//        this.team = userBuilder.team;
     }
 
     public Long getId() {
@@ -131,11 +133,11 @@ public class User {
         this.role = role;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -174,6 +176,14 @@ public class User {
     public void removeActivityReport(ActivityReport activityReport) {
         activityReports.remove(activityReport);
     }
+//
+//    public Team getTeam() {
+//        return team;
+//    }
+//
+//    public void setTeam(Team team) {
+//        this.team = team;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -204,6 +214,7 @@ public class User {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", activityReports=" + activityReports +
+//                ", team=" + team +
                 '}';
     }
 
@@ -216,10 +227,11 @@ public class User {
         private String firstName;
         private String lastName;
         private UserRole role;
-        private Date dateOfBirth;
+        private LocalDate dateOfBirth;
         private Sex sex;
         private int height;
         private int weight;
+//        private Team team;
 
         public Builder(String email) {
             this.email = email;
@@ -240,7 +252,7 @@ public class User {
             return this;
         }
 
-        public Builder setDateOfBirth(Date dateOfBirth) {
+        public Builder setDateOfBirth(LocalDate dateOfBirth) {
             this.dateOfBirth = dateOfBirth;
             return this;
         }
@@ -264,6 +276,11 @@ public class User {
             this.weight = weight;
             return this;
         }
+
+//        public Builder setTeam(Team team) {
+//            this.team = team;
+//            return this;
+//        }
 
         public User build() {
             return new User(this);
