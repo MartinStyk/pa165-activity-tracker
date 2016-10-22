@@ -67,8 +67,8 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
     }
 
     @Override
-    public void update(ActivityReport activityReport) {
-        em.merge(activityReport);
+    public ActivityReport update(ActivityReport activityReport) {
+        return em.merge(activityReport);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package cz.muni.fi.pa165.tracker.entity;
 
+import cz.muni.fi.pa165.tracker.validation.PastTime;
+
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -26,9 +28,11 @@ public class ActivityReport {
     private User user;
 
     @NotNull
+    @PastTime
     private LocalDateTime startTime;
      
     @NotNull
+    @PastTime
     private LocalDateTime endTime;
 
     @NotNull

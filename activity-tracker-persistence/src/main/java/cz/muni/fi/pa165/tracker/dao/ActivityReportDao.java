@@ -71,7 +71,7 @@ public interface ActivityReportDao {
      *
      * @param activityReport report to be updated
      */
-    void update(ActivityReport activityReport);
+    ActivityReport update(ActivityReport activityReport);
 
     /**
      * Method that finds all reports in DB
