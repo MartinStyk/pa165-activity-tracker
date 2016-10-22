@@ -2,14 +2,14 @@ package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.User;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Class represents implementation of dao activity report in application
@@ -23,18 +23,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @PersistenceContext
-     private EntityManager em;
+    private EntityManager em;
 
     @Override
     public void create(ActivityReport activityReport) {
-        if(activityReport.getStartTime().isAfter(activityReport.getEndTime())){
+        if (activityReport.getStartTime().isAfter(activityReport.getEndTime())) {
             throw new IllegalArgumentException("Start time must be before end time. ");
         }
-        
+
         if (activityReport.getBurnedCalories() < 0) {
             throw new IllegalArgumentException("Burned calories are negative. ");
         }
-        
+
         em.persist(activityReport);
     }
 
@@ -62,8 +62,8 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
     @Override
     public void deleteUserReports(User user) {
         em.createQuery("DELETE FROM ActivityReport a WHERE a.user = :user")
-            .setParameter("user", user)
-            .executeUpdate(); 
+                .setParameter("user", user)
+                .executeUpdate();
     }
 
     @Override

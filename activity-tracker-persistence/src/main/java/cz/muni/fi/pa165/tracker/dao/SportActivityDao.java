@@ -1,10 +1,10 @@
 package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
+
 import java.util.List;
 
 /**
- *
  * @author Adam Laurencík
  * @version 17.10.2016
  */
@@ -15,7 +15,7 @@ public interface SportActivityDao {
      *
      * @param activity SportActivity to be stored
      */
-    public void create(SportActivity activity);
+    void create(SportActivity activity);
 
     /**
      * Updates SportActivity, which is already stored in database
@@ -23,7 +23,7 @@ public interface SportActivityDao {
      * @param sportActivity persisted entity to be updated
      * @return the merged SportActivity attached to the EntityManager
      */
-    public SportActivity update(SportActivity sportActivity);
+    SportActivity update(SportActivity sportActivity);
 
     /**
      * Returns the SportActivity entity stored in database with given id
@@ -31,14 +31,14 @@ public interface SportActivityDao {
      * @param id id of the entity
      * @return the SportActivity entity with given id
      */
-    public SportActivity findById(Long id);
+    SportActivity findById(Long id);
 
     /**
      * Returns all Sport activities stored in database
      *
      * @return all persisted sport activites
      */
-    public List<SportActivity> findAll();
+    List<SportActivity> findAll();
 
     /**
      * Returns an activity with given name
@@ -47,15 +47,15 @@ public interface SportActivityDao {
      * @return SportActivity stored in DB with given name
      * @throws IllegalArgumentException if passed name is null
      */
-    public SportActivity findByName(String name);
+    SportActivity findByName(String name);
 
     /**
      * Removes SportActivity from persistence context
      *
      * @param sportActivity SportActivity to be removed
      * @throws IllegalArgumentException if passed SportActivity is null or is
-     * not stored in database
+     *                                  not stored in database
      */
-    public void remove(SportActivity sportActivity);
+    void remove(SportActivity sportActivity);
 
 }

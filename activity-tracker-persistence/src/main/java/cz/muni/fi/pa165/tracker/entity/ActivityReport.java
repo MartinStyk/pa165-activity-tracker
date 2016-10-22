@@ -2,10 +2,10 @@ package cz.muni.fi.pa165.tracker.entity;
 
 import cz.muni.fi.pa165.tracker.validation.PastTime;
 
-import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
  * Entity class represents activity report in application
@@ -30,7 +30,7 @@ public class ActivityReport {
     @NotNull
     @PastTime
     private LocalDateTime startTime;
-     
+
     @NotNull
     @PastTime
     private LocalDateTime endTime;
@@ -42,10 +42,10 @@ public class ActivityReport {
     //@NotNull
     //@ManyToOne(fetch = FetchType.EAGER)
     //private SportAtivity sportActivity;
-   
+
     public ActivityReport() {
     }
-    
+
     public ActivityReport(Long id) {
         this.id = id;
     }

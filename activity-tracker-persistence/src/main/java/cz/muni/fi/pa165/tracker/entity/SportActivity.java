@@ -20,7 +20,7 @@ public class SportActivity {
     @NotNull
     @Column(nullable = false, unique = true)
     private String name;
-    
+
     @Column(nullable = false)
     private Double caloriesFactor;
 
@@ -56,8 +56,6 @@ public class SportActivity {
         this.caloriesFactor = caloriesFactor;
     }
 
-    
-    
     @Override
     public int hashCode() {
         int hash = 7;
