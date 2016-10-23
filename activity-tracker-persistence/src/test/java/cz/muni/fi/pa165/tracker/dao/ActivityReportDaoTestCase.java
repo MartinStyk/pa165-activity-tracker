@@ -16,8 +16,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
@@ -30,10 +28,7 @@ import java.util.List;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
-
-    @PersistenceContext
-    private EntityManager em;
+public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests {
 
     @Inject
     private UserDao userDao;
@@ -135,16 +130,20 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
 
-        ActivityReport activityReportSagan = getSaganReport2();
+        ActivityReport activityReportSagan = getSaganReport();
         activityReportDao.create(activityReportSagan);
 
         ActivityReport activityReportHossa2 = getHossaReport2();
         activityReportDao.create(activityReportHossa2);
 
-        List<ActivityReport> activityReportList = activityReportDao.findReportsByUser(marianHossa);
-        Assert.assertEquals(activityReportList.size(), 2);
-        assertDeepEquals(activityReportList.get(0), activityReportHossa);
-        assertDeepEquals(activityReportList.get(1), activityReportHossa2);
+        List<ActivityReport> activityReportListHossa = activityReportDao.findReportsByUser(marianHossa);
+        Assert.assertEquals(activityReportListHossa.size(), 2);
+        assertDeepEquals(activityReportListHossa.get(0), activityReportHossa);
+        assertDeepEquals(activityReportListHossa.get(1), activityReportHossa2);
+
+        List<ActivityReport> activityReportListSagan = activityReportDao.findReportsByUser(peterSagan);
+        Assert.assertEquals(activityReportListSagan.size(), 1);
+        assertDeepEquals(activityReportListSagan.get(0), activityReportSagan);
     }
 
     @Test
@@ -165,9 +164,56 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(activityReportList.size(), 0);
     }
 
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testFindReportsForNullUser() {
+        ActivityReport activityReportHossa = getHossaReport1();
+        activityReportDao.create(activityReportHossa);
+
+        List<ActivityReport> activityReportList = activityReportDao.findReportsByUser(null);
+        Assert.assertEquals(activityReportList.size(), 0);
+    }
+
     @Test
     public void testFindReportsBySport() {
-        Assert.fail("todo...");
+        ActivityReport activityReportHossa = getHossaReport1();
+        activityReportDao.create(activityReportHossa);
+
+        ActivityReport activityReportSagan = getSaganReport();
+        activityReportDao.create(activityReportSagan);
+
+        ActivityReport activityReportHossa2 = getHossaReport2();
+        activityReportDao.create(activityReportHossa2);
+
+        List<ActivityReport> activityReports = activityReportDao.findReportsBySportActivity(hockey);
+        Assert.assertEquals(activityReports.size(), 2);
+        assertDeepEquals(activityReports.get(0), activityReportHossa);
+        assertDeepEquals(activityReports.get(1), activityReportHossa2);
+    }
+
+    @Test
+    public void testFindReportsBySportNotExisting() {
+        ActivityReport activityReportHossa = getHossaReport1();
+        activityReportDao.create(activityReportHossa);
+
+        List<ActivityReport> activityReports = activityReportDao.findReportsBySportActivity(cycling);
+        Assert.assertEquals(activityReports.size(), 0);
+    }
+
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testFindReportsBySportNotInDB() {
+        ActivityReport activityReportHossa = getHossaReport1();
+        activityReportDao.create(activityReportHossa);
+
+        SportActivity sport = new SportActivity();
+        sport.setName("racing");
+        sport.setCaloriesFactor(10.0);
+
+        activityReportDao.findReportsBySportActivity(sport);
+    }
+
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testFindReportsBySportNull() {
+        activityReportDao.findReportsBySportActivity(null);
     }
 
     @Test
@@ -189,12 +235,17 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
         activityReportDao.delete(activityReportHossa);
     }
 
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testDeleteReportNull() {
+        activityReportDao.delete(null);
+    }
+
     @Test
     public void testDeleteReportsByUser() {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
 
-        ActivityReport activityReportSagan = getSaganReport2();
+        ActivityReport activityReportSagan = getSaganReport();
         activityReportDao.create(activityReportSagan);
 
         ActivityReport activityReportHossa2 = getHossaReport2();
@@ -207,12 +258,46 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
         assertDeepEquals(activityReports.get(0), activityReportSagan);
     }
 
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testDeleteReportsByUserNull() {
+        activityReportDao.deleteUserReports(null);
+    }
+
+    @Test
+    public void testDeleteReportsBySportActivity() {
+        ActivityReport activityReportHossa = getHossaReport1();
+        activityReportDao.create(activityReportHossa);
+
+        ActivityReport activityReportSagan = getSaganReport();
+        activityReportDao.create(activityReportSagan);
+
+        ActivityReport activityReportHossa2 = getHossaReport2();
+        activityReportDao.create(activityReportHossa2);
+
+        Assert.assertEquals(activityReportDao.findAll().size(), 3);
+        activityReportDao.deleteReportsBySportActivity(hockey);
+        List<ActivityReport> activityReports = activityReportDao.findAll();
+        Assert.assertEquals(activityReports.size(), 1);
+        assertDeepEquals(activityReports.get(0), activityReportSagan);
+    }
+
+    @Test
+    public void testDeleteReportsBySportActivityNoResult() {
+        ActivityReport activityReportHossa = getHossaReport1();
+        activityReportDao.create(activityReportHossa);
+
+        activityReportDao.deleteReportsBySportActivity(cycling);
+        List<ActivityReport> activityReports = activityReportDao.findAll();
+        Assert.assertEquals(activityReports.size(), 1);
+        assertDeepEquals(activityReports.get(0), activityReportHossa);
+    }
+
     @Test
     public void testFindAll() {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
 
-        ActivityReport activityReportSagan = getSaganReport2();
+        ActivityReport activityReportSagan = getSaganReport();
         activityReportDao.create(activityReportSagan);
 
         ActivityReport activityReportHossa2 = getHossaReport2();
@@ -274,21 +359,24 @@ public class ActivityReportTestCase extends AbstractTestNGSpringContextTests {
     private ActivityReport getHossaReport1() {
         return new ActivityReport(marianHossa,
                 TestTime.CORRECT.getStart(),
-                TestTime.CORRECT.getEnd(),cycling,
+                TestTime.CORRECT.getEnd(),
+                hockey,
                 10);
     }
 
     private ActivityReport getHossaReport2() {
         return new ActivityReport(marianHossa,
                 TestTime.CORRECT.getStart().minusDays(1),
-                TestTime.CORRECT.getEnd().minusDays(1),cycling,
+                TestTime.CORRECT.getEnd().minusDays(1),
+                hockey,
                 1000);
     }
 
-    private ActivityReport getSaganReport2() {
+    private ActivityReport getSaganReport() {
         return new ActivityReport(peterSagan,
                 TestTime.CORRECT.getStart().minusDays(10),
-                TestTime.CORRECT.getEnd().minusDays(1),cycling,
+                TestTime.CORRECT.getEnd().minusDays(1),
+                cycling,
                 1990);
     }
 
