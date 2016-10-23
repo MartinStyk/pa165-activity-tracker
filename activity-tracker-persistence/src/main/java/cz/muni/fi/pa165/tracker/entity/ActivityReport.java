@@ -10,10 +10,9 @@ import java.util.Objects;
 
 /**
  * Entity class represents activity report in application
- * TODO hashCode, equals, compareTo
  *
  * @author Petra Ondřejková
- * @version 22.10.2016
+ * @version 23.10.2016
  */
 
 @Entity
@@ -112,11 +111,11 @@ public class ActivityReport {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.user);
-        hash = 17 * hash + Objects.hashCode(this.startTime);
-        hash = 17 * hash + Objects.hashCode(this.endTime);
-        hash = 17 * hash + Objects.hashCode(this.burnedCalories);
-        hash = 17 * hash + Objects.hashCode(this.sportActivity);
+        hash = 17 * hash + Objects.hashCode(getUser());
+        hash = 17 * hash + Objects.hashCode(getStartTime());
+        hash = 17 * hash + Objects.hashCode(getEndTime());
+        hash = 17 * hash + Objects.hashCode(getBurnedCalories());
+        hash = 17 * hash + Objects.hashCode(getSportActivity());
         return hash;
     }
 
@@ -128,23 +127,33 @@ public class ActivityReport {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof ActivityReport)) {
             return false;
         }
         final ActivityReport other = (ActivityReport) obj;
-        if (!Objects.equals(this.user, other.user)) {
+        if (!Objects.equals(this.getUser(), other.getUser())) {
             return false;
         }
-        if (!Objects.equals(this.startTime, other.startTime)) {
+        if (!Objects.equals(this.getStartTime(), other.getStartTime())) {
             return false;
         }
-        if (!Objects.equals(this.endTime, other.endTime)) {
+        if (!Objects.equals(this.getEndTime(), other.getEndTime())) {
             return false;
         }
-        if (!Objects.equals(this.burnedCalories, other.burnedCalories)) {
+        if (!Objects.equals(this.getBurnedCalories(), other.getBurnedCalories())) {
             return false;
         }
-        return Objects.equals(this.sportActivity, other.sportActivity);
+        return Objects.equals(this.getSportActivity(), other.getSportActivity());
     }
 
+    @Override
+    public String toString() {
+        return "ActivityReport{" +
+                "id=" + id +
+                ", user=" + user +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", burnedCalories=" + burnedCalories +
+                ", sportActivity=" + sportActivity + '}';
+    }
 }

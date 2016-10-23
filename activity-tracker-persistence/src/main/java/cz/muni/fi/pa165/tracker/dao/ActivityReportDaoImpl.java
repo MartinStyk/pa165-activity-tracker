@@ -14,10 +14,9 @@ import java.util.List;
 
 /**
  * Class represents implementation of dao activity report in application
- * TODO implements methods with Sport
  *
  * @author Petra Ondřejková
- * @version 22.10.2016
+ * @version 23.10.2016
  */
 @Repository
 @Transactional
