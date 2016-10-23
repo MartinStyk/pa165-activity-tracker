@@ -31,7 +31,6 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
         if (activityReport.getStartTime().isAfter(activityReport.getEndTime())) {
             throw new IllegalArgumentException("Start time must be before end time. ");
         }
-
         if (activityReport.getBurnedCalories() < 0) {
             throw new IllegalArgumentException("Burned calories are negative. ");
         }
@@ -45,6 +44,9 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public List<ActivityReport> findReportsByUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is not valid");
+        }
         try {
             TypedQuery<ActivityReport> q = em.createQuery(
                     "SELECT a FROM ActivityReport a WHERE a.user = :user",
@@ -62,6 +64,9 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public void deleteUserReports(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is not valid");
+        }
         em.createQuery("DELETE FROM ActivityReport a WHERE a.user = :user")
                 .setParameter("user", user)
                 .executeUpdate();
@@ -81,6 +86,9 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public List<ActivityReport> findReportsBySportActivity(SportActivity activity) {
+        if (activity == null) {
+            throw new IllegalArgumentException("Activity is not valid");
+        }
         try {
             TypedQuery<ActivityReport> q = em.createQuery(
                     "SELECT a FROM ActivityReport a WHERE a.sportActivity = :sportActivity",
