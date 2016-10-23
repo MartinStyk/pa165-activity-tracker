@@ -45,6 +45,7 @@ public interface UserDao {
      *
      * @param email email of user to be found
      * @return User stored in DB with given email entry
+     * @throws IllegalArgumentException if email is null or empty
      */
     User findByEmail(String email);
 

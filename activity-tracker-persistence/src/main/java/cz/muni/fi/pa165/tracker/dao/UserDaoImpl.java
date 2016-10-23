@@ -44,6 +44,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("email not valid");
+        }
         // we don`t want to throw exception if user is not found - rather return null
         try {
             TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.email = :email",
