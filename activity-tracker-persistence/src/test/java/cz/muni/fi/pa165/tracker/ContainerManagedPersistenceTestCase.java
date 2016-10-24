@@ -14,7 +14,6 @@ import org.testng.annotations.Test;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * @author Martin Styk
