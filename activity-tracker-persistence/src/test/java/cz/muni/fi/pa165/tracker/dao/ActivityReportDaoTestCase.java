@@ -95,7 +95,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         testCreateInternal(TestTime.FUTURE);
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test(expectedExceptions = ValidationException.class)
     public void testCreateInverseTime() {
         testCreateInternal(TestTime.WRONG_ORDER);
     }

@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.tracker.entity;
 
 import cz.muni.fi.pa165.tracker.validation.PastTime;
+import cz.muni.fi.pa165.tracker.validation.TimeSequence;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -17,6 +18,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "ActivityReports")
+@TimeSequence(members = {"startTime", "endTime"})
 public class ActivityReport {
 
     @Id

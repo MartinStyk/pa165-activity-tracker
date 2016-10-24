@@ -27,12 +27,6 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @Override
     public void create(ActivityReport activityReport) {
-        if (activityReport.getStartTime().isAfter(activityReport.getEndTime())) {
-            throw new IllegalArgumentException("Start time must be before end time. ");
-        }
-        if (activityReport.getBurnedCalories() < 0) {
-            throw new IllegalArgumentException("Burned calories are negative. ");
-        }
         em.persist(activityReport);
     }
 
