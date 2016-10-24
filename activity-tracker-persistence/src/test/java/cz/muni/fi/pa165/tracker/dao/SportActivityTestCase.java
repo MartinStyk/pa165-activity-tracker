@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.tracker.dao;
 
-
 import cz.muni.fi.pa165.tracker.PersistenceApplicationContext;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import org.springframework.dao.DataAccessException;
@@ -20,10 +19,11 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 /**
  * Test class for SportActivity
- * TODO implements all tests
+ * Almoust test implemented except testUpdateNotExistingSportActivity
+ * Not sure about behivior of aplication
  * 
  * @author Petra Ondřejková
- * @version 22.10.2016
+ * @version 24.10.2016
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -76,7 +76,7 @@ public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
        sportActivityDao.create(nameNull);
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test(expectedExceptions = ValidationException.class)
     public void testCreateNullCalorieFactor() {
        sportActivityDao.create(caloriesFactorNull);
     }
@@ -109,13 +109,12 @@ public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
         SportActivity updated = sportActivityDao.update(football);
     }
 
-    @Test
+    @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
     public void testUpdateCalorieFactorNull() {
-        Assert.fail("todo...");
-        //sportActivityDao.create(football);
-        //football.setCaloriesFactor(null);
+        sportActivityDao.create(football);
+        football.setCaloriesFactor(null);
 
-        //SportActivity updated = sportActivityDao.update(football);
+        SportActivity updated = sportActivityDao.update(football);
     }
 
     @Test (expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
@@ -126,26 +125,40 @@ public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
         SportActivity updated = sportActivityDao.update(football);
     }
 
-    @Test
+    @Test //(expectedExceptions)
     public void testUpdateNotExistingSportActivity() {
-        Assert.fail("todo...");
-        //sportActivityDao.create(football);
-        //SportActivity updated = sportActivityDao.update(biathlon);
+        sportActivityDao.create(football);
+        SportActivity updated = sportActivityDao.update(biathlon);
+        Assert.fail("NOT SURE ABOUT RESULT OF TEST...");
+        //Assert.assertEquals(sportActivityDao.findAll().size(), 1);
+
+        //Assert.assertEquals(sportActivityDao.findAll().size(), 2);
     }
 
     @Test
     public void testFindSportActivityByID() {
-        Assert.fail("todo...");
+        sportActivityDao.create(football);
+        sportActivityDao.create(biathlon);
+
+        SportActivity result1 = sportActivityDao.findById(football.getId());
+        assertDeepEquals(result1, football);
+
+        SportActivity result2 = sportActivityDao.findById(biathlon.getId());
+        assertDeepEquals(result2, biathlon);
     }
 
-    @Test
+    @Test (expectedExceptions = DataAccessException.class)
     public void testFindSportActivityByIDNull() {
-        Assert.fail("todo...");
+        sportActivityDao.create(football);
+        sportActivityDao.create(biathlon);
+        SportActivity result1 = sportActivityDao.findById(null);
     }
 
     @Test
     public void testFindAll() {
-        Assert.fail("todo...");
+        sportActivityDao.create(football);
+        sportActivityDao.create(biathlon);
+        Assert.assertEquals(sportActivityDao.findAll().size(), 2);
     }
 
     @Test
@@ -155,12 +168,19 @@ public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testFindSportActivityByName() {
-        Assert.fail("todo...");
+        sportActivityDao.create(football);
+        sportActivityDao.create(biathlon);
+        SportActivity result1 = sportActivityDao.findByName(football.getName());
+        assertDeepEquals(result1, football);
+        SportActivity result2 = sportActivityDao.findByName(biathlon.getName());
+        assertDeepEquals(result2, biathlon);
     }
 
-    @Test
+    @Test(expectedExceptions = DataAccessException.class)
     public void testFindSportActivityByNameNull() {
-        Assert.fail("todo...");
+        sportActivityDao.create(football);
+        sportActivityDao.create(biathlon);
+        SportActivity result = sportActivityDao.findByName(null);
     }
 
     @Test(expectedExceptions = DataAccessException.class)
@@ -194,5 +214,13 @@ public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
     public void testRemoveNotExistingSportActivity() {
         sportActivityDao.create(football);
         sportActivityDao.remove(biathlon);
+    }
+
+
+private void assertDeepEquals(SportActivity sport1, SportActivity sport2) {
+        Assert.assertEquals(sport1, sport2);
+        Assert.assertEquals(sport1.getId(), sport2.getId());
+        Assert.assertEquals(sport1.getName(), sport2.getName());
+        Assert.assertEquals(sport1.getCaloriesFactor(), sport2.getCaloriesFactor());
     }
 }
