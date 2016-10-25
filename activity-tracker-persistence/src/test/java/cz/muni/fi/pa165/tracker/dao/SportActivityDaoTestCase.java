@@ -27,7 +27,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
+public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {
 
     @Inject
     private SportActivityDao sportActivityDao;
