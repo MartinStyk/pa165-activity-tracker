@@ -7,7 +7,10 @@ import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;

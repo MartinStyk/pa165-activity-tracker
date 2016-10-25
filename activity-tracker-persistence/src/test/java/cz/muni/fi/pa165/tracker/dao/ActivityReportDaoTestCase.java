@@ -19,6 +19,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
@@ -31,9 +33,12 @@ import java.util.List;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@TestExecutionListeners(TransactionalTestExecutionListener.class)
-//@Transactional
+@TestExecutionListeners(TransactionalTestExecutionListener.class)
+@Transactional
 public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests {
+
+    @PersistenceContext
+    EntityManager em;
 
     @Inject
     private UserDao userDao;
@@ -341,6 +346,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         activityReportDao.create(activityReportHossa);
         activityReportHossa.setUser(null);
         activityReportDao.update(activityReportHossa);
+        em.flush();
     }
 
     @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
@@ -350,6 +356,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         activityReportHossa.setStartTime(TestTime.FUTURE.getStart());
         activityReportHossa.setStartTime(TestTime.FUTURE.getEnd());
         activityReportDao.update(activityReportHossa);
+        em.flush();
     }
 
     private void assertDeepEquals(ActivityReport report1, ActivityReport report2) {

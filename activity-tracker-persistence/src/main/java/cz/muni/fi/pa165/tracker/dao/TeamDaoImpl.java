@@ -11,14 +11,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Jan Grundmann
  * @version 24.10.2016
  */
 @Repository
-@Transactional
 public class TeamDaoImpl implements TeamDao {
 
     @PersistenceContext

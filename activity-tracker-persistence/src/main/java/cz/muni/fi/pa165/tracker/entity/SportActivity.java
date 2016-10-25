@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.tracker.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -22,6 +23,8 @@ public class SportActivity {
     private String name;
 
     @Column(nullable = false)
+    @Min(1)
+    @NotNull
     private Double caloriesFactor;
 
     public SportActivity() {

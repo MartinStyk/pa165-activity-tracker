@@ -5,12 +5,17 @@ import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 
 import java.util.List;
@@ -27,7 +32,12 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@TestExecutionListeners(TransactionalTestExecutionListener.class)
+@Transactional
 public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {
+
+    @PersistenceContext
+    EntityManager em;
 
     @Inject
     private SportActivityDao sportActivityDao;
@@ -101,12 +111,13 @@ public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {
         SportActivity updated = sportActivityDao.update(null);
     }
 
-    @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
+    @Test(expectedExceptions = {ValidationException.class, TransactionSystemException.class})
     public void testUpdateNameNull() {
         sportActivityDao.create(football);
         football.setName(null);
 
         SportActivity updated = sportActivityDao.update(football);
+        em.flush();
     }
 
     @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
@@ -115,6 +126,7 @@ public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {
         football.setCaloriesFactor(null);
 
         SportActivity updated = sportActivityDao.update(football);
+        em.flush();
     }
 
     @Test (expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
@@ -123,6 +135,7 @@ public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {
         football.setCaloriesFactor(-1.5);
 
         SportActivity updated = sportActivityDao.update(football);
+        em.flush();
     }
 
     @Test

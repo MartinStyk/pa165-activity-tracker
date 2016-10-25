@@ -2,7 +2,6 @@ package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,7 +14,6 @@ import java.util.List;
  * @version 15.10.2016
  */
 @Repository
-@Transactional
 public class UserDaoImpl implements UserDao {
 
     @PersistenceContext

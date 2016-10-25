@@ -2,7 +2,6 @@ package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +13,6 @@ import java.util.List;
  * @version 17.10.2016
  */
 @Repository
-@Transactional
 public class SportActivityDaoImpl implements SportActivityDao {
 
     @PersistenceContext

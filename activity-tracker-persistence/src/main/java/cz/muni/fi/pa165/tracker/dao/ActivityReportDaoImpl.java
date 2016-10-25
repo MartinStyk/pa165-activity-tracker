@@ -4,7 +4,6 @@ import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -19,7 +18,6 @@ import java.util.List;
  * @version 23.10.2016
  */
 @Repository
-@Transactional
 public class ActivityReportDaoImpl implements ActivityReportDao {
 
     @PersistenceContext
