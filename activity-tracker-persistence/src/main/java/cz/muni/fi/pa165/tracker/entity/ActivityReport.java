@@ -30,14 +30,17 @@ public class ActivityReport {
     private User user;
 
     @NotNull
+    @Column(nullable = false)
     @PastTime
     private LocalDateTime startTime;
 
     @NotNull
+    @Column(nullable = false)
     @PastTime
     private LocalDateTime endTime;
 
     @NotNull
+    @Column(nullable = false)
     @Min(0)
     private Integer burnedCalories;
 
