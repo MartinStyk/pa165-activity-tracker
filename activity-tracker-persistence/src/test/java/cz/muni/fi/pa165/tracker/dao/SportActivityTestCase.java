@@ -125,14 +125,11 @@ public class SportActivityTestCase extends AbstractTestNGSpringContextTests {
         SportActivity updated = sportActivityDao.update(football);
     }
 
-    @Test //(expectedExceptions)
+    @Test
     public void testUpdateNotExistingSportActivity() {
         sportActivityDao.create(football);
         SportActivity updated = sportActivityDao.update(biathlon);
-        Assert.fail("NOT SURE ABOUT RESULT OF TEST...");
-        //Assert.assertEquals(sportActivityDao.findAll().size(), 1);
-
-        //Assert.assertEquals(sportActivityDao.findAll().size(), 2);
+        Assert.assertEquals(sportActivityDao.findAll().size(), 2);
     }
 
     @Test
