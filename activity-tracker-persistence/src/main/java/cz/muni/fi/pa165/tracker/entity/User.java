@@ -62,8 +62,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ActivityReport> activityReports = new ArrayList<>();
 
-//    @ManyToOne
-//    private Team team;
+    @ManyToOne
+    private Team team;
 
     public User() {
     }
@@ -82,7 +82,7 @@ public class User {
         this.sex = userBuilder.sex;
         this.height = userBuilder.height;
         this.weight = userBuilder.weight;
-//        this.team = userBuilder.team;
+        this.team = userBuilder.team;
     }
 
     public Long getId() {
@@ -176,14 +176,14 @@ public class User {
     public void removeActivityReport(ActivityReport activityReport) {
         activityReports.remove(activityReport);
     }
-//
-//    public Team getTeam() {
-//        return team;
-//    }
-//
-//    public void setTeam(Team team) {
-//        this.team = team;
-//    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -214,7 +214,7 @@ public class User {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", activityReports=" + activityReports +
-//                ", team=" + team +
+                ", team=" + team +
                 '}';
     }
 
@@ -231,7 +231,7 @@ public class User {
         private Sex sex;
         private int height;
         private int weight;
-//        private Team team;
+        private Team team;
 
         public Builder(String email) {
             this.email = email;
@@ -277,10 +277,10 @@ public class User {
             return this;
         }
 
-//        public Builder setTeam(Team team) {
-//            this.team = team;
-//            return this;
-//        }
+        public Builder setTeam(Team team) {
+            this.team = team;
+            return this;
+        }
 
         public User build() {
             return new User(this);
