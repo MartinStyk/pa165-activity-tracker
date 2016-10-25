@@ -26,6 +26,7 @@ public class Team {
     private String name;
 
     @NotNull
+    @Column(nullable = false, unique = true)
     @OneToOne(fetch = FetchType.EAGER)
     private User teamLeader;
 
