@@ -192,12 +192,12 @@ public class User {
 
         User user = (User) o;
 
-        return !(email != null ? !email.equals(user.getEmail()) : user.getEmail() != null);
+        return !(getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null);
     }
 
     @Override
     public int hashCode() {
-        return email != null ? email.hashCode() : 0;
+        return getEmail() != null ? getEmail().hashCode() : 0;
     }
 
     @Override
