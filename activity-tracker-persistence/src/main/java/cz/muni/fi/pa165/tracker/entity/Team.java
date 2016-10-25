@@ -29,7 +29,7 @@ public class Team {
     @OneToOne(fetch = FetchType.EAGER)
     private User teamLeader;
 
-    @OneToMany(targetEntity = User.class)
+    @OneToMany(mappedBy = "team")
     private List<User> members = new ArrayList<>();
 
     public Team() {

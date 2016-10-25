@@ -9,8 +9,11 @@ import cz.muni.fi.pa165.tracker.enums.UserRole;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,6 +31,8 @@ import java.util.List;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+//@TestExecutionListeners(TransactionalTestExecutionListener.class)
+//@Transactional
 public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests {
 
     @Inject
