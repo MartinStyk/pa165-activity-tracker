@@ -33,24 +33,30 @@ public class User {
     private String email;
 
     @NotNull
+    @Column(nullable = false)
     private String passwordHash;
 
     @NotNull
+    @Column(nullable = false)
     private String firstName;
 
     @NotNull
+    @Column(nullable = false)
     private String lastName;
 
     @NotNull
     @PastDate
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
     @Enumerated
     @NotNull
+    @Column(nullable = false)
     private UserRole role;
 
     @Enumerated
     @NotNull
+    @Column(nullable = false)
     private Sex sex;
 
     @Min(1)
