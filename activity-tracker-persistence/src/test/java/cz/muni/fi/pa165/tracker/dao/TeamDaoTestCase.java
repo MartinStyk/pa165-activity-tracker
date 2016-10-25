@@ -12,7 +12,9 @@ import javax.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -26,6 +28,7 @@ import org.testng.annotations.Test;
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class TeamDaoTestCase extends AbstractTestNGSpringContextTests {
 
@@ -42,7 +45,6 @@ public class TeamDaoTestCase extends AbstractTestNGSpringContextTests {
     private User member2;
 
     @BeforeMethod
-    @Transactional
     public void saveUsers() {
         teamLeader = new User.Builder("leader@leading.com")
                 .setFirstName("Napoleon")

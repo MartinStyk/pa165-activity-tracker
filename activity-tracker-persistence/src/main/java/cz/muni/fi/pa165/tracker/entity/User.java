@@ -220,7 +220,6 @@ public class User {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", activityReports=" + activityReports +
-                ", team=" + team +
                 '}';
     }
 
