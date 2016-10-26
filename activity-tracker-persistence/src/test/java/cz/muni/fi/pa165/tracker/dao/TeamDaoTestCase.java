@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -89,6 +89,11 @@ public class TeamDaoTestCase extends AbstractTestNGSpringContextTests {
         createValidTeam1();
     }
 
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testCreateNullTeam() {
+        teamDao.create(null);
+    }
+
     @Test(expectedExceptions = ValidationException.class)
     public void testCreateWithoutName() {
         Team team = new Team();
@@ -104,23 +109,71 @@ public class TeamDaoTestCase extends AbstractTestNGSpringContextTests {
         team.setName("team");
         teamDao.create(team);
     }
-    
-    @Test   
-    public void testFindTeamById() {
-        Team team1= createValidTeam1();       
-        Team expected=teamDao.findById(team1.getId());
-        assertDeepEquals(team1, expected);
-    }
-    
+
     @Test
-    public void testFindTeamByName(){
-        Team team1 =createValidTeam1();
-        Team expected=teamDao.findByName(team1.getName());
+    public void testFindTeamById() {
+        Team team1 = createValidTeam1();
+        Team expected = teamDao.findById(team1.getId());
         assertDeepEquals(team1, expected);
     }
-    
-    
-    private Team createValidTeam1(){
+
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testFindTeamByNullId() {
+        teamDao.findById(null);
+    }
+
+    @Test
+    public void testFindTeamByName() {
+        Team team1 = createValidTeam1();
+        Team expected = teamDao.findByName(team1.getName());
+        assertDeepEquals(team1, expected);
+    }
+
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testFindTeamByNullName() {
+        teamDao.findByName(null);
+    }
+
+    @Test
+    public void testUpdate() {
+        Team team1 = createValidTeam1();
+        team1.setName("Updated");
+        Team updatedTeam = teamDao.update(team1);
+        Assert.assertEquals("Updated", team1.getName());
+    }
+
+    @Test
+    public void testFindAll() {
+        Assert.assertEquals(teamDao.findAll().size(), 0);
+        Team team1 = createValidTeam1();
+        Assert.assertEquals(teamDao.findAll().size(), 1);
+        Team team2 = createValidTeam2();
+        Assert.assertEquals(teamDao.findAll().size(), 2);
+
+    }
+
+    @Test
+    public void testRemove() {
+        Team team1 = createValidTeam1();
+        Team team2 = createValidTeam2();
+        teamDao.remove(team2);
+        userDao.remove(member2);
+        assertDeepEquals(teamDao.findAll().get(0), team1);
+
+    }
+
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testRemoveNotExistingTeam() {
+        Team team1 = new Team();
+        teamDao.remove(team1);
+    }
+
+    @Test(expectedExceptions = DataAccessException.class)
+    public void testRemoveNullTeam() {
+        teamDao.remove(null);
+    }
+
+    private Team createValidTeam1() {
         Team team = new Team();
         team.setName("Team1");
         team.setTeamLeader(teamLeader);
@@ -132,9 +185,9 @@ public class TeamDaoTestCase extends AbstractTestNGSpringContextTests {
         userDao.update(member1);
         userDao.update(teamLeader);
         return team;
-    }   
-    
-    private Team createValidTeam2(){
+    }
+
+    private Team createValidTeam2() {
         Team team = new Team();
         team.setName("Team2");
         team.setTeamLeader(member2);
@@ -144,15 +197,14 @@ public class TeamDaoTestCase extends AbstractTestNGSpringContextTests {
         userDao.update(member2);
         return team;
     }
-    
-    
-    private void assertDeepEquals(Team team1, Team team2){
+
+    private void assertDeepEquals(Team team1, Team team2) {
         Assert.assertEquals(team1, team2);
         Assert.assertEquals(team1.getId(), team2.getId());
         Assert.assertEquals(team1.getMembers(), team2.getMembers());
         Assert.assertEquals(team1.getTeamLeader(), team2.getTeamLeader());
         Assert.assertEquals(team1.getName(), team2.getName());
-        
+
     }
 
 }
