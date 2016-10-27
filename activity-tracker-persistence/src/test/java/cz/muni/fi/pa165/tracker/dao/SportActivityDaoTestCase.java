@@ -24,8 +24,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 /**
  * Test class for SportActivity
- * Almoust test implemented except testUpdateNotExistingSportActivity
- * Not sure about behivior of aplication
  * 
  * @author Petra Ondřejková
  * @version 24.10.2016
