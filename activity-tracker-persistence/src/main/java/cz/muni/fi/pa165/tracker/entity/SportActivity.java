@@ -61,9 +61,7 @@ public class SportActivity {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + name.hashCode();
-        return hash;
+        return getName() != null ? 89 * getName().hashCode() : 0;
     }
 
     @Override

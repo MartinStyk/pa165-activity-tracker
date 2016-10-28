@@ -77,9 +77,7 @@ public class Team {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 31 * hash + name.hashCode();
-        return hash;
+        return getName() != null ? 7 * getName().hashCode() : 0;
     }
 
     @Override
