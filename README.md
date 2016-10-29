@@ -1,4 +1,4 @@
-# pa165-activity-tracker
+﻿# pa165-activity-tracker [![Build Status](https://travis-ci.org/MartinStyk/pa165-activity-tracker.svg?branch=master)](https://travis-ci.org/MartinStyk/pa165-activity-tracker)
 This project was created as a part of course [FI:PA165 Enterprise Java applications](https://is.muni.cz/auth/predmet/fi/podzim2016/PA165) on Masaryk University, Brno, Czech Republic.
 
 ##Collaborators:
