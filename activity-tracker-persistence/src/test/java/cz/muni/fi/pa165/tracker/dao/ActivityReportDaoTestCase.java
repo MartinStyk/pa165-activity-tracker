@@ -340,7 +340,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         assertDeepEquals(updated, report);
     }
 
-    @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
+    @Test(expectedExceptions = {ConstraintViolationException.class})
     public void testUpdateNullUser() {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
@@ -349,7 +349,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         em.flush();
     }
 
-    @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
+    @Test(expectedExceptions = ConstraintViolationException.class)
     public void testUpdateTimeFuture() {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
