@@ -53,6 +53,7 @@ public interface UserDao {
      * Removes User entity from persistence context.
      *
      * @param user to be removed
+     * @throws IllegalArgumentException if user is null
      */
     void remove(User user);
 }

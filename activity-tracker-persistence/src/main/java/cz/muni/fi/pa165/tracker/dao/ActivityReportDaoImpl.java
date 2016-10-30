@@ -51,7 +51,7 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
     @Override
     public void delete(ActivityReport activityReport) {
         if (activityReport == null) {
-            throw new IllegalArgumentException("Activity report like null is not valid");
+            throw new IllegalArgumentException("Attempted to delete null activity report");
         }
         em.remove(findActivityReportByID(activityReport.getId()));
     }

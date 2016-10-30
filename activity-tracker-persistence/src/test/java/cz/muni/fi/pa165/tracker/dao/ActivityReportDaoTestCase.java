@@ -32,7 +32,6 @@ import java.util.List;
  * @version 22.10.2016
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests {
@@ -340,7 +339,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         assertDeepEquals(updated, report);
     }
 
-    @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
+    @Test(expectedExceptions = {ConstraintViolationException.class})
     public void testUpdateNullUser() {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
@@ -349,7 +348,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         em.flush();
     }
 
-    @Test(expectedExceptions = {ConstraintViolationException.class, TransactionSystemException.class})
+    @Test(expectedExceptions = ConstraintViolationException.class)
     public void testUpdateTimeFuture() {
         ActivityReport activityReportHossa = getHossaReport1();
         activityReportDao.create(activityReportHossa);
