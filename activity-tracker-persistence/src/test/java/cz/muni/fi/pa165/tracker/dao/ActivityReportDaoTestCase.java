@@ -245,7 +245,7 @@ public class ActivityReportDaoTestCase extends AbstractTestNGSpringContextTests 
         activityReportDao.delete(activityReportHossa);
     }
 
-    @Test(expectedExceptions = {NullPointerException.class})
+    @Test(expectedExceptions = {DataAccessException.class})
     public void testDeleteReportNull() {
         activityReportDao.delete(null);
     }
