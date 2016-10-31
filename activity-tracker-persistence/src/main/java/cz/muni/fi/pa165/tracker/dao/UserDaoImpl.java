@@ -58,7 +58,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void remove(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("Usetr like null is not valid");
+            throw new IllegalArgumentException("Attempted to delete null user");
         }
         em.remove(findById(user.getId()));
     }

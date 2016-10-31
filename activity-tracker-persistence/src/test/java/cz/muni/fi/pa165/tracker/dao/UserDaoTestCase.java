@@ -30,7 +30,6 @@ import org.testng.annotations.Test;
  */
 
 @ContextConfiguration(classes =PersistenceApplicationContext.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class UserDaoTestCase extends AbstractTestNGSpringContextTests{

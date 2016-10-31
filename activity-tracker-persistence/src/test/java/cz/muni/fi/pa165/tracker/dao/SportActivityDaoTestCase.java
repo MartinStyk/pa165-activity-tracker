@@ -29,7 +29,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
  * @version 24.10.2016
  */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {

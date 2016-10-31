@@ -7,8 +7,7 @@ import cz.muni.fi.pa165.tracker.entity.User;
 import java.util.List;
 
 /**
- * Interface represents data acces object of activity report
- * TODO findReportBySport and deleteRepotsBySport
+ * Interface represents data access object of activity report
  *
  * @author Petra Ondřejková
  * @version 22.10.2016
@@ -50,6 +49,7 @@ public interface ActivityReportDao {
      * Method that deletes activity report form DB
      *
      * @param actvityReport report to be deleted
+     * @throws IllegalArgumentException if activity report is null
      */
     void delete(ActivityReport actvityReport);
 
