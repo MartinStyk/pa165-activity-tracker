@@ -6,11 +6,14 @@
 package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.PersistenceApplicationContext;
+import cz.muni.fi.pa165.tracker.entity.ActivityReport;
+import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.Team;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +24,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -37,44 +41,29 @@ public class UserDaoTestCase extends AbstractTestNGSpringContextTests{
     @Inject
     private UserDao userDao;
     
-//    @Inject
-//    private ActivityReportDao activityReportDao;
-//    
-//    @Inject
-//    private SportActivityDao sportActivityDao;
-//    
-//    @Inject
-//    private TeamDao teamDao;
-//    
-//    private User pepaNovy;
-//    private User evaStara;
-//    
+    @Inject
+    private ActivityReportDao activityReportDao;
+    
+    @Inject
+    private SportActivityDao sportActivityDao;
+        
     private Team starousi;
     
-//    @BeforeMethod
-//    public void createUsers() {
-//        pepaNovy = new User.Builder("pepa@mail.com")
-//        .setFirstName("Pepa")
-//        .setHeight(150)
-//        .setLastName("Novy")
-//        .setRole(UserRole.REGULAR)
-//        .setSex(Sex.MALE)
-//        .setTeam(starousi)
-//        .setWeight(50)
-//        .setDateOfBirth(LocalDate.ofYearDay(1990, 333))
-//        .build();
-//        
-//        evaStara = new User.Builder("eva@mail.com")
-//        .setFirstName("Eva")
-//        .setHeight(155)
-//        .setLastName("Stara")
-//        .setRole(UserRole.REGULAR)
-//        .setSex(Sex.FEMALE)
-//        .setTeam(starousi)
-//        .setWeight(60)
-//        .setDateOfBirth(LocalDate.ofYearDay(1950, 111))
-//        .build();        
-//    }
+    private SportActivity football;
+    private SportActivity skiing;
+       
+    @BeforeMethod
+    public void createSports() {
+        football = new SportActivity();
+        football.setName("Football");
+        football.setCaloriesFactor(18.5);
+        sportActivityDao.create(football);
+        
+        skiing = new SportActivity();
+        skiing.setName("Skiing");
+        skiing.setCaloriesFactor(88.8);
+        sportActivityDao.create(skiing);
+    }
     
     @Test
     public void testCreate(){
@@ -105,8 +94,10 @@ public class UserDaoTestCase extends AbstractTestNGSpringContextTests{
     public void testUpdate(){
         User user = createValidUser1();
         user.setLastName("NewLastName");
+        user.addActivityReport(createSkiingActivity(user));
+        user.addActivityReport(createFootballActivity(user));
         User updatedUser = userDao.update(user);
-        Assert.assertEquals("NewLastName", updatedUser.getLastName());
+        assertDeepEquals(user, updatedUser);
     }
     
     @Test
@@ -192,20 +183,42 @@ public class UserDaoTestCase extends AbstractTestNGSpringContextTests{
         userDao.create(user);
         return user;
     }
+    
+    private ActivityReport createFootballActivity(User user) {
+        ActivityReport footballReport = new ActivityReport();
+        footballReport.setUser(user);
+        footballReport.setBurnedCalories(888);
+        footballReport.setStartTime(LocalDateTime.now().minusHours(2));
+        footballReport.setEndTime(LocalDateTime.now().minusMinutes(5));
+        footballReport.setSportActivity(football);
+        activityReportDao.create(footballReport);
+        return footballReport;
+    }
+    
+    private ActivityReport createSkiingActivity(User user) {
+        ActivityReport skiingReport = new ActivityReport();
+        skiingReport.setUser(user);
+        skiingReport.setBurnedCalories(2000);
+        skiingReport.setStartTime(LocalDateTime.now().minusHours(5));
+        skiingReport.setEndTime(LocalDateTime.now().minusMinutes(5));
+        skiingReport.setSportActivity(skiing);
+        activityReportDao.create(skiingReport);
+        return skiingReport;
+    }
 
     private void assertDeepEquals(User user1, User user2) {
-        Assert.assertEquals(user1.getDateOfBirth(),user2.getDateOfBirth());
-        Assert.assertEquals(user1.getPasswordHash(),user2.getPasswordHash());
-        Assert.assertEquals(user1.getEmail(),user2.getEmail());
-        Assert.assertEquals(user1.getFirstName(),user2.getFirstName());
-        Assert.assertEquals(user1.getHeight(),user2.getHeight());
-        Assert.assertEquals(user1.getId(),user2.getId());
-        Assert.assertEquals(user1.getLastName(),user2.getLastName());
-        Assert.assertEquals(user1.getRole(),user2.getRole());
-        Assert.assertEquals(user1.getSex(),user2.getSex());
-        Assert.assertEquals(user1.getTeam(),user2.getTeam());
-        Assert.assertEquals(user1.getWeight(),user2.getWeight());
-        Assert.assertEquals(user1.getActivityReports(),user2.getActivityReports());        
+        Assert.assertEquals(user1, user2);
+        Assert.assertEquals(user1.getDateOfBirth(), user2.getDateOfBirth());
+        Assert.assertEquals(user1.getPasswordHash(), user2.getPasswordHash());
+        Assert.assertEquals(user1.getEmail(), user2.getEmail());
+        Assert.assertEquals(user1.getFirstName(), user2.getFirstName());
+        Assert.assertEquals(user1.getHeight(), user2.getHeight());
+        Assert.assertEquals(user1.getId(), user2.getId());
+        Assert.assertEquals(user1.getLastName(), user2.getLastName());
+        Assert.assertEquals(user1.getRole(), user2.getRole());
+        Assert.assertEquals(user1.getSex(), user2.getSex());
+        Assert.assertEquals(user1.getTeam(), user2.getTeam());
+        Assert.assertEquals(user1.getWeight(), user2.getWeight());       
     }
 }
 
