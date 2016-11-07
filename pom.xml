@@ -38,6 +38,8 @@
 
     <modules>
         <module>activity-tracker-persistence</module>
+        <module>activity-tracker-api</module>
+        <module>activity-tracker-service</module>
     </modules>
 
     <dependencyManagement>
