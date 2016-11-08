@@ -7,7 +7,7 @@
     <groupId>cz.muni.fi.pa165</groupId>
     <artifactId>activity-tracker</artifactId>
     <packaging>pom</packaging>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
 
     <name>Activity Tracker Parent</name>
 
@@ -38,6 +38,8 @@
 
     <modules>
         <module>activity-tracker-persistence</module>
+        <module>activity-tracker-api</module>
+        <module>activity-tracker-service</module>
     </modules>
 
     <dependencyManagement>
