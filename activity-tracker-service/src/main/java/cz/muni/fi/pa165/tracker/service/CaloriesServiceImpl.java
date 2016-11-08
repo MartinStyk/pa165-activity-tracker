@@ -1,0 +1,46 @@
+package cz.muni.fi.pa165.tracker.service;
+
+import cz.muni.fi.pa165.tracker.entity.SportActivity;
+import cz.muni.fi.pa165.tracker.entity.User;
+import cz.muni.fi.pa165.tracker.enums.Sex;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
+
+/**
+ * Implementation of {@link CaloriesService}.
+ * <p>
+ * This implementation uses formula from page
+ * http://www.shapesense.com/fitness-exercise/calculators/activity-based-calorie-burn-calculator.aspx
+ *
+ * @author Martin Styk
+ * @version 08.11.2016
+ */
+@Service
+public class CaloriesServiceImpl implements CaloriesService {
+
+    @Override
+    public int getBurnedCalories(User user, SportActivity sportActivity, Duration duration) {
+        if (user == null || sportActivity == null || duration == null) {
+            throw new IllegalArgumentException("Invalid null argumets in getBurnedCalories");
+        }
+        if (sportActivity.getCaloriesFactor() == null) {
+            throw new IllegalArgumentException("Calories factor for sport activity is null");
+        }
+
+        double userAge = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
+
+        double metabolicRate;
+        if (user.getSex() == Sex.MALE) {
+            metabolicRate = (13.75 * user.getWeight()) + (5 * user.getHeight()) - (6.76 * userAge) + 66;
+        } else {
+            metabolicRate = (9.56 * user.getWeight()) + (1.85 * user.getHeight()) - (4.68 * userAge) + 655;
+        }
+
+        double calorieBurn = (metabolicRate / 24) * sportActivity.getCaloriesFactor() * duration.toHours();
+
+        return (int) calorieBurn;
+    }
+}

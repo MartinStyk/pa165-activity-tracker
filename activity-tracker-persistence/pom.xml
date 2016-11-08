@@ -45,6 +45,10 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
         <!--Derby DB driver for use of embedded derby db-->
         <dependency>
             <groupId>org.apache.derby</groupId>
