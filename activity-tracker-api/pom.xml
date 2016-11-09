@@ -13,4 +13,11 @@
 
     <name>Activity Tracker API</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
