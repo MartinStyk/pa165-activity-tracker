@@ -71,17 +71,17 @@ public class UserServiceImpl implements UserService {
     }
 
     private static String createHash(String password) {
-        final int SALT_BYTE_SIZE = 24;
-        final int HASH_BYTE_SIZE = 24;
-        final int PBKDF2_ITERATIONS = 1000;
+        final int saltByteSize = 24;
+        final int hashByteSize = 24;
+        final int numberIterations = 1000;
         // Generate a random salt
         SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[SALT_BYTE_SIZE];
+        byte[] salt = new byte[saltByteSize];
         random.nextBytes(salt);
         // Hash the password
-        byte[] hash = pbkdf2(password.toCharArray(), salt, PBKDF2_ITERATIONS, HASH_BYTE_SIZE);
+        byte[] hash = pbkdf2(password.toCharArray(), salt, numberIterations, hashByteSize);
         // format iterations:salt:hash
-        return PBKDF2_ITERATIONS + ":" + toHex(salt) + ":" + toHex(hash);
+        return numberIterations + ":" + toHex(salt) + ":" + toHex(hash);
     }
 
     private static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes) {

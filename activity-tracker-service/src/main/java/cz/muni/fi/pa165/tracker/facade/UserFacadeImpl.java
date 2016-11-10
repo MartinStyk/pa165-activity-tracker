@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.tracker.facade;
 import cz.muni.fi.pa165.tracker.dto.UserAuthenticateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
+import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.service.UserService;
 import java.util.List;
@@ -27,41 +28,54 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public Long createUser(UserCreateDTO user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (user == null) {
+            throw new IllegalArgumentException("User is null. ");
+        }
+        if (user.getPasswordHash() == null || user.getPasswordHash().isEmpty()) {
+            throw new IllegalArgumentException("Password is null or empty. ");
+        }
+
+        userService.registerUser(bms.mapTo(user, User.class), user.getPasswordHash());
+        return userService.findByEmail(user.getEmail()).getId();
     }
 
     @Override
-    public void updateUser(UserDTO u) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void updateUser(UserDTO user) {
+        userService.update(bms.mapTo(user, User.class));
     }
 
     @Override
     public UserDTO findUserById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        User user = userService.findById(id);
+        return (user == null) ? null : bms.mapTo(user, UserDTO.class);
     }
 
     @Override
     public List<UserDTO> findAll() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return bms.mapTo(userService.findAll(), UserDTO.class);
     }
 
     @Override
     public UserDTO findUserByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        User user = userService.findByEmail(email);
+        return (user == null) ? null : bms.mapTo(user, UserDTO.class);
     }
 
     @Override
     public void removeUser(UserDTO user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        User userEntity = bms.mapTo(user, User.class);
+        userService.deleteUser(userEntity);
     }
 
     @Override
     public boolean logIn(UserAuthenticateDTO user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        User userEntity = userService.findById(user.getUserId());
+        return userService.authenticateUser(userEntity, user.getPassword());
     }
 
     @Override
     public boolean isAdmin(UserDTO user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        User userEntity = bms.mapTo(user, User.class);
+        return userService.isAdmin(userEntity);
     }
 }
