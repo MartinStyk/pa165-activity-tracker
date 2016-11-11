@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.tracker.dto.ActivityReportDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportUpdateDTO;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.User;
+import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.service.ActivityReportService;
 import cz.muni.fi.pa165.tracker.service.UserService;
@@ -42,8 +43,18 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
             throw new IllegalArgumentException("activity report cannot be null");
         }
         ActivityReport activityReport = beanMappingService.mapTo(activityReportDTO, ActivityReport.class);
-//        activityReport.setSportActivity(sportService.findById(activityReportDTO.getSportActivityId()));
-        activityReport.setUser(userService.findById(activityReportDTO.getUserId()));
+
+        User user = userService.findById(activityReportDTO.getUserId());
+        if (user == null) {
+            throw new NonExistingEntityException("Activity report can not be created with non existing user");
+        }
+        activityReport.setUser(user);
+
+//        SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
+//        if(activity == null){
+//            throw new NonExistingEntityException("Activity report can not be created with non sport");
+//        }
+//        activityReport.setSportActivity(activity);
         activityReportService.create(activityReport);
         return activityReport.getId();
     }
@@ -54,8 +65,23 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
             throw new IllegalArgumentException("activity report cannot be null");
         }
         ActivityReport activityReport = beanMappingService.mapTo(activityReportDTO, ActivityReport.class);
-        activityReport.setUser(userService.findById(activityReportDTO.getId()));
-//        activityReport.setSportActivity(sportService.findById(activityReportDTO.getSportActivity()));
+
+        if (activityReportService.findById(activityReport.getId()) == null) {
+            throw new NonExistingEntityException("Can not update non existing activity report");
+        }
+
+        User user = userService.findById(activityReportDTO.getUserId());
+        if (user == null) {
+            throw new NonExistingEntityException("Activity report can not be created with non existing user");
+        }
+        activityReport.setUser(user);
+
+//        SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
+//        if(activity == null){
+//            throw new NonExistingEntityException("Activity report can not be created with non sport");
+//        }
+//        activityReport.setSportActivity(activity);
+
         activityReportService.update(activityReport);
     }
 
@@ -66,29 +92,47 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
 
     @Override
     public ActivityReportDTO getActivityReportById(Long activityReportId) {
-        return beanMappingService.mapTo(activityReportService.findById(activityReportId), ActivityReportDTO.class);
+        ActivityReport activityReport = activityReportService.findById(activityReportId);
+        if (activityReport == null) {
+            throw new NonExistingEntityException("Activity report for doesn't exist");
+        }
+        return beanMappingService.mapTo(activityReport, ActivityReportDTO.class);
     }
 
     @Override
     public List<ActivityReportDTO> getActivityReportsByUser(Long userId) {
         User user = userService.findById(userId);
+        if (user == null) {
+            throw new NonExistingEntityException("Can not find activity reports for non existing user");
+        }
         return beanMappingService.mapTo(activityReportService.findByUser(user), ActivityReportDTO.class);
     }
 
     @Override
     public List<ActivityReportDTO> getActivityReportsBySport(Long sportId) {
-//        SportActivity sportActivity = sportService.findById(sportId);
+//        SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
+//        if(activity == null){
+//            throw new NonExistingEntityException("Can not find reports for not existing sport");
+//        }
 //        return beanMappingService.mapTo(activityReportService.findBySport(sportActivity), ActivityReportDTO.class);
         return null;
     }
 
     @Override
     public void removeActivityReport(Long activityReportId) {
+        ActivityReport activityReport = activityReportService.findById(activityReportId);
+        if (activityReport == null) {
+            throw new NonExistingEntityException("Can not remove not existing activity report");
+        }
         activityReportService.remove(new ActivityReport(activityReportId));
     }
 
     @Override
     public void removeActivityReportsOfUser(Long userId) {
-        activityReportService.removeActivityReportsOfUser(new User(userId));
+        User user = userService.findById(userId);
+        if (user == null) {
+            throw new NonExistingEntityException("Can not remove activity reports for non existing user");
+        }
+        activityReportService.removeActivityReportsOfUser(user);
     }
 }

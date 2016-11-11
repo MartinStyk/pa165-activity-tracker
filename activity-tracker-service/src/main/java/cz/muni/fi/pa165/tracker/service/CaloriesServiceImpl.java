@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.tracker.service;
 
+import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.enums.Sex;
@@ -20,6 +21,15 @@ import java.time.Period;
  */
 @Service
 public class CaloriesServiceImpl implements CaloriesService {
+
+    @Override
+    public int getBurnedCalories(ActivityReport activityReport) {
+        if (activityReport == null) {
+            throw new IllegalArgumentException("Activity report is null");
+        }
+        return getBurnedCalories(activityReport.getUser(), activityReport.getSportActivity(),
+                Duration.between(activityReport.getStartTime(), activityReport.getEndTime()));
+    }
 
     @Override
     public int getBurnedCalories(User user, SportActivity sportActivity, Duration duration) {

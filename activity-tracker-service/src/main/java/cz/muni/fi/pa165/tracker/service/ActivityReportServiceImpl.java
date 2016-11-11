@@ -8,7 +8,6 @@ import cz.muni.fi.pa165.tracker.exception.ActivityTrackerServiceException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.time.Duration;
 import java.util.List;
 
 /**
@@ -30,9 +29,12 @@ public class ActivityReportServiceImpl implements ActivityReportService {
 
     @Override
     public void create(ActivityReport activityReport) {
+        if (activityReport == null) {
+            throw new IllegalArgumentException("Activity report is null");
+        }
         try {
             if (activityReport.getBurnedCalories() == null) {
-                activityReport.setBurnedCalories(getBurnedCaloriesForReport(activityReport));
+                activityReport.setBurnedCalories(caloriesService.getBurnedCalories(activityReport));
             }
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new ActivityTrackerServiceException("Exception during calories computation", e);
@@ -42,10 +44,11 @@ public class ActivityReportServiceImpl implements ActivityReportService {
 
     @Override
     public ActivityReport update(ActivityReport activityReport) {
+        if (activityReport == null) {
+            throw new IllegalArgumentException("Activity report is null");
+        }
         try {
-            if (activityReport.getBurnedCalories() == null) {
-                activityReport.setBurnedCalories(getBurnedCaloriesForReport(activityReport));
-            }
+            activityReport.setBurnedCalories(caloriesService.getBurnedCalories(activityReport));
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new ActivityTrackerServiceException("Exception during calories computation", e);
         }
@@ -59,11 +62,17 @@ public class ActivityReportServiceImpl implements ActivityReportService {
 
     @Override
     public List<ActivityReport> findByUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is null");
+        }
         return activityReportDao.findReportsByUser(user);
     }
 
     @Override
     public List<ActivityReport> findBySport(SportActivity sportActivity) {
+        if (sportActivity == null) {
+            throw new IllegalArgumentException("Sport activity is null");
+        }
         return activityReportDao.findReportsBySportActivity(sportActivity);
     }
 
@@ -74,18 +83,18 @@ public class ActivityReportServiceImpl implements ActivityReportService {
 
     @Override
     public void remove(ActivityReport activityReport) {
+        if (activityReport == null) {
+            throw new IllegalArgumentException("Activity report is null");
+        }
         activityReportDao.delete(activityReport);
     }
 
     @Override
     public void removeActivityReportsOfUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is null");
+        }
         activityReportDao.deleteUserReports(user);
     }
 
-    private int getBurnedCaloriesForReport(ActivityReport activityReport) {
-        return caloriesService.getBurnedCalories(
-                activityReport.getUser(),
-                activityReport.getSportActivity(),
-                Duration.between(activityReport.getStartTime(), activityReport.getEndTime()));
-    }
 }

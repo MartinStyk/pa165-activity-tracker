@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.tracker.service;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
+import cz.muni.fi.pa165.tracker.exception.ActivityTrackerServiceException;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public interface ActivityReportService {
      * Creates new Activity report. If calories are not set, their values is computed.
      *
      * @param activityReport to be created
+     * @throws IllegalArgumentException        if activityReport is null
+     * @throws ActivityTrackerServiceException if calories computation is not successful
      */
     void create(ActivityReport activityReport);
 
@@ -26,6 +29,8 @@ public interface ActivityReportService {
      *
      * @param activityReport entity to be updated
      * @return updated activity report entity
+     * @throws IllegalArgumentException        if activityReport is null
+     * @throws ActivityTrackerServiceException if calories computation is not successful
      */
     ActivityReport update(ActivityReport activityReport);
 
@@ -42,6 +47,7 @@ public interface ActivityReportService {
      *
      * @param user user attached to the activity report entity to be returned
      * @return the activity reports for given user
+     * @throws IllegalArgumentException if user is null
      */
     List<ActivityReport> findByUser(User user);
 
@@ -50,6 +56,7 @@ public interface ActivityReportService {
      *
      * @param sportActivity attached to the activity report entity to be returned
      * @return the activity reports for given sport activities
+     * @throws IllegalArgumentException if sportActivity is null
      */
     List<ActivityReport> findBySport(SportActivity sportActivity);
 
@@ -64,6 +71,7 @@ public interface ActivityReportService {
      * Removes the activity report entity from persistence context.
      *
      * @param activityReport activity report to be removed
+     * @throws IllegalArgumentException if activityReport is null
      */
     void remove(ActivityReport activityReport);
 
@@ -71,6 +79,7 @@ public interface ActivityReportService {
      * Removes the activity report entities associated with given user from persistence context.
      *
      * @param user which reports will be removed
+     * @throws IllegalArgumentException if user is null
      */
     void removeActivityReportsOfUser(User user);
 }
