@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.tracker.facade;
 
 import cz.muni.fi.pa165.tracker.dto.ActivityReportCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportDTO;
+import cz.muni.fi.pa165.tracker.dto.ActivityReportUpdateDTO;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public interface ActivityReportFacade {
      * Creates activity report.
      *
      * @param activityReport entity to be created
+     * @throws IllegalArgumentException if activityReport is null
      * @return id of newly created activity report
      */
     Long createActivityReport(ActivityReportCreateDTO activityReport);
@@ -24,8 +26,9 @@ public interface ActivityReportFacade {
      * Updates activity report.
      *
      * @param activityReport entity to be updated
+     * @throws IllegalArgumentException if activityReport is null
      */
-    void updateActivityReport(ActivityReportDTO activityReport);
+    void updateActivityReport(ActivityReportUpdateDTO activityReport);
 
     /**
      * Returns all activity reports.
@@ -39,7 +42,6 @@ public interface ActivityReportFacade {
      *
      * @param activityReportId
      * @return activity report identified by unique id
-     * @throws IllegalArgumentException if activityReportId is null
      */
     ActivityReportDTO getActivityReportById(Long activityReportId);
 
@@ -48,7 +50,6 @@ public interface ActivityReportFacade {
      *
      * @param userId id of user
      * @return activity reports of given user
-     * @throws IllegalArgumentException if userId is null
      */
     List<ActivityReportDTO> getActivityReportsByUser(Long userId);
 
@@ -57,7 +58,6 @@ public interface ActivityReportFacade {
      *
      * @param sportId id of sport
      * @return activity reports of given sport
-     * @throws IllegalArgumentException if sportId is null
      */
     List<ActivityReportDTO> getActivityReportsBySport(Long sportId);
 
@@ -73,7 +73,6 @@ public interface ActivityReportFacade {
      * Deletes activity reports of given user
      *
      * @param userId id of user
-     * @throws IllegalArgumentException if the artist name is null
      */
     void removeActivityReportsOfUser(Long userId);
 

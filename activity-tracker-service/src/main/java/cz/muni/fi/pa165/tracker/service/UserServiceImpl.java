@@ -9,6 +9,8 @@ import java.security.SecureRandom;
 import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import javax.crypto.spec.PBEKeySpec;
 
 /**
@@ -19,6 +21,7 @@ import javax.crypto.spec.PBEKeySpec;
  * @author Petra Ondřejková
  * @version 09.11. 2016
  */
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired

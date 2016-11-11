@@ -61,8 +61,8 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
         if (user == null) {
             throw new IllegalArgumentException("User is not valid");
         }
-        em.createQuery("DELETE FROM ActivityReport a WHERE a.user = :user")
-                .setParameter("user", user)
+        em.createQuery("DELETE FROM ActivityReport a WHERE a.user.id = :user")
+                .setParameter("user", user.getId())
                 .executeUpdate();
     }
 

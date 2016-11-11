@@ -24,6 +24,7 @@ public class UserFacadeImpl implements UserFacade {
     @Inject
     private UserService userService;
 
+    @Inject
     private BeanMappingService bms;
 
     @Override

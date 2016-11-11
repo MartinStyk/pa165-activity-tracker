@@ -1,19 +1,13 @@
-package cz.muni.fi.pa165.tracker;
+package cz.muni.fi.pa165.tracker.configuration;
 
 
-import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
-import cz.muni.fi.pa165.tracker.dto.UserDTO;
-import cz.muni.fi.pa165.tracker.entity.User;
+import cz.muni.fi.pa165.tracker.PersistenceApplicationContext;
 import cz.muni.fi.pa165.tracker.exception.DataAccessExceptionTranslateAspect;
 import cz.muni.fi.pa165.tracker.facade.ActivityReportFacadeImpl;
-import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingServiceImpl;
 import cz.muni.fi.pa165.tracker.service.ActivityReportServiceImpl;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
-import org.dozer.loader.api.BeanMappingBuilder;
-import org.dozer.loader.api.FieldDefinition;
-import org.dozer.loader.api.TypeMappingOptions;
 import org.springframework.context.annotation.*;
 
 import java.util.ArrayList;
