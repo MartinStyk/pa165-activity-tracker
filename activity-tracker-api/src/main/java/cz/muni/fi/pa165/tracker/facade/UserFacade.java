@@ -6,7 +6,7 @@ import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import java.util.List;
 
 /**
- * Facade interface fot User
+ * Facade interface for User
  *
  * @author Petra Ondřejková
  * @version 09.11. 2016
