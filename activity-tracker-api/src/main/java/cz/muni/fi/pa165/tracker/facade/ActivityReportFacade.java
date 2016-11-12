@@ -69,6 +69,15 @@ public interface ActivityReportFacade {
     List<ActivityReportDTO> getActivityReportsBySport(Long sportId);
 
     /**
+     * Returns all activity reports for given sport and given user.
+     *
+     * @param sportId id of sport
+     * @return activity reports of given sport or empty list if user has no activities
+     * @throws NonExistingEntityException if sport or user for given id doesn't exist
+     */
+    List<ActivityReportDTO> getActivityReportsByUserAndSport(Long userId, Long sportId);
+
+    /**
      * Deletes activity report.
      *
      * @param activityReportId id of report to delete

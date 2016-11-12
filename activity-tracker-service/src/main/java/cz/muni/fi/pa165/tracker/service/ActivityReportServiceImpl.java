@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link ActivityReportService}. This class is part of the
@@ -74,6 +75,20 @@ public class ActivityReportServiceImpl implements ActivityReportService {
             throw new IllegalArgumentException("Sport activity is null");
         }
         return activityReportDao.findReportsBySportActivity(sportActivity);
+    }
+
+    @Override
+    public List<ActivityReport> findByUserAndSport(User user, SportActivity sportActivity) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is null");
+        }
+        if (sportActivity == null) {
+            throw new IllegalArgumentException("Sport activity is null");
+        }
+        return findByUser(user)
+                .stream()
+                .filter(i -> i.getSportActivity() == sportActivity)
+                .collect(Collectors.toList());
     }
 
     @Override

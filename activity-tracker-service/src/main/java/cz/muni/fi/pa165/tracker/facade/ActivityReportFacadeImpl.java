@@ -119,6 +119,24 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
     }
 
     @Override
+    public List<ActivityReportDTO> getActivityReportsByUserAndSport(Long userId, Long sportId) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            throw new NonExistingEntityException("Can not find activity reports for non existing user");
+        }
+
+//     SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
+//        if(activity == null){
+//            throw new NonExistingEntityException("Can not find reports for not existing sport");
+//        }
+
+//
+//        return beanMappingService.mapTo(activityReportService.findByUserAndSport(user, activity),
+// ActivityReportDTO.class);
+        return null;
+    }
+
+    @Override
     public void removeActivityReport(Long activityReportId) {
         ActivityReport activityReport = activityReportService.findById(activityReportId);
         if (activityReport == null) {

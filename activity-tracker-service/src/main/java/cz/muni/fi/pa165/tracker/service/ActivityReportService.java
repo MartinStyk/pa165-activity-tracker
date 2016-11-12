@@ -60,6 +60,17 @@ public interface ActivityReportService {
      */
     List<ActivityReport> findBySport(SportActivity sportActivity);
 
+
+    /**
+     * Returns the activity report entities attached to the given sport and given user.
+     *
+     * @param user attached to the activity report entity to be returned
+     * @param sportActivity attached to the activity report entity to be returned
+     * @return the activity reports for given sport activities and given user
+     * @throws IllegalArgumentException if sportActivity or user is null
+     */
+    List<ActivityReport> findByUserAndSport(User user, SportActivity sportActivity);
+
     /**
      * Returns all activity report entities.
      *
