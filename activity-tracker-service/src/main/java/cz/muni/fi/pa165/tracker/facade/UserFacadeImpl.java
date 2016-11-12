@@ -4,10 +4,14 @@ import cz.muni.fi.pa165.tracker.dto.UserAuthenticateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.entity.User;
+import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.service.UserService;
+
 import java.util.List;
 import javax.inject.Inject;
+
+import cz.muni.fi.pa165.tracker.service.UserStatisticsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private UserStatisticsService statisticsService;
 
     @Inject
     private BeanMappingService bms;
@@ -48,7 +55,12 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public UserDTO findUserById(Long id) {
         User user = userService.findById(id);
-        return (user == null) ? null : bms.mapTo(user, UserDTO.class);
+        if (user == null) {
+            throw new NonExistingEntityException("User doesn't exist for id " + id);
+        }
+        UserDTO userDTO = bms.mapTo(user, UserDTO.class);
+        userDTO.setTotalCalories(statisticsService.getTotalCalories(user));
+        return userDTO;
     }
 
     @Override
@@ -59,7 +71,12 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public UserDTO findUserByEmail(String email) {
         User user = userService.findByEmail(email);
-        return (user == null) ? null : bms.mapTo(user, UserDTO.class);
+        if (user == null) {
+            throw new NonExistingEntityException("User doesn't exist for email " + email);
+        }
+        UserDTO userDTO = bms.mapTo(user, UserDTO.class);
+        userDTO.setTotalCalories(statisticsService.getTotalCalories(user));
+        return userDTO;
     }
 
     @Override

@@ -18,6 +18,8 @@ public class UserDTO extends UserCreateDTO {
 
     private TeamDTO team;
 
+    private int totalCalories;
+
     public Long getId() {
         return id;
     }
@@ -40,6 +42,14 @@ public class UserDTO extends UserCreateDTO {
 
     public TeamDTO getTeam() {
         return team;
+    }
+
+    public int getTotalCalories() {
+        return totalCalories;
+    }
+
+    public void setTotalCalories(int totalCalories) {
+        this.totalCalories = totalCalories;
     }
 
     public void setTeam(TeamDTO team) {
