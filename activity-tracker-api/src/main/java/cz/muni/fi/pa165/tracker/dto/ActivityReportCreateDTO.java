@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.tracker.dto;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * DTO for creating Activity reports.
@@ -71,11 +72,7 @@ public class ActivityReportCreateDTO {
 
     @Override
     public int hashCode() {
-        int result = userId != null ? userId.hashCode() : 0;
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        result = 31 * result + (sportActivityId != null ? sportActivityId.hashCode() : 0);
-        return result;
+        return Objects.hash(userId, sportActivityId, startTime, endTime);
     }
 
     @Override
