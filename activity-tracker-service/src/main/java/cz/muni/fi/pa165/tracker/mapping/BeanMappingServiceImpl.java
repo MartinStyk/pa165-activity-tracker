@@ -4,17 +4,14 @@ import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Bean mapping service.
  *
- * @implNote  We still need to handle conversion "from id to entity" and vice versa
- *
  * @author Petra Ondřejková
  * @version 09.11. 2016
+ * @implNote We still need to handle conversion "from id to entity" and vice versa
  */
 @Service
 public class BeanMappingServiceImpl implements BeanMappingService {
@@ -27,6 +24,15 @@ public class BeanMappingServiceImpl implements BeanMappingService {
         List<T> mappedCollection = new ArrayList<>();
         for (Object object : objects) {
             mappedCollection.add(dozer.map(object, mapToClass));
+        }
+        return mappedCollection;
+    }
+
+    @Override
+    public <T> Map<T, Integer> mapTo(Map<?, Integer> objects, Class<T> mapToClass) {
+        Map<T, Integer> mappedCollection = new HashMap<>();
+        for (Map.Entry<?, Integer> entry : objects.entrySet()) {
+            mappedCollection.put(dozer.map(entry.getKey(), mapToClass), entry.getValue());
         }
         return mappedCollection;
     }

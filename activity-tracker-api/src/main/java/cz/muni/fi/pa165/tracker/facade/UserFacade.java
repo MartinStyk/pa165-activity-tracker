@@ -3,6 +3,9 @@ package cz.muni.fi.pa165.tracker.facade;
 import cz.muni.fi.pa165.tracker.dto.UserAuthenticateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
+import cz.muni.fi.pa165.tracker.dto.UserStatisticsDTO;
+import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
+
 import java.util.List;
 
 /**
@@ -75,5 +78,15 @@ public interface UserFacade {
      * @return true if user is admin, false otherwise
      */
     boolean isAdmin(UserDTO user);
+
+    /**
+     * Returns statistics overview for given user.
+     *
+     * @param userDTO user for whom statistics are computed
+     * @return fully filled statistics DTO, see {@link UserStatisticsDTO}
+     * @throws IllegalArgumentException   if userDTO is null
+     * @throws NonExistingEntityException if user does not exist
+     */
+    UserStatisticsDTO getStatistics(UserDTO userDTO);
 
 }

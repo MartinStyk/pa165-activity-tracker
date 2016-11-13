@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.tracker.dao.ActivityReportDao;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  * @author Martin Styk
  * @version 12.11.2016
  */
+@Service
 public class UserStatisticsServiceImpl implements UserStatisticsService {
 
     @Inject
@@ -40,8 +42,8 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
 
         return activityReportDao.findReportsByUser(user).stream()
                 .filter(r -> r.getBurnedCalories() != null && r.getStartTime() != null)
-                .filter(r -> r.getStartTime().toLocalDate().isAfter(afterDate))
-                .filter(r -> r.getStartTime().toLocalDate().isBefore(beforeDate))
+                .filter(r -> !r.getStartTime().toLocalDate().isBefore(afterDate))
+                .filter(r -> !r.getStartTime().toLocalDate().isAfter(beforeDate))
                 .mapToInt(r -> r.getBurnedCalories())
                 .sum();
     }
@@ -62,18 +64,21 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
 
         return (int) activityReportDao.findReportsByUser(user).stream()
                 .filter(r -> r.getStartTime() != null)
-                .filter(r -> r.getStartTime().toLocalDate().isAfter(afterDate))
-                .filter(r -> r.getStartTime().toLocalDate().isBefore(beforeDate))
+                .filter(r -> !r.getStartTime().toLocalDate().isBefore(afterDate))
+                .filter(r -> !r.getStartTime().toLocalDate().isAfter(beforeDate))
                 .count();
     }
 
     @Override
-    public Map<SportActivity, Long> getSportsPerformedByUser(User user) {
+    public Map<SportActivity, Integer> getSportsPerformedByUser(User user) {
         if (user == null) throw new IllegalArgumentException("User is null");
 
         return activityReportDao.findReportsByUser(user)
                 .stream()
-                .collect(Collectors.groupingBy(ActivityReport::getSportActivity, Collectors.counting()));
+                .collect(
+                        Collectors.groupingBy(ActivityReport::getSportActivity,
+                        Collectors.reducing(0, e -> 1, Integer::sum))
+                );
     }
 
 
@@ -83,7 +88,7 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
                 .stream()
                 .collect(
                         Collectors.groupingBy(ActivityReport::getSportActivity,
-                                Collectors.summingInt(ActivityReport::getBurnedCalories))
+                        Collectors.summingInt(ActivityReport::getBurnedCalories))
                 );
     }
 }

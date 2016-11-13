@@ -1,19 +1,19 @@
 package cz.muni.fi.pa165.tracker.facade;
 
-import cz.muni.fi.pa165.tracker.dto.UserAuthenticateDTO;
-import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
-import cz.muni.fi.pa165.tracker.dto.UserDTO;
+import cz.muni.fi.pa165.tracker.dto.*;
+import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
+import cz.muni.fi.pa165.tracker.service.TimeService;
 import cz.muni.fi.pa165.tracker.service.UserService;
-
-import java.util.List;
-import javax.inject.Inject;
-
 import cz.muni.fi.pa165.tracker.service.UserStatisticsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class implemented user facade.
@@ -30,6 +30,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Inject
     private UserStatisticsService statisticsService;
+
+    @Inject
+    private TimeService timeService;
 
     @Inject
     private BeanMappingService bms;
@@ -95,5 +98,46 @@ public class UserFacadeImpl implements UserFacade {
     public boolean isAdmin(UserDTO user) {
         User userEntity = bms.mapTo(user, User.class);
         return userService.isAdmin(userEntity);
+    }
+
+    @Override
+    public UserStatisticsDTO getStatistics(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO is null");
+        }
+        User user = userService.findById(userDTO.getId());
+        if (user == null) {
+            throw new NonExistingEntityException("User does not exist");
+        }
+        UserStatisticsDTO statisticsDTO = new UserStatisticsDTO();
+        statisticsDTO.setUserDTO(bms.mapTo(user, UserDTO.class));
+
+        statisticsDTO.setTotalCalories(statisticsService.getTotalCalories(user));
+        statisticsDTO.setCaloriesLastWeek(
+                statisticsService.getTotalCalories(user, timeService.dateWeekAgo(), timeService.dateNow())
+        );
+        statisticsDTO.setCaloriesLastMonth(
+                statisticsService.getTotalCalories(user, timeService.dateMonthAgo(), timeService.dateNow())
+        );
+
+        statisticsDTO.setTotalSportActivities(statisticsService.getTotalActivities(user));
+        statisticsDTO.setSportActivitiesLastWeek(
+                statisticsService.getTotalActivities(user, timeService.dateWeekAgo(), timeService.dateNow())
+        );
+        statisticsDTO.setSportActivitiesLastMonth(
+                statisticsService.getTotalActivities(user, timeService.dateMonthAgo(), timeService.dateNow())
+        );
+
+        Map<SportActivity, Integer> sportsAndCount = statisticsService.getSportsPerformedByUser(user);
+        statisticsDTO.setSportActivities(
+                bms.mapTo(sportsAndCount, SportActivityDTO.class)
+        );
+
+        Map<SportActivity, Integer> caloriesForSports = statisticsService.getCaloriesForSportsOfUser(user);
+        statisticsDTO.setSportActivities(
+                bms.mapTo(caloriesForSports, SportActivityDTO.class)
+        );
+
+        return statisticsDTO;
     }
 }

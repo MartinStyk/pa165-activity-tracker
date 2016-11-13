@@ -29,8 +29,8 @@ public interface UserStatisticsService {
      * Time frame is specified with activity report start time.
      *
      * @param user       for whom calories are computed
-     * @param afterDate  find calories burnt after this date, exclusive
-     * @param beforeDate find calories burnt before this date, exclusive
+     * @param afterDate  find calories burnt after this date, inclusive
+     * @param beforeDate find calories burnt before this date, inclusive
      * @return total calories in specified time frame
      * @throws IllegalArgumentException if params are null on in incorrect order
      */
@@ -51,8 +51,8 @@ public interface UserStatisticsService {
      * Time frame is specified with activity report start time.
      *
      * @param user       for whom activities are computed
-     * @param afterDate  find activities after this date, exclusive
-     * @param beforeDate find activities before this date, exclusive
+     * @param afterDate  find activities after this date, inclusive
+     * @param beforeDate find activities before this date, inclusive
      * @return total activities in specified time frame
      * @throws IllegalArgumentException if params are null on in incorrect order
      */
@@ -64,7 +64,7 @@ public interface UserStatisticsService {
      * @param user for whom statistics are computed
      * @return map in format SportActivity - number of reports with this activity for given user
      */
-    Map<SportActivity, Long> getSportsPerformedByUser(User user);
+    Map<SportActivity, Integer> getSportsPerformedByUser(User user);
 
     /**
      * Computes chart of sport activity - calories burnt performing this sport.
