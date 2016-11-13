@@ -13,6 +13,8 @@ import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.service.SportActivityService;
 import java.util.List;
 import javax.inject.Inject;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of (@link SportActivityFacade}
@@ -20,6 +22,8 @@ import javax.inject.Inject;
  * @author Adam Laurenčík
  * @version 13.11.2016
  */
+@Service
+@Transactional
 public class SportActivityFacadeImpl implements SportActivityFacade {
 
     @Inject
