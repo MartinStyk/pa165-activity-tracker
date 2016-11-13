@@ -4,10 +4,12 @@ import cz.muni.fi.pa165.tracker.dto.ActivityReportCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportUpdateDTO;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
+import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.service.ActivityReportService;
+import cz.muni.fi.pa165.tracker.service.SportActivityService;
 import cz.muni.fi.pa165.tracker.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +36,8 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
     @Inject
     private UserService userService;
 
-//    @Inject
-//    private SportService sportService;
+    @Inject
+    private SportActivityService sportService;
 
     @Override
     public Long createActivityReport(ActivityReportCreateDTO activityReportDTO) {
@@ -44,17 +46,9 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
         }
         ActivityReport activityReport = beanMappingService.mapTo(activityReportDTO, ActivityReport.class);
 
-        User user = userService.findById(activityReportDTO.getUserId());
-        if (user == null) {
-            throw new NonExistingEntityException("Activity report can not be created with non existing user");
-        }
-        activityReport.setUser(user);
+        activityReport.setUser(getExistingUserOrThrowException(activityReportDTO.getUserId()));
+        activityReport.setSportActivity(getExistingSportOrThrowException(activityReportDTO.getSportActivityId()));
 
-//        SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
-//        if(activity == null){
-//            throw new NonExistingEntityException("Activity report can not be created with non sport");
-//        }
-//        activityReport.setSportActivity(activity);
         activityReportService.create(activityReport);
         return activityReport.getId();
     }
@@ -70,17 +64,8 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
             throw new NonExistingEntityException("Can not update non existing activity report");
         }
 
-        User user = userService.findById(activityReportDTO.getUserId());
-        if (user == null) {
-            throw new NonExistingEntityException("Activity report can not be created with non existing user");
-        }
-        activityReport.setUser(user);
-
-//        SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
-//        if(activity == null){
-//            throw new NonExistingEntityException("Activity report can not be created with non sport");
-//        }
-//        activityReport.setSportActivity(activity);
+        activityReport.setUser(getExistingUserOrThrowException(activityReportDTO.getUserId()));
+        activityReport.setSportActivity(getExistingSportOrThrowException(activityReportDTO.getSportActivityId()));
 
         activityReportService.update(activityReport);
     }
@@ -101,39 +86,23 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
 
     @Override
     public List<ActivityReportDTO> getActivityReportsByUser(Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            throw new NonExistingEntityException("Can not find activity reports for non existing user");
-        }
+        User user = getExistingUserOrThrowException(userId);
         return beanMappingService.mapTo(activityReportService.findByUser(user), ActivityReportDTO.class);
     }
 
     @Override
     public List<ActivityReportDTO> getActivityReportsBySport(Long sportId) {
-//        SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
-//        if(activity == null){
-//            throw new NonExistingEntityException("Can not find reports for not existing sport");
-//        }
-//        return beanMappingService.mapTo(activityReportService.findBySport(sportActivity), ActivityReportDTO.class);
-        return null;
+        SportActivity sportActivity = getExistingSportOrThrowException(sportId);
+        return beanMappingService.mapTo(activityReportService.findBySport(sportActivity), ActivityReportDTO.class);
     }
 
     @Override
     public List<ActivityReportDTO> getActivityReportsByUserAndSport(Long userId, Long sportId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            throw new NonExistingEntityException("Can not find activity reports for non existing user");
-        }
+        User user = getExistingUserOrThrowException(userId);
+        SportActivity activity = getExistingSportOrThrowException(sportId);
 
-//     SportActivity activity = sportService.findById(activityReportDTO.getSportActivityId());
-//        if(activity == null){
-//            throw new NonExistingEntityException("Can not find reports for not existing sport");
-//        }
-
-//
-//        return beanMappingService.mapTo(activityReportService.findByUserAndSport(user, activity),
-// ActivityReportDTO.class);
-        return null;
+        return beanMappingService.mapTo(activityReportService.findByUserAndSport(user, activity),
+                ActivityReportDTO.class);
     }
 
     @Override
@@ -147,10 +116,33 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
 
     @Override
     public void removeActivityReportsOfUser(Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            throw new NonExistingEntityException("Can not remove activity reports for non existing user");
-        }
+        User user = getExistingUserOrThrowException(userId);
         activityReportService.removeActivityReportsOfUser(user);
+    }
+
+    /**
+     * @param id user id
+     * @return existing user
+     * @throws NonExistingEntityException if user does not exist
+     */
+    private User getExistingUserOrThrowException(Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            throw new NonExistingEntityException("User does not exist.");
+        }
+        return user;
+    }
+
+    /**
+     * @param id sport id
+     * @return existing sport
+     * @throws NonExistingEntityException if sport does not exist
+     */
+    private SportActivity getExistingSportOrThrowException(Long id) {
+        SportActivity sportActivity = sportService.findById(id);
+        if (sportActivity == null) {
+            throw new NonExistingEntityException("Sport does not exist.");
+        }
+        return sportActivity;
     }
 }
