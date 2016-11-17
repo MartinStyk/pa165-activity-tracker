@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.enums.Sex;
+import cz.muni.fi.pa165.tracker.exception.ActivityTrackerServiceException;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -39,6 +40,9 @@ public class CaloriesServiceImpl implements CaloriesService {
         if (sportActivity.getCaloriesFactor() == null) {
             throw new IllegalArgumentException("Calories factor for sport activity is null");
         }
+        if (duration.isNegative()) {
+            throw new IllegalArgumentException("Duration is negative");
+        }
 
         double userAge = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
 
@@ -50,6 +54,11 @@ public class CaloriesServiceImpl implements CaloriesService {
         }
 
         double calorieBurn = (metabolicRate / 24) * sportActivity.getCaloriesFactor() * duration.toHours();
+
+        if (calorieBurn < 0) {
+            throw new ActivityTrackerServiceException("Negative calories computed for user " + user + " sport "
+                    + sportActivity + " duration " + duration);
+        }
 
         return (int) calorieBurn;
     }
