@@ -17,7 +17,7 @@ public class SportActivityCreateDTO {
 
     @Min(1)
     @NotNull
-    private Double caloreisFactor;
+    private Double caloriesFactor;
 
     public String getName() {
         return name;
@@ -27,19 +27,19 @@ public class SportActivityCreateDTO {
         this.name = name;
     }
 
-    public Double getCaloreisFactor() {
-        return caloreisFactor;
+    public Double getCaloriesFactor() {
+        return caloriesFactor;
     }
 
-    public void setCaloreisFactor(Double caloreisFactor) {
-        this.caloreisFactor = caloreisFactor;
+    public void setCaloriesFactor(Double caloriesFactor) {
+        this.caloriesFactor = caloriesFactor;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Objects.hashCode(this.caloreisFactor);
+        hash = 97 * hash + Objects.hashCode(this.caloriesFactor);
         return hash;
     }
 
@@ -55,7 +55,7 @@ public class SportActivityCreateDTO {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.caloreisFactor, other.caloreisFactor)) {
+        if (!Objects.equals(this.caloriesFactor, other.caloriesFactor)) {
             return false;
         }
         return true;
@@ -63,7 +63,7 @@ public class SportActivityCreateDTO {
 
     @Override
     public String toString() {
-        return "SportActivityCreateDTO{" + "name=" + name + ", caloreisFactor=" + caloreisFactor + '}';
+        return "SportActivityCreateDTO{" + "name=" + name + ", caloriesFactor=" + caloriesFactor + '}';
     }
 
 }

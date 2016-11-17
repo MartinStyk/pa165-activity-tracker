@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.tracker.facade;
 
 import cz.muni.fi.pa165.tracker.dto.SportActivityCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.SportActivityDTO;
+import cz.muni.fi.pa165.tracker.dto.SportActivityUpdateDTO;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface SportActivityFacade {
      * sportActivity
      * @param sportActivity sportActivity to be updated
      */
-    void updateSportActivity(SportActivityDTO sportActivity);
+    void updateSportActivity(SportActivityUpdateDTO sportActivity);
 
     /**
      * Removes SportActivity
@@ -48,6 +49,7 @@ public interface SportActivityFacade {
      * @param id id of activity to be found
      * @throws NonExistingEntityException if sportActivity for given id doesn't
      * exist
+     * @throws IllegalArgumentException if id is null
      * @return sportActivity with given id
      */
     SportActivityDTO getSportActivityById(Long id);
