@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -44,9 +45,13 @@ public class SportActivityDaoImpl implements SportActivityDao {
         if (name == null) {
             throw new IllegalArgumentException("Attemted to find SportActivity with null name");
         }
-        TypedQuery<SportActivity> q = em.createQuery("SELECT sa FROM SportActivity sa WHERE sa.name = :name",
-                SportActivity.class).setParameter("name", name);
-        return q.getSingleResult();
+        try {
+            TypedQuery<SportActivity> q = em.createQuery("SELECT sa FROM SportActivity sa WHERE sa.name = :name",
+                    SportActivity.class).setParameter("name", name);
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

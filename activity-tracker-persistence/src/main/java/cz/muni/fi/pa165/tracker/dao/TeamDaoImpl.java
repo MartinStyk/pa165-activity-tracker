@@ -6,10 +6,13 @@
 package cz.muni.fi.pa165.tracker.dao;
 
 import cz.muni.fi.pa165.tracker.entity.Team;
+
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Repository;
 
 /**
@@ -48,9 +51,13 @@ public class TeamDaoImpl implements TeamDao {
         if (name == null) {
             throw new IllegalArgumentException("Attempted to find Team with null name");
         }
-        TypedQuery<Team> q = em.createQuery("SELECT t FROM Team t WHERE t.name = :name",
-                Team.class).setParameter("name", name);
-        return q.getSingleResult();
+        try {
+            TypedQuery<Team> q = em.createQuery("SELECT t FROM Team t WHERE t.name = :name",
+                    Team.class).setParameter("name", name);
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

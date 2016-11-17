@@ -190,10 +190,10 @@ public class SportActivityDaoTestCase extends AbstractTestNGSpringContextTests {
         SportActivity result = sportActivityDao.findByName(null);
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test
     public void testFindSportActivityByNotExistingName() {
         sportActivityDao.create(football);
-        SportActivity find = sportActivityDao.findByName("biathlon");
+        Assert.assertNull(sportActivityDao.findByName("biathlon"));
     }
 
     @Test
