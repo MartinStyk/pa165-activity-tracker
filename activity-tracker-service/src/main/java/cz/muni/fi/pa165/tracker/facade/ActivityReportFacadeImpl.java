@@ -77,6 +77,9 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
 
     @Override
     public ActivityReportDTO getActivityReportById(Long activityReportId) {
+        if (activityReportId == null) {
+            throw new IllegalArgumentException("activityReportId is null");
+        }
         ActivityReport activityReport = activityReportService.findById(activityReportId);
         if (activityReport == null) {
             throw new NonExistingEntityException("Activity report for doesn't exist");
@@ -107,6 +110,9 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
 
     @Override
     public void removeActivityReport(Long activityReportId) {
+        if (activityReportId == null) {
+            throw new IllegalArgumentException("activityReportId is null");
+        }
         ActivityReport activityReport = activityReportService.findById(activityReportId);
         if (activityReport == null) {
             throw new NonExistingEntityException("Can not remove not existing activity report");
@@ -124,11 +130,15 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
      * @param id user id
      * @return existing user
      * @throws NonExistingEntityException if user does not exist
+     * @throws IllegalArgumentException   if id is null
      */
     private User getExistingUserOrThrowException(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("user id is null");
+        }
         User user = userService.findById(id);
         if (user == null) {
-            throw new NonExistingEntityException("User does not exist.");
+            throw new NonExistingEntityException("User does not exist. Id: " + id);
         }
         return user;
     }
@@ -137,11 +147,15 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
      * @param id sport id
      * @return existing sport
      * @throws NonExistingEntityException if sport does not exist
+     * @throws IllegalArgumentException   if id is null
      */
     private SportActivity getExistingSportOrThrowException(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("sport id is null");
+        }
         SportActivity sportActivity = sportService.findById(id);
         if (sportActivity == null) {
-            throw new NonExistingEntityException("Sport does not exist.");
+            throw new NonExistingEntityException("Sport does not exist. Id: " + id);
         }
         return sportActivity;
     }

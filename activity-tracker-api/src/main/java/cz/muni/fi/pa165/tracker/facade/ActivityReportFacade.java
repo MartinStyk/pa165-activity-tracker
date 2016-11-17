@@ -47,6 +47,7 @@ public interface ActivityReportFacade {
      * @param activityReportId
      * @return activity report identified by unique id
      * @throws NonExistingEntityException if report for given id doesn't exist
+     * @throws IllegalArgumentException if activityReportId is null
      */
     ActivityReportDTO getActivityReportById(Long activityReportId);
 
@@ -56,6 +57,7 @@ public interface ActivityReportFacade {
      * @param userId id of user
      * @return activity reports of given user or empty list if user has no activities
      * @throws NonExistingEntityException if user for given id doesn't exist
+     * @throws IllegalArgumentException if userId is null
      */
     List<ActivityReportDTO> getActivityReportsByUser(Long userId);
 
@@ -65,6 +67,7 @@ public interface ActivityReportFacade {
      * @param sportId id of sport
      * @return activity reports of given sport or empty list if user has no activities
      * @throws NonExistingEntityException if sport for given id doesn't exist
+     * @throws IllegalArgumentException if sportId is null
      */
     List<ActivityReportDTO> getActivityReportsBySport(Long sportId);
 
@@ -74,6 +77,7 @@ public interface ActivityReportFacade {
      * @param sportId id of sport
      * @return activity reports of given sport or empty list if user has no activities
      * @throws NonExistingEntityException if sport or user for given id doesn't exist
+     * @throws IllegalArgumentException if userId or sportId is null
      */
     List<ActivityReportDTO> getActivityReportsByUserAndSport(Long userId, Long sportId);
 
@@ -82,6 +86,7 @@ public interface ActivityReportFacade {
      *
      * @param activityReportId id of report to delete
      * @throws NonExistingEntityException if activity report for given id doesn't exist
+     * @throws IllegalArgumentException if activityReportId
      */
     void removeActivityReport(Long activityReportId);
 
@@ -91,6 +96,7 @@ public interface ActivityReportFacade {
      *
      * @param userId id of user
      * @throws NonExistingEntityException if user for given id doesn't exist
+     * @throws IllegalArgumentException if userId is null
      */
     void removeActivityReportsOfUser(Long userId);
 
