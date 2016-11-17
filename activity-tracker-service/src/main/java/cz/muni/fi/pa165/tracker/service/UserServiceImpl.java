@@ -8,6 +8,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
 import javax.crypto.SecretKeyFactory;
+
+import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import javax.crypto.spec.PBEKeySpec;
  * @version 09.11. 2016
  */
 @Service
+@TranslatePersistenceExceptions
 public class UserServiceImpl implements UserService {
 
     @Autowired

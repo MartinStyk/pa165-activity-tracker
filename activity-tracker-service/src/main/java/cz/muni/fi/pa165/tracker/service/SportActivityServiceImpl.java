@@ -4,6 +4,8 @@ import cz.muni.fi.pa165.tracker.dao.SportActivityDao;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import java.util.List;
 import javax.inject.Inject;
+
+import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
  * @author Adam Laurenčík
  */
 @Service
+@TranslatePersistenceExceptions
 public class SportActivityServiceImpl implements SportActivityService {
 
     @Inject
@@ -40,8 +43,8 @@ public class SportActivityServiceImpl implements SportActivityService {
 
     @Override
     public SportActivity findByName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null");
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("name is null or empty");
         }
         return sportActivityDao.findByName(name);
     }

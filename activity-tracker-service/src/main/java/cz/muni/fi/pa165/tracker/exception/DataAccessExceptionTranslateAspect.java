@@ -13,7 +13,8 @@ import javax.validation.ConstraintViolationException;
  * Aspect for automatic translation of exceptions to ActivityTrackerDataAccessException.
  * <p>
  * Every exception from data access layer is translated to {@link ActivityTrackerDataAccessException}.
- * This is effective for all service classes.
+ * This is effective for all public methods annotated by {@link TranslatePersistenceExceptions} or all public
+ * method placed in class annotated by {@link TranslatePersistenceExceptions}.
  *
  * @author Martin Styk
  * @version 08.11.2016
@@ -22,7 +23,8 @@ import javax.validation.ConstraintViolationException;
 @Named
 public class DataAccessExceptionTranslateAspect {
 
-    @Around("execution(public * cz.muni.fi.pa165.tracker.service..*(..))")
+    @Around("(@annotation(TranslatePersistenceExceptions) || @within(TranslatePersistenceExceptions))" +
+            "&& execution(public * *(..))")
     public Object translateDataAccessException(ProceedingJoinPoint pjp) throws Throwable {
         try {
             return pjp.proceed();

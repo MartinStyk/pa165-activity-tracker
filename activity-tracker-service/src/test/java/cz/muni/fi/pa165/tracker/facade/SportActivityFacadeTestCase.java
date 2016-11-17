@@ -9,7 +9,6 @@ import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingServiceImpl;
 import cz.muni.fi.pa165.tracker.service.SportActivityService;
-import cz.muni.fi.pa165.tracker.service.SportActivityServiceImpl;
 import org.mockito.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;

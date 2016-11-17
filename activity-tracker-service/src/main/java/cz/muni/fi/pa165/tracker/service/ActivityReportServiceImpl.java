@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.exception.ActivityTrackerServiceException;
+import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  * @version 08.11.2016
  */
 @Service
+@TranslatePersistenceExceptions
 public class ActivityReportServiceImpl implements ActivityReportService {
 
     @Inject
