@@ -40,7 +40,7 @@ public class TeamDTO {
         return teamLeader;
     }
 
-    public void setTeamLeaderId(UserDTO teamLeader) {
+    public void setTeamLeader(UserDTO teamLeader) {
         this.teamLeader = teamLeader;
     }
 
