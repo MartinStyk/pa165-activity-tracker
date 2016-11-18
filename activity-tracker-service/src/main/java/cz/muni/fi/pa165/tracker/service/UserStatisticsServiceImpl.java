@@ -86,6 +86,8 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
 
     @Override
     public Map<SportActivity, Integer> getCaloriesForSportsOfUser(User user) {
+        if (user == null) throw new IllegalArgumentException("User is null");
+
         return activityReportDao.findReportsByUser(user)
                 .stream()
                 .collect(
