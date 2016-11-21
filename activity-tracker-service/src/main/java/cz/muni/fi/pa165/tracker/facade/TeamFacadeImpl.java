@@ -89,6 +89,9 @@ public class TeamFacadeImpl implements TeamFacade {
         if (teamDTO == null) {
             throw new IllegalArgumentException("TeamDTO is null");
         }
+        if (teamService.findTeamById(teamDTO.getId()) == null) {
+            throw new NonExistingEntityException("Team doesn't exist");
+        }
         Team team = bms.mapTo(teamDTO, Team.class);
         teamService.removeTeam(team);
     }
