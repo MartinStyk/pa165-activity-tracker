@@ -20,8 +20,9 @@ public interface TeamService {
     /**
      * Updates team
      * @param team updated team
+     * @return update team
      */
-    void updateTeam(Team team);
+    Team updateTeam(Team team);
 
     /**
      * Returns a list of all teams

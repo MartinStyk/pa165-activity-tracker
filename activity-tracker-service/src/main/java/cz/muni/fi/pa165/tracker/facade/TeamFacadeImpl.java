@@ -75,7 +75,7 @@ public class TeamFacadeImpl implements TeamFacade {
     @Override
     public TeamDTO getTeamByName(String teamName) {
         if (teamName == null) {
-            throw new IllegalArgumentException("teamName is null");
+            throw new IllegalArgumentException("Team Name is null");
         }
         Team team = teamService.findTeamByName(teamName);
         if (team == null) {
@@ -86,6 +86,9 @@ public class TeamFacadeImpl implements TeamFacade {
 
     @Override
     public void removeTeam(TeamDTO teamDTO) {
+        if (teamDTO == null) {
+            throw new IllegalArgumentException("TeamDTO is null");
+        }
         Team team = bms.mapTo(teamDTO, Team.class);
         teamService.removeTeam(team);
     }

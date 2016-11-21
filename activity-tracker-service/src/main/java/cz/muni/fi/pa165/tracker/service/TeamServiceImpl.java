@@ -34,11 +34,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void updateTeam(Team team) {
+    public Team updateTeam(Team team) {
         if (team == null) {
             throw new IllegalArgumentException("Team entity is null");
         }
-        teamDao.update(team);
+        return teamDao.update(team);
     }
 
     @Override
@@ -53,11 +53,17 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team findTeamByName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name of team is null or empty");
+        }
         return teamDao.findByName(name);
     }
 
     @Override
     public void removeTeam(Team team) {
+        if (team == null) {
+            throw new IllegalArgumentException("Team is null");
+        }
         teamDao.remove(team);
     }
 }
