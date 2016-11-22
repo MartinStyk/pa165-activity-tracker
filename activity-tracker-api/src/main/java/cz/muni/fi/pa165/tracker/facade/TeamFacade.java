@@ -7,6 +7,8 @@ package cz.muni.fi.pa165.tracker.facade;
 
 import cz.muni.fi.pa165.tracker.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.TeamDTO;
+import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
+
 import java.util.List;
 
 /**
@@ -22,6 +24,8 @@ public interface TeamFacade {
      *
      * @param team team to be created
      * @return id of created team
+     * @throws IllegalArgumentException   if team is null
+     * @throws NonExistingEntityException if teamleader in activity report doesn't exist
      */
     Long createTeam(TeamCreateDTO team);
 
@@ -29,6 +33,7 @@ public interface TeamFacade {
      * Updates team
      *
      * @param team entity to be updated
+     * @throws IllegalArgumentException if parameter is null
      */
     void updateTeam(TeamDTO team);
 
@@ -50,6 +55,7 @@ public interface TeamFacade {
 
     /**
      * Returns team with given name
+     *
      * @param name name of desired team
      * @return team entity matching given name
      * @throws IllegalArgumentException if name is null
