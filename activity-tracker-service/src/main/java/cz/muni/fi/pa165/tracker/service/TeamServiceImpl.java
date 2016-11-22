@@ -8,9 +8,10 @@ package cz.muni.fi.pa165.tracker.service;
 import cz.muni.fi.pa165.tracker.dao.TeamDao;
 import cz.muni.fi.pa165.tracker.entity.Team;
 import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Implementation of {@link TeamService}.
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 @TranslatePersistenceExceptions
 public class TeamServiceImpl implements TeamService {
 
-    @Autowired
+    @Inject
     private TeamDao teamDao;
 
     @Override
