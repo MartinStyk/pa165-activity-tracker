@@ -52,11 +52,21 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public void updateUser(UserDTO user) {
-        userService.update(bms.mapTo(user, User.class));
+        if (user == null){
+            throw new IllegalArgumentException("UserDTO is null");
+        }
+        User userEntity = bms.mapTo(user, User.class);
+        if(userService.findById(userEntity.getId())==null){
+            throw new NonExistingEntityException("Cannot update nonexisting user.");
+        }
+        userService.update(userEntity);
     }
 
     @Override
     public UserDTO findUserById(Long id) {
+        if(id==null){
+            throw new IllegalArgumentException("userId is null");
+        }
         User user = userService.findById(id);
         if (user == null) {
             throw new NonExistingEntityException("User doesn't exist for id " + id);
@@ -84,7 +94,13 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public void removeUser(UserDTO user) {
+        if(user==null){
+            throw new IllegalArgumentException("UserDTO is null");
+        }
         User userEntity = bms.mapTo(user, User.class);
+        if(userService.findById(userEntity.getId())==null){
+            throw new NonExistingEntityException("User does not exist");
+        }
         userService.deleteUser(userEntity);
     }
 

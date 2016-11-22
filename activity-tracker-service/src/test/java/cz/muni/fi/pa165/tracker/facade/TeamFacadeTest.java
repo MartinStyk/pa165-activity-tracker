@@ -258,8 +258,8 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void removeTeam() {
-        //removing activity with id 1 -  mock is initialized to return team
+    public void removeTeamTest() {
+        //removing team with id 1 -  mock is initialized to return team
         TeamDTO removeDTO = new TeamDTO();
         removeDTO.setId(1l);
         removeDTO.setName("TEAM");
@@ -275,7 +275,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void removeTeamNonExistingTest() {
-        //removing activity with id 0 -  mock is initialized to return null - not found
+        //removing team with id 0 -  mock is initialized to return null - not found
         TeamDTO team0 = new TeamDTO();
         team0.setId(0l);
         teamFacade.removeTeam(team0);
