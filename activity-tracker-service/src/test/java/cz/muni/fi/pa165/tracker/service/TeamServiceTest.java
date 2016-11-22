@@ -8,31 +8,30 @@ import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.exception.ActivityTrackerDataAccessException;
 import cz.muni.fi.pa165.tracker.exception.DataAccessExceptionTranslateAspect;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doAnswer;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
-import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import javax.persistence.EntityExistsException;
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.*;
 
 /**
  * Test class for TeamService
@@ -47,6 +46,9 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     private TeamDao teamDao;
 
     private TeamService teamService;
+
+    @Captor
+    ArgumentCaptor<Team> argumentCaptor;
 
     private Team newTeam;
     private Team teamPersisted;
@@ -214,6 +216,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     @Test
     public void createTeam() {
         teamService.createTeam(newTeam);
+        verify(teamDao).create(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), newTeam);
         assertNotNull(newTeam);
         assertEquals((long) newTeam.getId(), createdEntityId);
     }
@@ -256,6 +260,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     public void updateTeam() {
         assertNotNull(teamPersisted.getId());
         Team updated = teamService.updateTeam(teamPersisted);
+        verify(teamDao).update(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
     }
@@ -269,6 +275,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     public void updateTeamNonExisting() {
         assertNull(newTeam.getId());
         Team updated = teamService.updateTeam(newTeam);
+        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), newTeam);
         assertEquals((long) updated.getId(), updatedEntityId);
         assertDeepEqualsWithoutId(updated, newTeam);
     }
@@ -278,6 +286,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         assertNotNull(teamPersisted.getId());
         teamPersisted.setName("Change Name");
         Team updated = teamService.updateTeam(teamPersisted);
+        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
     }
@@ -298,6 +308,9 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
 
         teamPersisted.addMember(addMember);
         Team updated = teamService.updateTeam(teamPersisted);
+
+        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
     }
@@ -307,6 +320,9 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         assertNotNull(teamPersisted.getId());
         teamPersisted.removeMember(member);
         Team updated = teamService.updateTeam(teamPersisted);
+
+        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
     }
@@ -316,6 +332,9 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         assertNotNull(teamPersisted.getId());
         teamPersisted.setTeamLeader(member);
         Team updated = teamService.updateTeam(teamPersisted);
+
+        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
     }
@@ -388,6 +407,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     public void removeTeam() {
         teamPersisted.setId(alreadyExistingEntityId);
         teamService.removeTeam(teamPersisted);
+        verify(teamDao, atLeast(1)).remove(argumentCaptor.capture());
+        assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class) // ActivityTrackerDataAccessException

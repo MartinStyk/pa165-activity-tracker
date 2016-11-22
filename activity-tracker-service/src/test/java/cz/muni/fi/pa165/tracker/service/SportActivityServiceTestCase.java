@@ -5,6 +5,8 @@ import cz.muni.fi.pa165.tracker.dao.SportActivityDao;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.exception.ActivityTrackerDataAccessException;
 import cz.muni.fi.pa165.tracker.exception.DataAccessExceptionTranslateAspect;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -13,6 +15,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -24,8 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 /**
@@ -39,6 +41,9 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     private SportActivityDao sportActivityDao;
 
     private SportActivityService sportService;
+
+    @Captor
+    ArgumentCaptor<SportActivity> argumentCaptor;
 
     private SportActivity hockey;
     private SportActivity footballPersisted;
@@ -159,6 +164,8 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     @Test
     public void create() {
         sportService.create(hockey);
+        verify(sportActivityDao).create(argumentCaptor.capture());
+        assertDeepEquals(argumentCaptor.getValue(), hockey);
         assertNotNull(hockey);
         assertEquals((long) hockey.getId(), createdEntityId);
     }
@@ -195,6 +202,8 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     public void update() {
         assertNotNull(footballPersisted.getId());
         SportActivity updated = sportService.update(footballPersisted);
+        verify(sportActivityDao).update(argumentCaptor.capture());
+        assertDeepEquals(argumentCaptor.getValue(), footballPersisted);
         assertEquals(updated.getId(), footballPersisted.getId());
         assertEquals(updated.getName(), footballPersisted.getName());
         assertEquals(updated.getCaloriesFactor(), footballPersisted.getCaloriesFactor());
@@ -209,9 +218,7 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     public void updateNonExisting() {
         assertNull(hockey.getId());
         SportActivity updated = sportService.update(hockey);
-        assertEquals((long) updated.getId(), updatedEntityId);
-        assertEquals(updated.getCaloriesFactor(), hockey.getCaloriesFactor());
-        assertEquals(updated.getName(), hockey.getName());
+        assertDeepEquals(updated, hockey);
     }
 
     @Test(expectedExceptions = ActivityTrackerDataAccessException.class)
@@ -223,9 +230,7 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     @Test
     public void findById() {
         SportActivity found = sportService.findById(1l);
-        assertEquals(found.getId(), cyclingPersisted.getId());
-        assertEquals(found.getCaloriesFactor(), cyclingPersisted.getCaloriesFactor());
-        assertEquals(found.getName(), cyclingPersisted.getName());
+        assertDeepEquals(found, cyclingPersisted);
     }
 
     @Test
@@ -241,9 +246,7 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     @Test
     public void findByName() {
         SportActivity result = sportService.findByName("hockey");
-        assertEquals(result.getId(), hockey.getId());
-        assertEquals(result.getCaloriesFactor(), hockey.getCaloriesFactor());
-        assertEquals(result.getName(), hockey.getName());
+        assertDeepEquals(result, hockey);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -274,9 +277,7 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
         for (int i = 0; i < entityList.size(); i++) {
             SportActivity entity = entityList.get(i);
             SportActivity result = resultList.get(i);
-            assertEquals(result.getId(), entity.getId());
-            assertEquals(result.getName(), entity.getName());
-            assertEquals(result.getCaloriesFactor(), entity.getCaloriesFactor());
+            assertDeepEquals(result, entity);
         }
     }
 
@@ -288,8 +289,10 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
 
     @Test
     public void remove() {
-        hockey.setId(alreadyExistingEntityId);
-        sportService.remove(hockey);
+        footballPersisted.setId(alreadyExistingEntityId);
+        sportService.remove(footballPersisted);
+        verify(sportActivityDao).remove(argumentCaptor.capture());
+        assertDeepEquals(argumentCaptor.getValue(), footballPersisted);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -301,6 +304,12 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     public void removeNonExisting() {
         hockey.setId(notPersistedEntityId);
         sportService.remove(hockey);
+    }
+
+    private void assertDeepEquals(SportActivity sport1, SportActivity sport2) {
+        Assert.assertEquals(sport1.getId(), sport2.getId());
+        Assert.assertEquals(sport1.getName(), sport2.getName());
+        Assert.assertEquals(sport1.getCaloriesFactor(), sport2.getCaloriesFactor());
     }
 
 
