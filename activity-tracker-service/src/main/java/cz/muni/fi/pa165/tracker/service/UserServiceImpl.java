@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.crypto.spec.PBEKeySpec;
 
 /**
- * Implementation of the {@link UserService}. This class is part of the
- * service module of the application that provides the implementation of the
- * business logic for user.
+ * Implementation of the {@link UserService}. This class is part of the service
+ * module of the application that provides the implementation of the business
+ * logic for user.
  *
  * @author Petra Ondřejková
  * @version 09.11. 2016
@@ -33,24 +33,46 @@ public class UserServiceImpl implements UserService {
     private ActivityReportDao activityReport;
 
     @Override
-    public void registerUser(User user, String passwordHash) {
-        user.setPasswordHash(createHash(passwordHash));
+    public void registerUser(User user, String password) {
+        if (user == null) {
+            throw new IllegalArgumentException("user is null");
+        }
+
+        if (password == null) {
+            throw new IllegalArgumentException("password is null");
+        }
+        user.setPasswordHash(createHash(password));
         userDao.create(user);
     }
 
     @Override
-    public boolean authenticateUser(User user, String passwordHash) {
-        return validatePassword(passwordHash, user.getPasswordHash());
+    public boolean authenticateUser(User user, String password) {
+        if (user == null) {
+            throw new IllegalArgumentException("user is null");
+        }
+        if (password == null) {
+            throw new IllegalArgumentException("password is null");
+        }
+        return validatePassword(password, user.getPasswordHash());
     }
 
     @Override
     public boolean isAdmin(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("user is null");
+        }
         User actual = findById(user.getId());
         return actual.getRole() == UserRole.ADMIN;
     }
 
     @Override
     public void deleteUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("user is null");
+        }
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("user does not have set id");
+        }
         User actual = findById(user.getId());
         activityReport.deleteUserReports(actual);
         userDao.remove(user);
@@ -58,11 +80,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null");
+        }
         return userDao.findById(id);
     }
 
     @Override
     public User findByEmail(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("email is null");
+        }
         return userDao.findByEmail(email);
     }
 
@@ -73,6 +101,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("user is null");
+        }
         return userDao.update(user);
     }
 
@@ -100,8 +131,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public static boolean validatePassword(String password, String correctHash) {
-        if (password == null) return false;
-        if (correctHash == null) throw new IllegalArgumentException("password hash is null");
+        if (password == null) {
+            return false;
+        }
+        if (correctHash == null) {
+            throw new IllegalArgumentException("password hash is null");
+        }
         String[] params = correctHash.split(":");
         int iterations = Integer.parseInt(params[0]);
         byte[] salt = fromHex(params[1]);
@@ -121,8 +156,9 @@ public class UserServiceImpl implements UserService {
      */
     private static boolean slowEquals(byte[] a, byte[] b) {
         int diff = a.length ^ b.length;
-        for (int i = 0; i < a.length && i < b.length; i++)
+        for (int i = 0; i < a.length && i < b.length; i++) {
             diff |= a[i] ^ b[i];
+        }
         return diff == 0;
     }
 

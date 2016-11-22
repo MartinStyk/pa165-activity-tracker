@@ -13,21 +13,24 @@ public interface UserService {
 
     /**
      * Register new user.
+     *
      * @param user user to be created
-     * @param passwordHash plain password
+     * @param password plain password
      */
-    void registerUser(User user, String passwordHash);
+    void registerUser(User user, String password);
 
     /**
      * Log in user.
+     *
      * @param user user logging in
-     * @param passwordHash plain password
+     * @param password plain password
      * @return true if user was successfully logged in, false otherwise
      */
-    boolean authenticateUser(User user, String passwordHash);
+    boolean authenticateUser(User user, String password);
 
     /**
      * Check whether the user is admin or not.
+     *
      * @param user
      * @return true if user is admin, false otherwise
      */
@@ -35,12 +38,14 @@ public interface UserService {
 
     /**
      * Remove given user.
+     *
      * @param user user to be removed
      */
     void deleteUser(User user);
 
     /**
      * Finds an user by given id.
+     *
      * @param id of user to be found
      * @return found user
      */
@@ -48,6 +53,7 @@ public interface UserService {
 
     /**
      * Finds an user by email.
+     *
      * @param email of user to be found
      * @return found user
      */
@@ -55,12 +61,14 @@ public interface UserService {
 
     /**
      * Returns a list of all users.
+     *
      * @return list of all users.
      */
     List<User> findAll();
 
     /**
      * Updates an user with new data.
+     *
      * @param user containing new user data.
      * @return update user
      */
