@@ -82,6 +82,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leader.setDateOfBirth(LocalDate.ofYearDay(1990, 333));
 
         leaderDTO = new UserDTO();
+        leaderDTO.setId(1l);
         leaderDTO.setPasswordHash(leader.getPasswordHash());
         leaderDTO.setFirstName(leader.getFirstName());
         leaderDTO.setHeight(leader.getHeight());
@@ -104,6 +105,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leader2.setDateOfBirth(LocalDate.ofYearDay(1991, 333));
 
         leader2DTO = new UserDTO();
+        leader2DTO.setId(2l);
         leader2DTO.setPasswordHash(leader2.getPasswordHash());
         leader2DTO.setFirstName(leader2.getFirstName());
         leader2DTO.setHeight(leader2.getHeight());
@@ -162,7 +164,9 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         teamFacade.createTeam(teamCreateDTO);
         verify(teamService).createTeam(argumentCaptor.capture());
         assertEquals(argumentCaptor.getValue().getName(), name);
-        //assertDeepEquals(argumentCaptor.getValue().getTeamLeader(), leader);
+        assertDeepEquals(argumentCaptor.getValue().getTeamLeader(), leader);
+        assertEquals(argumentCaptor.getValue().getMembers().size(), 1);
+        assertDeepEquals(argumentCaptor.getValue().getMembers().get(0), leader);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -171,12 +175,33 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void updateTeamTest() {
+    public void updateTeamTestName() {
         final long id = 1;
         final String name = "Updated Team";
         TeamDTO updatedDTO = new TeamDTO();
         updatedDTO.setId(id);
-        updatedDTO.setName(name);
+        // update name
+        updatedDTO.setName(team.getName());
+        updatedDTO.setTeamLeader(leaderDTO);
+        List<UserDTO> members = new ArrayList();
+        members.add(leaderDTO);
+        updatedDTO.setMembers(members);
+
+        teamFacade.updateTeam(updatedDTO);
+        verify(teamService).updateTeam(argumentCaptor.capture());
+        assertEquals((long) argumentCaptor.getValue().getId(), id);
+        assertEquals(argumentCaptor.getValue().getName(), name);
+        assertEquals(argumentCaptor.getValue().getTeamLeader(), leader);
+        assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
+    }
+
+    @Test
+    public void updateTeamTestLeader() {
+        final long id = 1;
+        TeamDTO updatedDTO = new TeamDTO();
+        updatedDTO.setId(id);
+        updatedDTO.setName(team.getName());
+        updatedDTO.setTeamLeader(leader2DTO);
         List<UserDTO> members = new ArrayList();
         members.add(leader2DTO);
         members.add(leaderDTO);
@@ -185,8 +210,28 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         teamFacade.updateTeam(updatedDTO);
         verify(teamService).updateTeam(argumentCaptor.capture());
         assertEquals((long) argumentCaptor.getValue().getId(), id);
-        assertEquals(argumentCaptor.getValue().getName(), name);
-        //assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
+        assertEquals(argumentCaptor.getValue().getName(), team.getName());
+        assertEquals(argumentCaptor.getValue().getTeamLeader(), leader2);
+        assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
+    }
+
+    @Test
+    public void updateTeamTestMembers() {
+        final long id = 1;
+        TeamDTO updatedDTO = new TeamDTO();
+        updatedDTO.setId(id);
+        updatedDTO.setName(team.getName());
+        List<UserDTO> members = new ArrayList();
+        members.add(leader2DTO);
+        members.add(leaderDTO);
+        updatedDTO.setMembers(members);
+
+        teamFacade.updateTeam(updatedDTO);
+        verify(teamService).updateTeam(argumentCaptor.capture());
+        assertEquals((long) argumentCaptor.getValue().getId(), id);
+        assertEquals(argumentCaptor.getValue().getName(), team.getName());
+        assertEquals(argumentCaptor.getValue().getTeamLeader(), leader);
+        assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
     }
 
     @Test(expectedExceptions = NonExistingEntityException.class)
@@ -244,7 +289,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         assertEquals(team1.getName(), teamDTO.getName());
         assertEquals(team1.getTeamLeader().getId(), teamDTO.getTeamLeader().getId());
         assertEquals(team1.getMembers().size(), teamDTO.getMembers().size());
-        //assertDeepEqualsDTO(team1.getMembers().get(0), teamDTO.getMembers().get(0));
+        assertDeepEqualsDTO(team1.getMembers().get(0), teamDTO.getMembers().get(0));
     }
 
     @Test(expectedExceptions = NonExistingEntityException.class)
@@ -263,8 +308,11 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         assertEquals(result.getId(), teamDTO.getId());
         assertEquals(result.getName(), teamDTO.getName());
         assertEquals(result.getTeamLeader().getId(), teamDTO.getTeamLeader().getId());
+        assertDeepEqualsDTO(result.getTeamLeader(), teamDTO.getTeamLeader());
         assertEquals(result.getMembers().size(), teamDTO.getMembers().size());
-        //assertDeepEqualsDTO(result.getMembers().get(0), teamDTO.getMembers().get(0));
+        for(int i = 0; i < teamDTO.getMembers().size(); i++) {
+            assertDeepEqualsDTO(result.getMembers().get(i), teamDTO.getMembers().get(i));
+        }
     }
 
     @Test(expectedExceptions = NonExistingEntityException.class)
