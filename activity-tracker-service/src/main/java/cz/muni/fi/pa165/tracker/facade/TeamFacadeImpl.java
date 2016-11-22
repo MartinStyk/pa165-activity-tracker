@@ -45,7 +45,9 @@ public class TeamFacadeImpl implements TeamFacade {
             throw new IllegalArgumentException("TeamDTO is null");
         }
         Team team = bms.mapTo(teamDTO, Team.class);
-        team.setTeamLeader(getExistingUserOrThrowException(teamDTO.getTeamLeaderId()));
+        User leader = getExistingUserOrThrowException(teamDTO.getTeamLeaderId());
+        team.setTeamLeader(leader);
+        team.addMember(leader);
 
         teamService.createTeam(team);
         return team.getId();
