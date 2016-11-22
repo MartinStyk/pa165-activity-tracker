@@ -30,6 +30,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import org.mockito.*;
+import static org.mockito.Mockito.atLeast;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -83,6 +84,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
 
         leaderDTO = new UserDTO();
         leaderDTO.setId(1l);
+        leaderDTO.setEmail("pepa@mail.com");
         leaderDTO.setPasswordHash(leader.getPasswordHash());
         leaderDTO.setFirstName(leader.getFirstName());
         leaderDTO.setHeight(leader.getHeight());
@@ -106,6 +108,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
 
         leader2DTO = new UserDTO();
         leader2DTO.setId(2l);
+        leader2DTO.setEmail("josef@mail.com");
         leader2DTO.setPasswordHash(leader2.getPasswordHash());
         leader2DTO.setFirstName(leader2.getFirstName());
         leader2DTO.setHeight(leader2.getHeight());
@@ -181,18 +184,18 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         TeamDTO updatedDTO = new TeamDTO();
         updatedDTO.setId(id);
         // update name
-        updatedDTO.setName(team.getName());
+        updatedDTO.setName(name);
         updatedDTO.setTeamLeader(leaderDTO);
         List<UserDTO> members = new ArrayList();
         members.add(leaderDTO);
         updatedDTO.setMembers(members);
 
         teamFacade.updateTeam(updatedDTO);
-        verify(teamService).updateTeam(argumentCaptor.capture());
+        verify(teamService, atLeast(1)).updateTeam(argumentCaptor.capture());
         assertEquals((long) argumentCaptor.getValue().getId(), id);
         assertEquals(argumentCaptor.getValue().getName(), name);
         assertEquals(argumentCaptor.getValue().getTeamLeader(), leader);
-        assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
+        assertEquals(argumentCaptor.getValue().getMembers().size(), members.size());
     }
 
     @Test
@@ -212,7 +215,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         assertEquals((long) argumentCaptor.getValue().getId(), id);
         assertEquals(argumentCaptor.getValue().getName(), team.getName());
         assertEquals(argumentCaptor.getValue().getTeamLeader(), leader2);
-        assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
+        assertEquals(argumentCaptor.getValue().getMembers().size(), members.size());
     }
 
     @Test
@@ -221,17 +224,18 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         TeamDTO updatedDTO = new TeamDTO();
         updatedDTO.setId(id);
         updatedDTO.setName(team.getName());
+        updatedDTO.setTeamLeader(leaderDTO);
         List<UserDTO> members = new ArrayList();
         members.add(leader2DTO);
         members.add(leaderDTO);
         updatedDTO.setMembers(members);
 
         teamFacade.updateTeam(updatedDTO);
-        verify(teamService).updateTeam(argumentCaptor.capture());
+        verify(teamService, atLeast(1)).updateTeam(argumentCaptor.capture());
         assertEquals((long) argumentCaptor.getValue().getId(), id);
         assertEquals(argumentCaptor.getValue().getName(), team.getName());
         assertEquals(argumentCaptor.getValue().getTeamLeader(), leader);
-        assertTrue(argumentCaptor.getValue().getMembers().containsAll(members));
+        assertEquals(argumentCaptor.getValue().getMembers().size(), members.size());
     }
 
     @Test(expectedExceptions = NonExistingEntityException.class)
