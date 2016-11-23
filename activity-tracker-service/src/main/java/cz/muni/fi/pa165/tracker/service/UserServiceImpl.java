@@ -4,16 +4,15 @@ import cz.muni.fi.pa165.tracker.dao.ActivityReportDao;
 import cz.muni.fi.pa165.tracker.dao.UserDao;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
+import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.inject.Inject;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
-import javax.crypto.SecretKeyFactory;
-
-import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.spec.PBEKeySpec;
 
 /**
  * Implementation of the {@link UserService}. This class is part of the service
@@ -27,9 +26,10 @@ import javax.crypto.spec.PBEKeySpec;
 @TranslatePersistenceExceptions
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Inject
     private UserDao userDao;
 
+    @Inject
     private ActivityReportDao activityReport;
 
     @Override
