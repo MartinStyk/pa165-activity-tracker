@@ -113,7 +113,7 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
 
         userService = factory.getProxy();
         ReflectionTestUtils.setField(userService, "userDao", userDao);
-        ReflectionTestUtils.setField(userService, "activityReport", activityReportDao);
+        ReflectionTestUtils.setField(userService, "activityReportDao", activityReportDao);
     }
 
     @BeforeMethod(dependsOnMethods = "initUsers")
@@ -331,10 +331,11 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
     public void deleteUserTest() {
         userService.deleteUser(user);
         verify(userDao, atLeast(1)).remove(argumentCaptor.capture());
+        verify(activityReportDao).deleteUserReports(user);
         assertDeepEqualsWithoutId(argumentCaptor.getValue(), user);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class) // ActivityTrackerDataAccessException
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void removeNull() {
         userService.deleteUser(null);
     }

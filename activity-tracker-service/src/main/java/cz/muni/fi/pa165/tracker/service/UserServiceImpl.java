@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Inject
-    private ActivityReportDao activityReport;
+    private ActivityReportDao activityReportDao;
 
     @Override
     public void registerUser(User user, String password) {
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("user does not have set id");
         }
         User actual = findById(user.getId());
-        activityReport.deleteUserReports(actual);
+        activityReportDao.deleteUserReports(actual);
         userDao.remove(user);
     }
 
