@@ -52,11 +52,11 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public void updateUser(UserDTO user) {
-        if (user == null){
+        if (user == null) {
             throw new IllegalArgumentException("UserDTO is null");
         }
         User userEntity = bms.mapTo(user, User.class);
-        if(userService.findById(userEntity.getId())==null){
+        if (userService.findById(userEntity.getId()) == null) {
             throw new NonExistingEntityException("Cannot update nonexisting user.");
         }
         userService.update(userEntity);
@@ -64,7 +64,7 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public UserDTO findUserById(Long id) {
-        if(id==null){
+        if (id == null) {
             throw new IllegalArgumentException("userId is null");
         }
         User user = userService.findById(id);
@@ -83,6 +83,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public UserDTO findUserByEmail(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("email is null");
+        }
         User user = userService.findByEmail(email);
         if (user == null) {
             throw new NonExistingEntityException("User doesn't exist for email " + email);
@@ -94,11 +97,11 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public void removeUser(UserDTO user) {
-        if(user==null){
+        if (user == null) {
             throw new IllegalArgumentException("UserDTO is null");
         }
         User userEntity = bms.mapTo(user, User.class);
-        if(userService.findById(userEntity.getId())==null){
+        if (userService.findById(userEntity.getId()) == null) {
             throw new NonExistingEntityException("User does not exist");
         }
         userService.deleteUser(userEntity);
@@ -112,6 +115,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public boolean isAdmin(UserDTO user) {
+        if (user == null) {
+            throw new IllegalArgumentException("UserDTO is null");
+        }
         User userEntity = bms.mapTo(user, User.class);
         return userService.isAdmin(userEntity);
     }
@@ -150,7 +156,7 @@ public class UserFacadeImpl implements UserFacade {
         );
 
         Map<SportActivity, Integer> caloriesForSports = statisticsService.getCaloriesForSportsOfUser(user);
-        statisticsDTO.setSportActivities(
+        statisticsDTO.setCaloriesForActivities(
                 bms.mapTo(caloriesForSports, SportActivityDTO.class)
         );
 

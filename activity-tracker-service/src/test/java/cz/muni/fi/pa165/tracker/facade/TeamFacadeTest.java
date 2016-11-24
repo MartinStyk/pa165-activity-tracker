@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import org.mockito.*;
 import static org.mockito.Mockito.atLeast;
-import static org.testng.Assert.assertTrue;
 
 /**
  * 

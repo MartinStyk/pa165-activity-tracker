@@ -29,13 +29,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 /**
  * Test class for TeamService
- * 
+ *
  * @author Petra Ondřejková
  * @version 21.11. 2016
  */
@@ -63,7 +62,6 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     private final long notPersistedEntityId = 666l;
     private final String alreadyExistingTeamName = "alreadyExistingTeamName";
 
-
     @BeforeMethod
     public void initTeams() {
         leader = new User(1l);
@@ -87,7 +85,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         leader2.setSex(Sex.MALE);
         leader2.setWeight(87);
         leader2.setDateOfBirth(LocalDate.ofYearDay(1990, 200));
-    
+
         member = new User(2l);
         member.setEmail("clen@mail.com");
         member.setPasswordHash("heslo");
@@ -98,7 +96,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         member.setSex(Sex.MALE);
         member.setWeight(65);
         member.setDateOfBirth(LocalDate.ofYearDay(1991, 222));
-        
+
         newTeam = new Team("New Team");
         newTeam.setTeamLeader(leader);
         newTeam.addMember(leader);
@@ -129,23 +127,20 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         ReflectionTestUtils.setField(teamService, "teamDao", teamDao);
     }
 
-
     @BeforeMethod(dependsOnMethods = "initTeams")
     public void initMocksBehaviour() {
-    
+
         //findByName
         when(teamDao.findByName("frajeri")).thenReturn(teamPersisted);
         when(teamDao.findByName("non existing")).thenReturn(null);
 
-
         // findById
         when(teamDao.findById(0l)).thenReturn(null);
         when(teamDao.findById(1l)).thenReturn(teamPersisted);
-    
+
         doAnswer((InvocationOnMock invocation) -> {
             throw new InvalidDataAccessApiUsageException("This behaviour is already tested on dao layer.");
         }).when(teamDao).findById(null);
-
 
         //create
         doAnswer((InvocationOnMock invocation) -> {
@@ -169,8 +164,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
             team.setId(createdEntityId);
             return null; //this is happy day scenario
         }).when(teamDao).create(any(Team.class));
-    
-    
+
         //update
         doAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArguments()[0] == null) {
@@ -193,7 +187,6 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
             return team; //this is happy day scenario
         }).when(teamDao).update(any(Team.class));
 
-
         //remove
         doAnswer((InvocationOnMock invocation) -> {
             Object argument = invocation.getArguments()[0];
@@ -204,10 +197,14 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
             Team team = (Team) invocation.getArguments()[0];
 
             if (team.getId() == alreadyExistingEntityId) //happy day scenario
+            {
                 return null;
+            }
 
             if (team.getId() == notPersistedEntityId) //entity is not saved
+            {
                 throw new InvalidDataAccessApiUsageException("This behaviour is already tested on dao layer.");
+            }
 
             return null;
         }).when(teamDao).remove(any(Team.class));
@@ -275,7 +272,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     public void updateTeamNonExisting() {
         assertNull(newTeam.getId());
         Team updated = teamService.updateTeam(newTeam);
-        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        verify(teamDao, atLeast(1)).update(argumentCaptor.capture());
         assertDeepEqualsWithoutId(argumentCaptor.getValue(), newTeam);
         assertEquals((long) updated.getId(), updatedEntityId);
         assertDeepEqualsWithoutId(updated, newTeam);
@@ -286,7 +283,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         assertNotNull(teamPersisted.getId());
         teamPersisted.setName("Change Name");
         Team updated = teamService.updateTeam(teamPersisted);
-        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        verify(teamDao, atLeast(1)).update(argumentCaptor.capture());
         assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
@@ -309,7 +306,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         teamPersisted.addMember(addMember);
         Team updated = teamService.updateTeam(teamPersisted);
 
-        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        verify(teamDao, atLeast(1)).update(argumentCaptor.capture());
         assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
@@ -321,7 +318,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         teamPersisted.removeMember(member);
         Team updated = teamService.updateTeam(teamPersisted);
 
-        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        verify(teamDao, atLeast(1)).update(argumentCaptor.capture());
         assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
@@ -333,7 +330,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         teamPersisted.setTeamLeader(member);
         Team updated = teamService.updateTeam(teamPersisted);
 
-        verify(teamDao,atLeast(1)).update(argumentCaptor.capture());
+        verify(teamDao, atLeast(1)).update(argumentCaptor.capture());
         assertDeepEqualsWithoutId(argumentCaptor.getValue(), teamPersisted);
         assertEquals(updated.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(updated, teamPersisted);
@@ -341,7 +338,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findAllNonEmptyResult() {
-        
+
         List<Team> entityList = Arrays.asList(teamPersisted, teamPersisted2);
         when(teamDao.findAll()).thenReturn(entityList);
 
@@ -427,6 +424,5 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         assertEquals(team1.getTeamLeader(), team2.getTeamLeader());
         assertEquals(team1.getMembers().size(), team2.getMembers().size());
         assertTrue(team1.getMembers().containsAll(team2.getMembers()));
-
     }
 }
