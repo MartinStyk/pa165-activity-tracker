@@ -117,7 +117,7 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
         if (activityReport == null) {
             throw new NonExistingEntityException("Can not remove not existing activity report");
         }
-        activityReportService.remove(new ActivityReport(activityReportId));
+        activityReportService.remove(activityReport);
     }
 
     @Override

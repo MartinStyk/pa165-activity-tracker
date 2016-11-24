@@ -9,7 +9,6 @@ import cz.muni.fi.pa165.tracker.configuration.ServiceConfiguration;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportUpdateDTO;
-import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
@@ -21,30 +20,26 @@ import cz.muni.fi.pa165.tracker.mapping.BeanMappingServiceImpl;
 import cz.muni.fi.pa165.tracker.service.ActivityReportService;
 import cz.muni.fi.pa165.tracker.service.SportActivityService;
 import cz.muni.fi.pa165.tracker.service.UserService;
+import org.mockito.*;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import static org.testng.Assert.assertEquals;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertNotNull;
 
 /**
- *
  * @author Jan Grundmann
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
@@ -112,14 +107,14 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         football = new SportActivity("football");
         football.setId(2l);
         football.setCaloriesFactor(1.5);
-        
+
         report1 = new ActivityReport(1l);
         report1.setStartTime(LocalDateTime.now().minusHours(2));
         report1.setEndTime(LocalDateTime.now().minusHours(1));
         report1.setBurnedCalories(400);
         report1.setSportActivity(hockey);
         report1.setUser(user);
-        
+
         report2 = new ActivityReport(2l);
         report2.setStartTime(LocalDateTime.now().minusHours(4));
         report2.setEndTime(LocalDateTime.now().minusHours(2));
@@ -127,7 +122,7 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         report2.setSportActivity(football);
         report2.setUser(user2);
     }
-    
+
     @BeforeMethod(dependsOnMethods = "initEntities")
     public void initMocksBehaviour() {
 
@@ -145,14 +140,14 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         //findBySport
         when(activityReportService.findBySport(hockey)).thenReturn(Arrays.asList(report1));
         when(activityReportService.findBySport(football)).thenReturn(Arrays.asList(report2));
-        
+
         //findByUser
         when(activityReportService.findByUser(user)).thenReturn(Arrays.asList(report1));
         when(activityReportService.findByUser(user2)).thenReturn(Arrays.asList(report2));
-        
+
         //findByUserAndSport
-        when(activityReportService.findByUserAndSport(user,hockey)).thenReturn(Arrays.asList(report1));
-        when(activityReportService.findByUserAndSport(user2,hockey)).thenReturn(Arrays.asList());
+        when(activityReportService.findByUserAndSport(user, hockey)).thenReturn(Arrays.asList(report1));
+        when(activityReportService.findByUserAndSport(user2, hockey)).thenReturn(Arrays.asList());
     }
 
     @Test
@@ -179,7 +174,33 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         assertEquals(argumentCaptor.getValue().getStartTime(), startTime);
         assertEquals(argumentCaptor.getValue().getEndTime(), endTime);
         assertEquals(argumentCaptor.getValue().getSportActivity(), football);
-        assertEquals(argumentCaptor.getValue().getUser(), user);                          
+        assertEquals(argumentCaptor.getValue().getUser(), user);
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void createActivityReportTestNonExistingUser() {
+        ActivityReportCreateDTO arcDTO = new ActivityReportCreateDTO();
+        LocalDateTime startTime = LocalDateTime.now().minusHours(2);
+        LocalDateTime endTime = LocalDateTime.now().minusHours(1);
+        arcDTO.setEndTime(endTime);
+        arcDTO.setStartTime(startTime);
+        arcDTO.setUserId(5l);
+        arcDTO.setSportActivityId(2l);
+
+        activityReportFacade.createActivityReport(arcDTO);
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void createActivityReportTestNonExistingSport() {
+        ActivityReportCreateDTO arcDTO = new ActivityReportCreateDTO();
+        LocalDateTime startTime = LocalDateTime.now().minusHours(2);
+        LocalDateTime endTime = LocalDateTime.now().minusHours(1);
+        arcDTO.setEndTime(endTime);
+        arcDTO.setStartTime(startTime);
+        arcDTO.setUserId(1l);
+        arcDTO.setSportActivityId(5l);
+
+        activityReportFacade.createActivityReport(arcDTO);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -194,9 +215,9 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         LocalDateTime startTime = LocalDateTime.now().minusHours(2);
         LocalDateTime endTime = LocalDateTime.now().minusHours(1);
         updatedArDTO.setEndTime(endTime);
-        updatedArDTO.setStartTime(startTime);        
+        updatedArDTO.setStartTime(startTime);
         updatedArDTO.setUserId(1l);
-        
+
         updatedArDTO.setSportActivityId(1l);
 
         activityReportFacade.updateActivityReport(updatedArDTO);
@@ -207,12 +228,54 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         assertEquals(argumentCaptor.getValue().getUser(), user);
     }
 
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void updateActivityReportNonExistingSport() {
+        ActivityReportUpdateDTO updatedArDTO = new ActivityReportUpdateDTO();
+        updatedArDTO.setId(1l);
+        LocalDateTime startTime = LocalDateTime.now().minusHours(2);
+        LocalDateTime endTime = LocalDateTime.now().minusHours(1);
+        updatedArDTO.setEndTime(endTime);
+        updatedArDTO.setStartTime(startTime);
+        updatedArDTO.setUserId(1l);
+        updatedArDTO.setSportActivityId(-1l);
+
+        activityReportFacade.updateActivityReport(updatedArDTO);
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void updateActivityReportNonExistingReport() {
+        ActivityReportUpdateDTO updatedArDTO = new ActivityReportUpdateDTO();
+        updatedArDTO.setId(-1l);
+        LocalDateTime startTime = LocalDateTime.now().minusHours(2);
+        LocalDateTime endTime = LocalDateTime.now().minusHours(1);
+        updatedArDTO.setEndTime(endTime);
+        updatedArDTO.setStartTime(startTime);
+        updatedArDTO.setUserId(1l);
+        updatedArDTO.setSportActivityId(1l);
+
+        activityReportFacade.updateActivityReport(updatedArDTO);
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void updateActivityReportNonExistingUser() {
+        ActivityReportUpdateDTO updatedArDTO = new ActivityReportUpdateDTO();
+        updatedArDTO.setId(1l);
+        LocalDateTime startTime = LocalDateTime.now().minusHours(2);
+        LocalDateTime endTime = LocalDateTime.now().minusHours(1);
+        updatedArDTO.setEndTime(endTime);
+        updatedArDTO.setStartTime(startTime);
+        updatedArDTO.setUserId(-1l);
+        updatedArDTO.setSportActivityId(1l);
+
+        activityReportFacade.updateActivityReport(updatedArDTO);
+    }
+
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void updateActivityReportSportTest() {
+    public void updateActivityReportNullTest() {
         activityReportFacade.updateActivityReport(null);
     }
 
-    @Test(enabled=false)
+    @Test
     public void removeActivityReportTest() {
         //removing activity with id 1 -  mock is initialized to return report1
         activityReportFacade.removeActivityReport(1l);
@@ -223,7 +286,7 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         assertEquals(argumentCaptor.getValue().getSportActivity().getId(), report1.getSportActivity().getId());
         assertEquals(argumentCaptor.getValue().getUser().getId(), report1.getUser().getId());
     }
-    
+
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void removeNonExistingActivityReportTest() {
         activityReportFacade.removeActivityReport(0l);
@@ -234,16 +297,10 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         activityReportFacade.removeActivityReport(null);
     }
 
-    @Test (enabled=false)
+    @Test
     public void removeActivityReportByUserTest() {
-        //removing activity with of user2 -  mock is initialized to return report2
         activityReportFacade.removeActivityReportsOfUser(2l);
-        verify(activityReportService).remove(argumentCaptor.capture());
-        assertEquals((long) argumentCaptor.getValue().getId(), 2);
-        assertEquals(argumentCaptor.getValue().getEndTime(), report1.getEndTime());
-        assertEquals(argumentCaptor.getValue().getStartTime(), report1.getStartTime());
-        assertEquals(argumentCaptor.getValue().getSportActivity().getId(), report1.getSportActivity().getId());
-        assertEquals(argumentCaptor.getValue().getUser().getId(), report1.getUser().getId());
+        verify(activityReportService).removeActivityReportsOfUser(user2);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -251,13 +308,18 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         activityReportFacade.removeActivityReportsOfUser(null);
     }
 
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void removeActivityReportByNonExistingUserTest() {
+        activityReportFacade.removeActivityReportsOfUser(3l);
+    }
+
     @Test
     public void getAllActivityReports() {
-        List<ActivityReport> arList = Arrays.asList(report1,report2);
+        List<ActivityReport> arList = Arrays.asList(report1, report2);
         when(activityReportService.findAll()).thenReturn(arList);
 
         List<ActivityReportDTO> dtoList = activityReportFacade.getAllActivityReports();
-        
+
         assertEquals(dtoList.size(), 2);
 
         for (int i = 0; i < 2; i++) {
@@ -268,7 +330,7 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
             assertEquals(dto.getStartTime(), entity.getStartTime());
             assertEquals(dto.getSportActivity().getId(), entity.getSportActivity().getId());
             assertEquals(dto.getUser().getId(), entity.getUser().getId());
-        }    
+        }
     }
 
     @Test
@@ -288,7 +350,7 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         assertEquals(report.getEndTime(), report1.getEndTime());
         assertEquals(report.getStartTime(), report1.getStartTime());
         assertEquals(report.getUser().getId(), report1.getUser().getId());
-        assertEquals(report.getSportActivity().getId(), report1.getSportActivity().getId());       
+        assertEquals(report.getSportActivity().getId(), report1.getSportActivity().getId());
     }
 
     @Test(expectedExceptions = NonExistingEntityException.class)
@@ -304,14 +366,14 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
     @Test
     public void getActivityReportByUserTest() {
         List<ActivityReportDTO> reportsList = activityReportFacade.getActivityReportsByUser(1l);
-        
+
         assertEquals(reportsList.size(), 1);
         assertEquals(reportsList.get(0).getId(), report1.getId());
         assertEquals(reportsList.get(0).getBurnedCalories(), report1.getBurnedCalories());
         assertEquals(reportsList.get(0).getEndTime(), report1.getEndTime());
         assertEquals(reportsList.get(0).getStartTime(), report1.getStartTime());
         assertEquals(reportsList.get(0).getUser().getId(), report1.getUser().getId());
-        assertEquals(reportsList.get(0).getSportActivity().getId(), report1.getSportActivity().getId());       
+        assertEquals(reportsList.get(0).getSportActivity().getId(), report1.getSportActivity().getId());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -319,17 +381,27 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
         activityReportFacade.getActivityReportsByUser(null);
     }
 
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void getActivityReportByNonExistingUserTest() {
+        activityReportFacade.getActivityReportsByUser(-1l);
+    }
+
     @Test
     public void getActivityReportBySportTest() {
         List<ActivityReportDTO> reportsList = activityReportFacade.getActivityReportsBySport(1l);
-        
+
         assertEquals(reportsList.size(), 1);
         assertEquals(reportsList.get(0).getId(), report1.getId());
         assertEquals(reportsList.get(0).getBurnedCalories(), report1.getBurnedCalories());
         assertEquals(reportsList.get(0).getEndTime(), report1.getEndTime());
         assertEquals(reportsList.get(0).getStartTime(), report1.getStartTime());
         assertEquals(reportsList.get(0).getUser().getId(), report1.getUser().getId());
-        assertEquals(reportsList.get(0).getSportActivity().getId(), report1.getSportActivity().getId());       
+        assertEquals(reportsList.get(0).getSportActivity().getId(), report1.getSportActivity().getId());
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void getActivityReportByNonExistingSportTest() {
+        activityReportFacade.getActivityReportsBySport(-1l);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -339,26 +411,41 @@ public class ActivityReportFacadeTestCase extends AbstractTestNGSpringContextTes
 
     @Test
     public void getActivityReportByUserAndSportTest() {
-        List<ActivityReportDTO> reportsList = activityReportFacade.getActivityReportsByUserAndSport(1l,1l);
-        
+        List<ActivityReportDTO> reportsList = activityReportFacade.getActivityReportsByUserAndSport(1l, 1l);
+
         assertEquals(reportsList.size(), 1);
         assertEquals(reportsList.get(0).getId(), report1.getId());
         assertEquals(reportsList.get(0).getBurnedCalories(), report1.getBurnedCalories());
         assertEquals(reportsList.get(0).getEndTime(), report1.getEndTime());
         assertEquals(reportsList.get(0).getStartTime(), report1.getStartTime());
         assertEquals(reportsList.get(0).getUser().getId(), report1.getUser().getId());
-        assertEquals(reportsList.get(0).getSportActivity().getId(), report1.getSportActivity().getId());       
+        assertEquals(reportsList.get(0).getSportActivity().getId(), report1.getSportActivity().getId());
     }
 
     @Test
     public void getActivityReportByUserAndSportEmptyTest() {
-        List<ActivityReportDTO> reportsList = activityReportFacade.getActivityReportsByUserAndSport(2l,1l);
-        
+        List<ActivityReportDTO> reportsList = activityReportFacade.getActivityReportsByUserAndSport(2l, 1l);
+
         assertEquals(reportsList.size(), 0);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void getNullActivityReportByUserAndSportTest() {
-        activityReportFacade.getActivityReportsBySport(null);
+    public void getActivityReportByNullUserAndSportTest() {
+        activityReportFacade.getActivityReportsByUserAndSport(null, 1l);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void getActivityReportByUserAndNullSportTest() {
+        activityReportFacade.getActivityReportsByUserAndSport(1l, null);
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void getActivityReportByNonExistingUserAndSportTest() {
+        activityReportFacade.getActivityReportsByUserAndSport(-1l, 1l);
+    }
+
+    @Test(expectedExceptions = NonExistingEntityException.class)
+    public void getActivityReportByUserAndNonExistingSportTest() {
+        activityReportFacade.getActivityReportsByUserAndSport(1l, -1l);
     }
 }
