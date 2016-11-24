@@ -60,6 +60,9 @@ public class ActivityReportServiceImpl implements ActivityReportService {
 
     @Override
     public ActivityReport findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id is null");
+        }
         return activityReportDao.findActivityReportByID(id);
     }
 
