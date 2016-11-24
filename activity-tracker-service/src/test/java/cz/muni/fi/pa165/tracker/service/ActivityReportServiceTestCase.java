@@ -16,16 +16,21 @@ import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.exception.ActivityTrackerDataAccessException;
 import cz.muni.fi.pa165.tracker.exception.DataAccessExceptionTranslateAspect;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -35,17 +40,21 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+
 import javax.persistence.EntityExistsException;
 import javax.validation.ConstraintViolationException;
+
 import static org.mockito.Mockito.verify;
+
 import org.testng.Assert;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jan Grundmann
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
@@ -53,12 +62,6 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
 
     @Mock
     private ActivityReportDao arDao;
-
-    @Mock
-    private UserDao userDao;
-
-    @Mock
-    private SportActivityDao sportActivityDao;
 
     private ActivityReportService arService;
 
@@ -130,22 +133,18 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
 
         // This is workaround for correct proxy object setup. We need to do it this ugly way to enable Aspect on
         // mocked object sportService
+        // We can not inject services, otherwise exception translation will not work
         DataAccessExceptionTranslateAspect translateAspect = new DataAccessExceptionTranslateAspect();
         AspectJProxyFactory factory = new AspectJProxyFactory(new ActivityReportServiceImpl());
         factory.addAspect(translateAspect);
 
         arService = factory.getProxy();
         ReflectionTestUtils.setField(arService, "activityReportDao", arDao);
+        ReflectionTestUtils.setField(arService, "caloriesService", new CaloriesServiceImpl());
     }
 
     @BeforeMethod(dependsOnMethods = "initEntities")
     public void initMocksBehaviour() {
-
-        when(userDao.findById(1l)).thenReturn(user);
-        when(userDao.findById(2l)).thenReturn(user2);
-
-        when(sportActivityDao.findById(1l)).thenReturn(hockey);
-        when(sportActivityDao.findById(2l)).thenReturn(football);
 
         // findById
         when(arDao.findActivityReportByID(0l)).thenReturn(null);
@@ -156,7 +155,7 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
 
         //findByUser
         when(arDao.findReportsByUser(user2)).thenReturn(Arrays.asList(report2));
-    
+
         //create
         doAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArguments()[0] == null) {
@@ -179,8 +178,8 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
             activityReport.setId(createdEntityId);
             return null; //this is happy day scenario
         }).when(arDao).create(any(ActivityReport.class));
-    
-         //update
+
+        //update
         doAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArguments()[0] == null) {
                 throw new InvalidDataAccessApiUsageException("This behaviour is already tested on dao layer.");
@@ -201,7 +200,7 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
 
             return activityReport; //this is happy day scenario
         }).when(arDao).update(any(ActivityReport.class));
-    
+
         //remove
         doAnswer((InvocationOnMock invocation) -> {
             Object argument = invocation.getArguments()[0];
@@ -236,12 +235,24 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
     }
 
     @Test(expectedExceptions = ActivityTrackerDataAccessException.class)
+    public void createWithNullUser() {
+        report1.setUser(null);
+        arService.create(report1);
+    }
+
+    @Test(expectedExceptions = ActivityTrackerDataAccessException.class)
+    public void createWithNullSport() {
+        report1.setSportActivity(null);
+        arService.create(report1);
+    }
+
+    @Test(expectedExceptions = ActivityTrackerDataAccessException.class)
     public void createExisting() {
         report1.setId(alreadyExistingEntityId);
         arService.create(report1);
     }
 
-    @Test(enabled = false)
+    @Test
     public void update() {
         assertNotNull(report2.getId());
         ActivityReport updated = arService.update(report2);
@@ -292,7 +303,7 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
     @Test
     public void findNotExistingBySport() {
         List<ActivityReport> found = arService.findBySport(new SportActivity());
-        assertEquals(found.size(),0);
+        assertEquals(found.size(), 0);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -309,7 +320,7 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
     @Test
     public void findNotExistingByUser() {
         List<ActivityReport> found = arService.findByUser(new User());
-        assertEquals(found.size(),0);
+        assertEquals(found.size(), 0);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -325,15 +336,15 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
 
     @Test
     public void findNotExistingByUserAndSport() {
-        List<ActivityReport> found = arService.findByUserAndSport(new User(),new SportActivity());
-        assertEquals(found.size(),0);
+        List<ActivityReport> found = arService.findByUserAndSport(new User(), new SportActivity());
+        assertEquals(found.size(), 0);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void findByUserAndSportNull() {
-        arService.findByUserAndSport(null,null);
+        arService.findByUserAndSport(null, null);
     }
-    
+
 
     @Test
     public void remove() {
@@ -354,6 +365,40 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
         arService.remove(report2);
     }
 
+    @Test
+    public void findAllNonEmptyResult() {
+        List<ActivityReport> entityList = Arrays.asList(report1, report2);
+        when(arDao.findAll()).thenReturn(entityList);
+
+        List<ActivityReport> resultList = arService.findAll();
+
+        assertEquals(resultList.size(), entityList.size());
+
+        //just to check no modification of persisted data is done on this layer
+        for (int i = 0; i < entityList.size(); i++) {
+            ActivityReport entity = entityList.get(i);
+            ActivityReport result = resultList.get(i);
+            assertDeepEquals(result, entity);
+        }
+    }
+
+    @Test
+    public void findAllEmptyResult() {
+        when(arDao.findAll()).thenReturn(new ArrayList<>());
+        assertEquals(arService.findAll().size(), 0);
+    }
+
+    @Test
+    public void removeReportsOfUser() {
+        arService.removeActivityReportsOfUser(user);
+        verify(arDao).deleteUserReports(user);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void removeReportsOfUserNull() {
+        arService.removeActivityReportsOfUser(null);
+    }
+
     private void assertDeepEquals(ActivityReport report1, ActivityReport report2) {
         Assert.assertEquals(report1.getId(), report2.getId());
         Assert.assertEquals(report1.getEndTime(), report2.getEndTime());
@@ -362,7 +407,4 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
         Assert.assertEquals(report1.getSportActivity().getId(), report2.getSportActivity().getId());
         Assert.assertEquals(report1.getUser().getId(), report2.getUser().getId());
     }
-
-    
-
 }

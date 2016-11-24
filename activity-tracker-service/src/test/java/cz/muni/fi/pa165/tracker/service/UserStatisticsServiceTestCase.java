@@ -69,6 +69,7 @@ public class UserStatisticsServiceTestCase {
 
         // This is workaround for correct proxy object setup. We need to do it this ugly way to enable Aspect on
         // mocked object sportService
+        // We can not inject services, otherwise exception translation will not work
         DataAccessExceptionTranslateAspect translateAspect = new DataAccessExceptionTranslateAspect();
         AspectJProxyFactory factory = new AspectJProxyFactory(new UserStatisticsServiceImpl());
         factory.addAspect(translateAspect);

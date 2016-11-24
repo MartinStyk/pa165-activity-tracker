@@ -107,6 +107,7 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
 
         // This is workaround for correct proxy object setup. We need to do it this ugly way to enable Aspect on
         // mocked object userService
+        // We can not inject services, otherwise exception translation will not work
         DataAccessExceptionTranslateAspect translateAspect = new DataAccessExceptionTranslateAspect();
         AspectJProxyFactory factory = new AspectJProxyFactory(new UserServiceImpl());
         factory.addAspect(translateAspect);
