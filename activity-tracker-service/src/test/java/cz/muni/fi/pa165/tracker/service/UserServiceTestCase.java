@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.tracker.service;
 import cz.muni.fi.pa165.tracker.configuration.ServiceConfiguration;
 import cz.muni.fi.pa165.tracker.dao.ActivityReportDao;
 import cz.muni.fi.pa165.tracker.dao.UserDao;
-import cz.muni.fi.pa165.tracker.entity.Team;
 import org.mockito.Mock;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.enums.Sex;
@@ -50,10 +49,10 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
 
     private UserService userService;
 
-    private final long createdEntityId = 123l;
-    private final long updatedEntityId = 154l;
-    private final long alreadyExistingEntityId = 1l;
-    private final long notPersistedEntityId = 666l;
+    private final long createdEntityId = 123L;
+    private final long updatedEntityId = 154L;
+    private final long alreadyExistingEntityId = 1L;
+    private final long notPersistedEntityId = 666L;
     private final String alreadyExsistingEmail = "already@existing.mail";
 
     @Captor
@@ -67,7 +66,7 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void initUsers() {
-        user = new User(1l);
+        user = new User(1L);
         user.setEmail("prvy@mail.com");
         user.setPasswordHash("12345hhh");
         user.setFirstName("Jozef");
@@ -89,7 +88,7 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
         withoutId.setWeight(50);
         withoutId.setDateOfBirth(LocalDate.ofYearDay(1990, 333));
 
-        admin = new User(2l);
+        admin = new User(2L);
         admin.setEmail("admin@mail.com");
         admin.setPasswordHash("123456hhh");
         admin.setFirstName("Adminka");
@@ -125,7 +124,7 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
 
         when(userDao.findById(user.getId())).thenReturn(user);
         when(userDao.findById(admin.getId())).thenReturn(admin);
-        when(userDao.findById(0l)).thenReturn(null);
+        when(userDao.findById(0L)).thenReturn(null);
 
         //create
         doAnswer((InvocationOnMock invocation) -> {
@@ -303,7 +302,7 @@ public class UserServiceTestCase extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findUserNotExistingById() {
-        assertNull(userService.findById(0l));
+        assertNull(userService.findById(0L));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

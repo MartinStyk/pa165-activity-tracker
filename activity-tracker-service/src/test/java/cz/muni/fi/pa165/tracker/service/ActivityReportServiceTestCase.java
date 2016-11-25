@@ -7,8 +7,6 @@ package cz.muni.fi.pa165.tracker.service;
 
 import cz.muni.fi.pa165.tracker.configuration.ServiceConfiguration;
 import cz.muni.fi.pa165.tracker.dao.ActivityReportDao;
-import cz.muni.fi.pa165.tracker.dao.SportActivityDao;
-import cz.muni.fi.pa165.tracker.dao.UserDao;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.User;
@@ -75,14 +73,14 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
     private ActivityReport report1;
     private ActivityReport report2;
 
-    private final long createdEntityId = 123l;
-    private final long updatedEntityId = 154l;
-    private final long alreadyExistingEntityId = 2l;
-    private final long notPersistedEntityId = 666l;
+    private final long createdEntityId = 123L;
+    private final long updatedEntityId = 154L;
+    private final long alreadyExistingEntityId = 2L;
+    private final long notPersistedEntityId = 666L;
 
     @BeforeMethod
     public void initEntities() {
-        user = new User(1l);
+        user = new User(1L);
         user.setEmail("pepa@mail.com");
         user.setPasswordHash("12345");
         user.setFirstName("Pepa");
@@ -93,7 +91,7 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
         user.setWeight(50);
         user.setDateOfBirth(LocalDate.ofYearDay(1990, 333));
 
-        user2 = new User(2l);
+        user2 = new User(2L);
         user2.setEmail("josef@mail.com");
         user2.setPasswordHash("heslo");
         user2.setFirstName("Josef");
@@ -105,11 +103,11 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
         user2.setDateOfBirth(LocalDate.ofYearDay(1991, 333));
 
         hockey = new SportActivity("hockey");
-        hockey.setId(1l);
+        hockey.setId(1L);
         hockey.setCaloriesFactor(2.5);
 
         football = new SportActivity("football");
-        football.setId(2l);
+        football.setId(2L);
         football.setCaloriesFactor(1.5);
 
         report1 = new ActivityReport();
@@ -119,7 +117,7 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
         report1.setSportActivity(hockey);
         report1.setUser(user);
 
-        report2 = new ActivityReport(2l);
+        report2 = new ActivityReport(2L);
         report2.setStartTime(LocalDateTime.now().minusHours(4));
         report2.setEndTime(LocalDateTime.now().minusHours(2));
         report2.setBurnedCalories(500);
@@ -147,8 +145,8 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
     public void initMocksBehaviour() {
 
         // findById
-        when(arDao.findActivityReportByID(0l)).thenReturn(null);
-        when(arDao.findActivityReportByID(2l)).thenReturn(report2);
+        when(arDao.findActivityReportByID(0L)).thenReturn(null);
+        when(arDao.findActivityReportByID(2L)).thenReturn(report2);
 
         //findBySport
         when(arDao.findReportsBySportActivity(football)).thenReturn(Arrays.asList(report2));
@@ -280,13 +278,13 @@ public class ActivityReportServiceTestCase extends AbstractTestNGSpringContextTe
 
     @Test
     public void findById() {
-        ActivityReport found = arService.findById(2l);
+        ActivityReport found = arService.findById(2L);
         assertDeepEquals(found, report2);
     }
 
     @Test
     public void findNotExistingById() {
-        assertNull(arService.findById(0l));
+        assertNull(arService.findById(0L));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

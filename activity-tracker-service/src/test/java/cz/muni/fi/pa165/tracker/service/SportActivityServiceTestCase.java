@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
@@ -49,10 +48,10 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
     private SportActivity footballPersisted;
     private SportActivity cyclingPersisted;
 
-    private long createdEntityId = 99l;
-    private long updatedEntityId = 100l;
-    private long alreadyExistingEntityId = 77l;
-    private long notPersistedEntityId = 78l;
+    private long createdEntityId = 99L;
+    private long updatedEntityId = 100L;
+    private long alreadyExistingEntityId = 77L;
+    private long notPersistedEntityId = 78L;
     private String alreadyExistingSportName = "alreadyExistingSportName";
 
     @BeforeClass
@@ -77,11 +76,11 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
 
         footballPersisted = new SportActivity("football");
         footballPersisted.setCaloriesFactor(1.5);
-        footballPersisted.setId(50l);
+        footballPersisted.setId(50L);
 
         cyclingPersisted = new SportActivity("cycling");
         cyclingPersisted.setCaloriesFactor(5d);
-        cyclingPersisted.setId(51l);
+        cyclingPersisted.setId(51L);
     }
 
     @BeforeMethod(dependsOnMethods = "initSportActivities")
@@ -91,9 +90,9 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
         when(sportActivityDao.findByName("non existing")).thenReturn(null);
 
         // findById
-        when(sportActivityDao.findById(0l)).thenReturn(null);
-        when(sportActivityDao.findById(1l)).thenReturn(cyclingPersisted);
-        when(sportActivityDao.findById(2l)).thenReturn(footballPersisted);
+        when(sportActivityDao.findById(0L)).thenReturn(null);
+        when(sportActivityDao.findById(1L)).thenReturn(cyclingPersisted);
+        when(sportActivityDao.findById(2L)).thenReturn(footballPersisted);
 
         doAnswer((InvocationOnMock invocation) -> {
             throw new InvalidDataAccessApiUsageException("This behaviour is already tested on dao layer.");
@@ -230,13 +229,13 @@ public class SportActivityServiceTestCase extends AbstractTestNGSpringContextTes
 
     @Test
     public void findById() {
-        SportActivity found = sportService.findById(1l);
+        SportActivity found = sportService.findById(1L);
         assertDeepEquals(found, cyclingPersisted);
     }
 
     @Test
     public void findNotExistingById() {
-        assertNull(sportService.findById(0l));
+        assertNull(sportService.findById(0L));
     }
 
     @Test(expectedExceptions = ActivityTrackerDataAccessException.class)

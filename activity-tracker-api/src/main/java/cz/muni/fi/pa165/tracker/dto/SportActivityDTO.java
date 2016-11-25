@@ -64,10 +64,7 @@ public class SportActivityDTO {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.caloriesFactor, other.caloriesFactor)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.caloriesFactor, other.caloriesFactor);
     }
 
     @Override

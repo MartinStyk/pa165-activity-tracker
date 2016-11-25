@@ -80,7 +80,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void initUsers() {
-        user = new User(1l);
+        user = new User(1L);
         user.setEmail("prvy@mail.com");
         user.setPasswordHash("12345hhh");
         user.setFirstName("Jozef");
@@ -104,7 +104,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
         userDTO.setDateOfBirth(user.getDateOfBirth());
         userDTO.setTotalCalories(58);
 
-        admin = new User(2l);
+        admin = new User(2L);
         admin.setEmail("admin@mail.com");
         admin.setPasswordHash("123456hhh");
         admin.setFirstName("Adminka");
@@ -133,9 +133,9 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
     @BeforeMethod(dependsOnMethods = "initUsers")
     public void initMocksBehaviour() {
         // findById
-        when(userService.findById(1l)).thenReturn(user);
-        when(userService.findById(2l)).thenReturn(admin);
-        when(userService.findById(0l)).thenReturn(null);
+        when(userService.findById(1L)).thenReturn(user);
+        when(userService.findById(2L)).thenReturn(admin);
+        when(userService.findById(0L)).thenReturn(null);
 
         //findByEmail
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
@@ -188,7 +188,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void updateNonExistingUserTest() {
         userDTO.setEmail("i@dont.exist");
-        userDTO.setId(0l);
+        userDTO.setId(0L);
         userFacade.updateUser(userDTO);
     }
 
@@ -207,7 +207,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void removeUserNonExistingTest() {
-        userDTO.setId(0l);
+        userDTO.setId(0L);
         userFacade.removeUser(userDTO);
     }
 
@@ -224,7 +224,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void findNonExistingUserByIdTest() {
-        userFacade.findUserById(0l);
+        userFacade.findUserById(0L);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -300,7 +300,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
         int lastWeekSportActivities = 1;
         int lastMonthSportActivities = 2;
         SportActivity hockey = new SportActivity("hockey");
-        hockey.setId(1l);
+        hockey.setId(1L);
         hockey.setCaloriesFactor(2.5);
         SportActivityDTO hockeyDTO = new SportActivityDTO();
         hockeyDTO.setId(hockey.getId());
@@ -310,7 +310,7 @@ public class UserFacadeTestCase extends AbstractTestNGSpringContextTests {
         int hockeyCalories = 200;
 
         SportActivity football = new SportActivity("football");
-        football.setId(2l);
+        football.setId(2L);
         football.setCaloriesFactor(1.01);
         SportActivityDTO footballDTO = new SportActivityDTO();
         footballDTO.setId(football.getId());

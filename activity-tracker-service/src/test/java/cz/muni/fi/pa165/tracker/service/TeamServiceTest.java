@@ -56,15 +56,15 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     private User leader2;
     private User member;
 
-    private final long createdEntityId = 123l;
-    private final long updatedEntityId = 154l;
-    private final long alreadyExistingEntityId = 111l;
-    private final long notPersistedEntityId = 666l;
+    private final long createdEntityId = 123L;
+    private final long updatedEntityId = 154L;
+    private final long alreadyExistingEntityId = 111L;
+    private final long notPersistedEntityId = 666L;
     private final String alreadyExistingTeamName = "alreadyExistingTeamName";
 
     @BeforeMethod
     public void initTeams() {
-        leader = new User(1l);
+        leader = new User(1L);
         leader.setEmail("pepa@mail.com");
         leader.setPasswordHash("12345");
         leader.setFirstName("Pepa");
@@ -75,7 +75,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         leader.setWeight(50);
         leader.setDateOfBirth(LocalDate.ofYearDay(1990, 333));
 
-        leader2 = new User(5l);
+        leader2 = new User(5L);
         leader2.setEmail("pavel@mail.com");
         leader2.setPasswordHash("totojeheslo");
         leader2.setFirstName("Pavel");
@@ -86,7 +86,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         leader2.setWeight(87);
         leader2.setDateOfBirth(LocalDate.ofYearDay(1990, 200));
 
-        member = new User(2l);
+        member = new User(2L);
         member.setEmail("clen@mail.com");
         member.setPasswordHash("heslo");
         member.setFirstName("Antonin");
@@ -102,13 +102,13 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         newTeam.addMember(leader);
 
         teamPersisted = new Team("frajeri");
-        teamPersisted.setId(51l);
+        teamPersisted.setId(51L);
         teamPersisted.setTeamLeader(leader);
         teamPersisted.addMember(leader);
         teamPersisted.addMember(member);
 
         teamPersisted2 = new Team("frajeriNaDruhou");
-        teamPersisted2.setId(7l);
+        teamPersisted2.setId(7L);
         teamPersisted2.setTeamLeader(leader2);
         teamPersisted2.addMember(leader);
     }
@@ -136,8 +136,8 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
         when(teamDao.findByName("non existing")).thenReturn(null);
 
         // findById
-        when(teamDao.findById(0l)).thenReturn(null);
-        when(teamDao.findById(1l)).thenReturn(teamPersisted);
+        when(teamDao.findById(0L)).thenReturn(null);
+        when(teamDao.findById(1L)).thenReturn(teamPersisted);
 
         doAnswer((InvocationOnMock invocation) -> {
             throw new InvalidDataAccessApiUsageException("This behaviour is already tested on dao layer.");
@@ -293,7 +293,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
     @Test
     public void updateTeamAddMember() {
         assertNotNull(teamPersisted.getId());
-        User addMember = new User(3l);
+        User addMember = new User(3L);
         addMember.setEmail("addMember@mail.com");
         addMember.setPasswordHash("heslo123");
         addMember.setFirstName("Petr");
@@ -364,14 +364,14 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findTeamById() {
-        Team found = teamService.findTeamById(1l);
+        Team found = teamService.findTeamById(1L);
         assertEquals(found.getId(), teamPersisted.getId());
         assertDeepEqualsWithoutId(found, teamPersisted);
     }
 
     @Test
     public void findTeamNotExistingById() {
-        assertNull(teamService.findTeamById(0l));
+        assertNull(teamService.findTeamById(0L));
     }
 
     @Test(expectedExceptions = ActivityTrackerDataAccessException.class)

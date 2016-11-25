@@ -61,10 +61,7 @@ public class TeamCreateDTO {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.teamLeaderId, other.teamLeaderId)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.teamLeaderId, other.teamLeaderId);
     }
 
     @Override

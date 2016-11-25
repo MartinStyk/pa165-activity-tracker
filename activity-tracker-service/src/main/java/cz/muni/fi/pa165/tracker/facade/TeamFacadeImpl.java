@@ -60,7 +60,7 @@ public class TeamFacadeImpl implements TeamFacade {
         }
         Team team = bms.mapTo(teamDTO, Team.class);
         List<User> members = bms.mapTo(teamDTO.getMembers(), User.class);
-        for (User u : members) team.addMember(u);
+        members.forEach(team::addMember);
 
         if (teamService.findTeamById(team.getId()) == null) {
             throw new NonExistingEntityException("Cannot update nonexisting team.");
@@ -116,7 +116,7 @@ public class TeamFacadeImpl implements TeamFacade {
         }
         Team team = bms.mapTo(teamDTO, Team.class);
         List<User> members = bms.mapTo(teamDTO.getMembers(), User.class);
-        for (User u : members) team.addMember(u);
+        members.forEach(team::addMember);
 
         teamService.removeTeam(team);
     }

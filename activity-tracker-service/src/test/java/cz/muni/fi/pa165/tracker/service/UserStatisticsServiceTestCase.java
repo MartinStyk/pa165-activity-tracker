@@ -106,11 +106,11 @@ public class UserStatisticsServiceTestCase {
 
         hockey = new SportActivity("hockey");
         hockey.setCaloriesFactor(2.5);
-        hockey.setId(1l);
+        hockey.setId(1L);
 
         football = new SportActivity("football");
         football.setCaloriesFactor(1.5);
-        football.setId(2l);
+        football.setId(2L);
 
         hockeyReport1 = new ActivityReport(validUser,
                 LocalDateTime.now().minusDays(2),

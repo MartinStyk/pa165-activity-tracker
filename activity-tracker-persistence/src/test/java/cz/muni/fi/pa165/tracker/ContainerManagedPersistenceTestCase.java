@@ -173,7 +173,7 @@ public class ContainerManagedPersistenceTestCase extends AbstractTransactionalTe
                 .setDateOfBirth(dateOfBirht)
                 .build();
         userDao.create(user);
-        User result = userDao.findById(100l);
+        User result = userDao.findById(100L);
         Assert.assertNull(result);
     }
 }

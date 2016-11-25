@@ -59,25 +59,25 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
     @BeforeMethod
     public void initSportActivities() {
         hockey = new SportActivity("hockey");
-        hockey.setId(1l);
+        hockey.setId(1L);
         hockey.setCaloriesFactor(2.5);
 
         football = new SportActivity("football");
-        football.setId(2l);
+        football.setId(2L);
         football.setCaloriesFactor(1.5);
 
         cycling = new SportActivity("cycling");
-        cycling.setId(3l);
+        cycling.setId(3L);
         cycling.setCaloriesFactor(5d);
     }
 
     @BeforeMethod(dependsOnMethods = "initSportActivities")
     public void initMocksBehaviour() {
         // findById
-        when(sportActivityService.findById(0l)).thenReturn(null);
-        when(sportActivityService.findById(1l)).thenReturn(hockey);
-        when(sportActivityService.findById(2l)).thenReturn(football);
-        when(sportActivityService.findById(3l)).thenReturn(cycling);
+        when(sportActivityService.findById(0L)).thenReturn(null);
+        when(sportActivityService.findById(1L)).thenReturn(hockey);
+        when(sportActivityService.findById(2L)).thenReturn(football);
+        when(sportActivityService.findById(3L)).thenReturn(cycling);
 
         //findByName
         when(sportActivityService.findByName("hockey")).thenReturn(hockey);
@@ -148,7 +148,7 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
     @Test
     public void removeTest() {
         //removing activity with id 1 -  mock is initialized to return hockey
-        sportFacade.removeSportActivity(1l);
+        sportFacade.removeSportActivity(1L);
         verify(sportActivityService).remove(argumentCaptor.capture());
         assertEquals((long) argumentCaptor.getValue().getId(), 1);
         assertEquals(argumentCaptor.getValue().getName(), hockey.getName());
@@ -158,7 +158,7 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void removeNonExistingTest() {
         //removing activity with id 0 -  mock is initialized to return null - not found
-        sportFacade.removeSportActivity(0l);
+        sportFacade.removeSportActivity(0L);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -168,7 +168,7 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
 
     @Test
     public void getSportByIdTest() {
-        SportActivityDTO sport = sportFacade.getSportActivityById(1l);
+        SportActivityDTO sport = sportFacade.getSportActivityById(1L);
         assertEquals(sport.getId(), hockey.getId());
         assertEquals(sport.getName(), hockey.getName());
         assertEquals(sport.getCaloriesFactor(), hockey.getCaloriesFactor());
@@ -176,7 +176,7 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
 
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void getNonExistingSportByIdTest() {
-        sportFacade.getSportActivityById(0l);
+        sportFacade.getSportActivityById(0L);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -202,6 +202,7 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
         sportFacade.getSportActivityByName(null);
     }
 
+    @Test
     public void getAllSportsTest() {
         List<SportActivity> entityList = Arrays.asList(hockey, football, cycling);
         when(sportActivityService.findAll()).thenReturn(entityList);
@@ -219,6 +220,7 @@ public class SportActivityFacadeTestCase extends AbstractTestNGSpringContextTest
         }
     }
 
+    @Test
     public void getAllSportsEmptyTest() {
         when(sportActivityService.findAll()).thenReturn(new ArrayList<>());
 

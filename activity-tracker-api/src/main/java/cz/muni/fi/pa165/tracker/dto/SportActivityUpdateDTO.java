@@ -14,4 +14,21 @@ public class SportActivityUpdateDTO extends SportActivityCreateDTO {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof SportActivityUpdateDTO)) {
+            return false;
+        }
+        SportActivityUpdateDTO activityUpdateDTO = (SportActivityUpdateDTO) o;
+        return super.equals(activityUpdateDTO) && (id != null && id.equals(activityUpdateDTO.getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + ((id == null) ? 0 : id.hashCode());
+    }
 }

@@ -27,7 +27,7 @@ public class ServiceConfiguration {
     @Bean
     public Mapper dozer() {
         // this is needed to support Java 8 time api with Dozer
-        List<String> mappingFiles = new ArrayList();
+        List<String> mappingFiles = new ArrayList<>();
         mappingFiles.add("dozerJdk8Converters.xml");
 
         DozerBeanMapper dozer = new DozerBeanMapper();

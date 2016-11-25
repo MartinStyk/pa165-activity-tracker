@@ -70,7 +70,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void initTeamsAndUsers() {
-        leader = new User(1l);
+        leader = new User(1L);
         leader.setEmail("pepa@mail.com");
         leader.setPasswordHash("12345");
         leader.setFirstName("Pepa");
@@ -82,7 +82,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leader.setDateOfBirth(LocalDate.ofYearDay(1990, 333));
 
         leaderDTO = new UserDTO();
-        leaderDTO.setId(1l);
+        leaderDTO.setId(1L);
         leaderDTO.setEmail("pepa@mail.com");
         leaderDTO.setPasswordHash(leader.getPasswordHash());
         leaderDTO.setFirstName(leader.getFirstName());
@@ -94,7 +94,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leaderDTO.setDateOfBirth(leader.getDateOfBirth());
         leaderDTO.setTotalCalories(0);
 
-        leader2 = new User(2l);
+        leader2 = new User(2L);
         leader2.setEmail("josef@mail.com");
         leader2.setPasswordHash("heslo");
         leader2.setFirstName("Josef");
@@ -106,7 +106,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leader2.setDateOfBirth(LocalDate.ofYearDay(1991, 333));
 
         leader2DTO = new UserDTO();
-        leader2DTO.setId(2l);
+        leader2DTO.setId(2L);
         leader2DTO.setEmail("josef@mail.com");
         leader2DTO.setPasswordHash(leader2.getPasswordHash());
         leader2DTO.setFirstName(leader2.getFirstName());
@@ -126,7 +126,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         teamDTO = new TeamDTO();
         teamDTO.setName("TEAM");
         teamDTO.setTeamLeader(leaderDTO);
-        List<UserDTO> members = new ArrayList();
+        List<UserDTO> members = new ArrayList<>();
         members.add(leaderDTO);
         teamDTO.setMembers(members);
 
@@ -139,9 +139,9 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
     @BeforeMethod(dependsOnMethods = "initTeamsAndUsers")
     public void initMocksBehaviour() {
         // findById
-        when(userService.findById(1l)).thenReturn(leader);
-        when(teamService.findTeamById(0l)).thenReturn(null);
-        when(teamService.findTeamById(1l)).thenReturn(team);
+        when(userService.findById(1L)).thenReturn(leader);
+        when(teamService.findTeamById(0L)).thenReturn(null);
+        when(teamService.findTeamById(1L)).thenReturn(team);
 
         //findByName
         when(teamService.findTeamByName("TEAM")).thenReturn(team);
@@ -161,7 +161,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         final String name = "New Team";
         TeamCreateDTO teamCreateDTO = new TeamCreateDTO();
         teamCreateDTO.setName(name);
-        teamCreateDTO.setTeamLeaderId(1l);
+        teamCreateDTO.setTeamLeaderId(1L);
 
         teamFacade.createTeam(teamCreateDTO);
         verify(teamService).createTeam(argumentCaptor.capture());
@@ -185,7 +185,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         // update name
         updatedDTO.setName(name);
         updatedDTO.setTeamLeader(leaderDTO);
-        List<UserDTO> members = new ArrayList();
+        List<UserDTO> members = new ArrayList<>();
         members.add(leaderDTO);
         updatedDTO.setMembers(members);
 
@@ -204,7 +204,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         updatedDTO.setId(id);
         updatedDTO.setName(team.getName());
         updatedDTO.setTeamLeader(leader2DTO);
-        List<UserDTO> members = new ArrayList();
+        List<UserDTO> members = new ArrayList<>();
         members.add(leader2DTO);
         members.add(leaderDTO);
         updatedDTO.setMembers(members);
@@ -224,7 +224,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         updatedDTO.setId(id);
         updatedDTO.setName(team.getName());
         updatedDTO.setTeamLeader(leaderDTO);
-        List<UserDTO> members = new ArrayList();
+        List<UserDTO> members = new ArrayList<>();
         members.add(leader2DTO);
         members.add(leaderDTO);
         updatedDTO.setMembers(members);
@@ -244,7 +244,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         TeamDTO updatedDTO = new TeamDTO();
         updatedDTO.setId(id);
         updatedDTO.setName(name);
-        List<UserDTO> members = new ArrayList();
+        List<UserDTO> members = new ArrayList<>();
         members.add(leaderDTO);
         updatedDTO.setMembers(members);
 
@@ -260,15 +260,15 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
     public void removeTeamTest() {
         //removing team with id 1 -  mock is initialized to return team
         TeamDTO removeDTO = new TeamDTO();
-        removeDTO.setId(1l);
+        removeDTO.setId(1L);
         removeDTO.setName("TEAM");
-        List<UserDTO> members = new ArrayList();
+        List<UserDTO> members = new ArrayList<>();
         members.add(leaderDTO);
         removeDTO.setMembers(members);
 
         teamFacade.removeTeam(removeDTO);
         verify(teamService).removeTeam(argumentCaptor.capture());
-        assertEquals((long) argumentCaptor.getValue().getId(), 1l);
+        assertEquals((long) argumentCaptor.getValue().getId(), 1L);
         assertEquals(argumentCaptor.getValue().getName(), team.getName());
     }
 
@@ -276,7 +276,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
     public void removeTeamNonExistingTest() {
         //removing team with id 0 -  mock is initialized to return null - not found
         TeamDTO team0 = new TeamDTO();
-        team0.setId(0l);
+        team0.setId(0L);
         teamFacade.removeTeam(team0);
     }
 
@@ -287,7 +287,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
 
     @Test
     public void getTeamByIdTest() {
-        TeamDTO team1 = teamFacade.getTeamById(1l);
+        TeamDTO team1 = teamFacade.getTeamById(1L);
         assertEquals(team1.getId(), teamDTO.getId());
         assertEquals(team1.getName(), teamDTO.getName());
         assertEquals(team1.getTeamLeader().getId(), teamDTO.getTeamLeader().getId());
@@ -297,7 +297,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = NonExistingEntityException.class)
     public void getNonExistingTeamByIdTest() {
-        teamFacade.getTeamById(0l);
+        teamFacade.getTeamById(0L);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -328,6 +328,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         teamFacade.getTeamByName(null);
     }
 
+    @Test
     public void getAllTeamsTest() {
         List<Team> entityList = Arrays.asList(team, team2);
         when(teamService.getAllTeams()).thenReturn(entityList);
@@ -346,6 +347,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         }
     }
 
+    @Test
     public void getAllTeamsEmptyTest() {
         when(teamService.getAllTeams()).thenReturn(new ArrayList<>());
 

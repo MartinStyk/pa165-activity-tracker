@@ -79,10 +79,7 @@ public class TeamDTO {
         if (!Objects.equals(this.teamLeader, other.teamLeader)) {
             return false;
         }
-        if (!Objects.equals(this.members, other.members)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.members, other.members);
     }
 
     @Override
