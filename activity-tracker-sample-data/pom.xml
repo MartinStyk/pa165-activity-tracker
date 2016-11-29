@@ -11,7 +11,7 @@
 
     <artifactId>activity-tracker-sample-data</artifactId>
     <name>Activity Tracker Sample Data</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>cz.muni.fi.pa165</groupId>

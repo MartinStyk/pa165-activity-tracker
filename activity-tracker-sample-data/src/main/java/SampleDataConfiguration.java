@@ -19,14 +19,14 @@ import java.io.IOException;
 @ComponentScan(basePackageClasses = SampleDataLoadingFacade.class)
 public class SampleDataConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(SampleDataConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SampleDataConfiguration.class);
 
     @Inject
-    SampleDataLoadingFacade sampleDataLoadingFacade;
+    private SampleDataLoadingFacade sampleDataLoadingFacade;
 
     @PostConstruct
     public void dataLoading() throws IOException {
-        log.debug("dataLoading()");
+        LOGGER.debug("dataLoading()");
         sampleDataLoadingFacade.loadData();
     }
 }
