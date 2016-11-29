@@ -42,6 +42,7 @@
         <module>activity-tracker-service</module>
         <module>activity-tracker-sample-data</module>
         <module>activity-tracker-spring-mvc-web</module>
+        <module>activity-tracker-rest</module>
     </modules>
 
     <dependencyManagement>

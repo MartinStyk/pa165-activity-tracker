@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
  * @author Petra Ondřejková
  * @version 09.11. 2016
  */
-public class UserCreateDTO {
+public class    UserCreateDTO {
 
     @NotNull
     @Pattern(regexp = ".+@.+\\....?")
