@@ -1,3 +1,5 @@
+package cz.muni.fi.pa165.tracker.data.sample;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

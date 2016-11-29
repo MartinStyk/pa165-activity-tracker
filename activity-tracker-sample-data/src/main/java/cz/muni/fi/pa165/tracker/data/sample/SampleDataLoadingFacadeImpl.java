@@ -1,3 +1,5 @@
+package cz.muni.fi.pa165.tracker.data.sample;
+
 /**
  * @author Martin Styk
  * @version 29.11.2016
