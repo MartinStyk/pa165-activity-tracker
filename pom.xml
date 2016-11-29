@@ -40,6 +40,7 @@
         <module>activity-tracker-persistence</module>
         <module>activity-tracker-api</module>
         <module>activity-tracker-service</module>
+        <module>activity-tracker-sample-data</module>
     </modules>
 
     <dependencyManagement>
