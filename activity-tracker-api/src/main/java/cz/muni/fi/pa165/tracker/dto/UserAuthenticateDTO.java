@@ -15,6 +15,15 @@ public class UserAuthenticateDTO {
     @NotNull
     private String password;
 
+    public UserAuthenticateDTO() {
+
+    }
+
+    public UserAuthenticateDTO(Long userId, String password) {
+        this.userId = userId;
+        this.password = password;
+    }
+
     public Long getUserId() {
         return userId;
     }

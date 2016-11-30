@@ -48,8 +48,10 @@ public class TeamFacadeImpl implements TeamFacade {
         User leader = getExistingUserOrThrowException(teamDTO.getTeamLeaderId());
         team.setTeamLeader(leader);
         team.addMember(leader);
+        leader.setTeam(team);
 
         teamService.createTeam(team);
+        userService.update(leader);
         return team.getId();
     }
 
@@ -65,6 +67,12 @@ public class TeamFacadeImpl implements TeamFacade {
         if (teamService.findTeamById(team.getId()) == null) {
             throw new NonExistingEntityException("Cannot update nonexisting team.");
         }
+        //set owning side
+        for (User u : team.getMembers()) {
+            u.setTeam(team);
+            userService.update(u);
+        }
+
         teamService.updateTeam(team);
     }
 

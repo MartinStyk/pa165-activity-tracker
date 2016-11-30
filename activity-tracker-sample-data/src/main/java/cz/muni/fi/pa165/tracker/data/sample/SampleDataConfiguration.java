@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.IOException;
 
- /**
+/**
  * @author Martin Styk
  * @version 29.11.2016
  */
