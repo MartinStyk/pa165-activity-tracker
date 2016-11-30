@@ -1,13 +1,16 @@
 package cz.muni.fi.pa165.tracker.rest.controller;
 
+import cz.muni.fi.pa165.tracker.dto.TeamDTO;
 import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.exception.ActivityTrackerDataAccessException;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
+import cz.muni.fi.pa165.tracker.facade.TeamFacade;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
 import cz.muni.fi.pa165.tracker.rest.exception.ExistingResourceException;
 import cz.muni.fi.pa165.tracker.rest.exception.InvalidResourceException;
 import cz.muni.fi.pa165.tracker.rest.exception.RequestedResourceNotFoundException;
+import cz.muni.fi.pa165.tracker.rest.exception.ResourceNotModifiedException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,9 @@ public class UserRestController {
 
     @Inject
     private UserFacade userFacade;
+
+    @Inject
+    private TeamFacade teamFacade;
 
     /**
      * Get list of all users, or get list of users coresponding to given email address
@@ -67,6 +73,25 @@ public class UserRestController {
         try {
             return userFacade.findUserById(id);
         } catch (NonExistingEntityException e) {
+            throw new RequestedResourceNotFoundException(e);
+        }
+    }
+
+    /**
+     * Get team of user according to userid
+     * <p>
+     * curl -i -X GET http://localhost:8080/pa165/rest/users/{id}/team
+     *
+     * @param id user identifier as path variable
+     * @return DTO of requested user
+     * @throws RequestedResourceNotFoundException if user does not exist in database
+     */
+    @RequestMapping(value = "/{id}/team", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final TeamDTO findUsersTeam(@PathVariable("id") long id) {
+        try {
+            UserDTO userDTO = userFacade.findUserById(id);
+            return teamFacade.getTeamByName(userDTO.getTeam());
+        } catch (NonExistingEntityException | IllegalArgumentException e) {
             throw new RequestedResourceNotFoundException(e);
         }
     }
@@ -116,5 +141,63 @@ public class UserRestController {
         }
     }
 
+    /**
+     * Updates user by PUT method.
+     * Updates only fields specified in editedUser
+     * <p>
+     * curl -i -X PUT -H "Content-Type: application/json" --data '{"email":"peterSagan@gmail.com","firstName":"Peter",
+     * "lastName":"Sagan","passwordHash":"200aaa","dateOfBirth":"1990-01-28","role":"ADMIN","sex":"MALE","height":"111",
+     * "weight":"100","team":"Rychle holky"}' http://localhost:8080/pa165/rest/users/4
+     * <p>
+     * curl -i -X PUT -H "Content-Type: application/json" --data '{"email":"peterSagan@gmail.com","firstName":"Petko"}'
+     * http://localhost:8080/pa165/rest/users/4
+     *
+     * @param id         user id as a path variable
+     * @param editedUser UserDTO with required fields for update
+     * @throws RequestedResourceNotFoundException if user does not exist
+     * @throws ResourceNotModifiedException       if user can not be updated
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public final UserDTO updateAlbum(@PathVariable("id") long id, @RequestBody UserDTO editedUser) throws Exception {
+        UserDTO existingUser = null;
+        try {
+            existingUser = userFacade.findUserById(id);
+        } catch (Exception e) {
+            throw new RequestedResourceNotFoundException(e);
+        }
+
+        UserDTO toUpdateDTO = mergeDTOs(existingUser, editedUser);
+        try {
+            userFacade.updateUser(toUpdateDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResourceNotModifiedException(e);
+        }
+
+        return toUpdateDTO;
+    }
+
+    /**
+     * Merge existing DTO and DTO containing data to update
+     */
+    private UserDTO mergeDTOs(UserDTO existing, UserDTO toUpdate) {
+        UserDTO result = new UserDTO();
+        result.setId(existing.getId());
+        result.setTotalCalories(existing.getTotalCalories());
+        result.setPasswordHash((toUpdate.getPasswordHash() == null) ? existing.getPasswordHash() :
+                toUpdate.getPasswordHash());
+        result.setEmail((toUpdate.getEmail() == null) ? existing.getEmail() : toUpdate.getEmail());
+        result.setFirstName((toUpdate.getFirstName() == null) ? existing.getFirstName() : toUpdate.getFirstName());
+        result.setLastName((toUpdate.getLastName() == null) ? existing.getLastName() : toUpdate.getLastName());
+        result.setDateOfBirth((toUpdate.getDateOfBirth() == null) ? existing.getDateOfBirth() :
+                toUpdate.getDateOfBirth());
+        result.setRole((toUpdate.getRole() == null) ? existing.getRole() : toUpdate.getRole());
+        result.setSex((toUpdate.getSex() == null) ? existing.getSex() : toUpdate.getSex());
+        result.setHeight((toUpdate.getHeight() < 1) ? existing.getHeight() : toUpdate.getHeight());
+        result.setWeight((toUpdate.getWeight() < 1) ? existing.getWeight() : toUpdate.getWeight());
+        result.setTeam((toUpdate.getTeam() == null) ? existing.getTeam() : toUpdate.getTeam());
+        return result;
+    }
 
 }

@@ -2,9 +2,11 @@ package cz.muni.fi.pa165.tracker.facade;
 
 import cz.muni.fi.pa165.tracker.dto.*;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
+import cz.muni.fi.pa165.tracker.entity.Team;
 import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.mapping.BeanMappingService;
+import cz.muni.fi.pa165.tracker.service.TeamService;
 import cz.muni.fi.pa165.tracker.service.TimeService;
 import cz.muni.fi.pa165.tracker.service.UserService;
 import cz.muni.fi.pa165.tracker.service.UserStatisticsService;
@@ -28,6 +30,9 @@ public class UserFacadeImpl implements UserFacade {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private TeamService teamService;
 
     @Inject
     private UserStatisticsService statisticsService;
@@ -59,6 +64,15 @@ public class UserFacadeImpl implements UserFacade {
         User userEntity = bms.mapTo(user, User.class);
         if (userService.findById(userEntity.getId()) == null) {
             throw new NonExistingEntityException("Cannot update nonexisting user.");
+        }
+        //we can also change team
+        //since DTO contains only team name, we need to convert it to Team object here
+        if (user.getTeam() != null) {
+            Team team = teamService.findTeamByName(user.getTeam());
+            if (team == null) {
+                throw new NonExistingEntityException("Cannot set non existing team for user.");
+            }
+            userEntity.setTeam(team);
         }
         userService.update(userEntity);
     }
