@@ -1,7 +1,4 @@
-package cz.muni.fi.pa165.tracker.data.sample; /**
- * @author Martin Styk
- * @version 29.11.2016
- */
+package cz.muni.fi.pa165.tracker.data.sample;
 
 import cz.muni.fi.pa165.tracker.configuration.ServiceConfiguration;
 import org.slf4j.Logger;
@@ -13,6 +10,11 @@ import org.springframework.context.annotation.Import;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.IOException;
+
+ /**
+ * @author Martin Styk
+ * @version 29.11.2016
+ */
 
 @Configuration
 @Import(ServiceConfiguration.class)
