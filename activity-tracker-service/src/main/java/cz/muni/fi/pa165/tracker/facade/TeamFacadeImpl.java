@@ -92,7 +92,11 @@ public class TeamFacadeImpl implements TeamFacade {
         }
         TeamDTO teamDTO = bms.mapTo(team, TeamDTO.class);
         List<UserDTO> members = bms.mapTo(team.getMembers(), UserDTO.class);
+        for (UserDTO user : members) {
+            user.setTeam(team.getName());
+        }
         teamDTO.setMembers(members);
+        teamDTO.getTeamLeader().setTeam(team.getName());
 
         return teamDTO;
     }
@@ -106,10 +110,13 @@ public class TeamFacadeImpl implements TeamFacade {
         if (team == null) {
             throw new NonExistingEntityException("Team doesn't exist");
         }
-
         TeamDTO teamDTO = bms.mapTo(team, TeamDTO.class);
         List<UserDTO> members = bms.mapTo(team.getMembers(), UserDTO.class);
+        for (UserDTO user : members) {
+            user.setTeam(team.getName());
+        }
         teamDTO.setMembers(members);
+        teamDTO.getTeamLeader().setTeam(team.getName());
 
         return teamDTO;
     }

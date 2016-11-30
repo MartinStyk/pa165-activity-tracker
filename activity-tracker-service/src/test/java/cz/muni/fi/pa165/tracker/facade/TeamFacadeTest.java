@@ -93,6 +93,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leaderDTO.setWeight(leader.getWeight());
         leaderDTO.setDateOfBirth(leader.getDateOfBirth());
         leaderDTO.setTotalCalories(0);
+        leaderDTO.setTeam("TEAM");
 
         leader2 = new User(2L);
         leader2.setEmail("josef@mail.com");
@@ -117,6 +118,7 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         leader2DTO.setWeight(leader2.getWeight());
         leader2DTO.setDateOfBirth(leader2.getDateOfBirth());
         leader2DTO.setTotalCalories(0);
+        leader2DTO.setTeam("TEAM 2");
 
         team = new Team();
         team.setName("TEAM");

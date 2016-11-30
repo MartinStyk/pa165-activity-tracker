@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,12 +74,25 @@ public class UserFacadeImpl implements UserFacade {
         }
         UserDTO userDTO = bms.mapTo(user, UserDTO.class);
         userDTO.setTotalCalories(statisticsService.getTotalCalories(user));
+        if (user.getTeam() != null) {
+            userDTO.setTeam(user.getTeam().getName());
+        }
         return userDTO;
     }
 
     @Override
     public List<UserDTO> findAll() {
-        return bms.mapTo(userService.findAll(), UserDTO.class);
+        List<User> resultEntities = userService.findAll();
+        List<UserDTO> resultDtos = new ArrayList<>(resultEntities.size());
+        for (User user : resultEntities) {
+            UserDTO dto = bms.mapTo(user, UserDTO.class);
+            dto.setTotalCalories(statisticsService.getTotalCalories(user));
+            if (user.getTeam() != null) {
+                dto.setTeam(user.getTeam().getName());
+            }
+            resultDtos.add(dto);
+        }
+        return resultDtos;
     }
 
     @Override
@@ -92,6 +106,9 @@ public class UserFacadeImpl implements UserFacade {
         }
         UserDTO userDTO = bms.mapTo(user, UserDTO.class);
         userDTO.setTotalCalories(statisticsService.getTotalCalories(user));
+        if (user.getTeam() != null) {
+            userDTO.setTeam(user.getTeam().getName());
+        }
         return userDTO;
     }
 

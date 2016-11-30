@@ -1,9 +1,5 @@
 package cz.muni.fi.pa165.tracker.dto;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * DTO for User.
  *
@@ -14,9 +10,7 @@ public class UserDTO extends UserCreateDTO {
 
     private Long id;
 
-    private List<ActivityReportDTO> activityReports = new ArrayList<>();
-
-    private TeamDTO team;
+    private String teamName;
 
     private int totalCalories;
 
@@ -28,20 +22,8 @@ public class UserDTO extends UserCreateDTO {
         this.id = id;
     }
 
-    public List<ActivityReportDTO> getActivityReports() {
-        return Collections.unmodifiableList(activityReports);
-    }
-
-    public void addActivityReport(ActivityReportDTO activityReport) {
-        activityReports.add(activityReport);
-    }
-
-    public void removeActivityReport(ActivityReportDTO activityReport) {
-        activityReports.remove(activityReport);
-    }
-
-    public TeamDTO getTeam() {
-        return team;
+    public String getTeam() {
+        return teamName;
     }
 
     public int getTotalCalories() {
@@ -52,8 +34,8 @@ public class UserDTO extends UserCreateDTO {
         this.totalCalories = totalCalories;
     }
 
-    public void setTeam(TeamDTO team) {
-        this.team = team;
+    public void setTeam(String team) {
+        this.teamName = team;
     }
 
     @Override
@@ -84,7 +66,6 @@ public class UserDTO extends UserCreateDTO {
                 ", sex=" + getSex() +
                 ", height=" + getHeight() +
                 ", weight=" + getWeight() +
-                ", activityReports=" + activityReports +
                 '}';
     }
 }
