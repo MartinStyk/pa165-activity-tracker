@@ -1,7 +1,5 @@
 package cz.muni.fi.pa165.tracker.data.sample;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import cz.muni.fi.pa165.tracker.entity.ActivityReport;
 import cz.muni.fi.pa165.tracker.entity.SportActivity;
 import cz.muni.fi.pa165.tracker.entity.Team;
@@ -12,18 +10,22 @@ import cz.muni.fi.pa165.tracker.service.ActivityReportService;
 import cz.muni.fi.pa165.tracker.service.SportActivityService;
 import cz.muni.fi.pa165.tracker.service.TeamService;
 import cz.muni.fi.pa165.tracker.service.UserService;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class that implements loading data sample.
+ *
  * @author Martin Styk, Petra Ondřejková
  * @version 29.11.2016
  */
@@ -32,21 +34,16 @@ import org.slf4j.LoggerFactory;
 public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleDataLoadingFacadeImpl.class);
-
-    @Inject
-    private UserService userService;
-
-    @Inject
-    private ActivityReportService activityReportService;
-
-    @Inject
-    private SportActivityService sportActivityService;
-
-    @Inject
-    private TeamService teamService;
-
     private final Map<String, User> users = new HashMap<>();
     private final Map<String, SportActivity> sports = new HashMap<>();
+    @Inject
+    private UserService userService;
+    @Inject
+    private ActivityReportService activityReportService;
+    @Inject
+    private SportActivityService sportActivityService;
+    @Inject
+    private TeamService teamService;
 
     @Override
     public void loadData() {
@@ -139,7 +136,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 LocalDateTime.of(2016, 11, 27, 15, 0), LocalDateTime.of(2016, 11, 27, 17, 0));
         activityReport(users.get("jagr"), sports.get("workout"),
                 LocalDateTime.of(2016, 11, 27, 22, 0), LocalDateTime.of(2016, 11, 27, 22, 15));
-        activityReport(users.get("jagr"), sports.get("joga"),
+        activityReport(users.get("jagr"), sports.get("yoga"),
                 LocalDateTime.of(2016, 11, 28, 7, 0), LocalDateTime.of(2016, 11, 28, 7, 30));
         activityReport(users.get("jagr"), sports.get("hockey"),
                 LocalDateTime.of(2016, 11, 28, 10, 0), LocalDateTime.of(2016, 11, 28, 11, 30));
@@ -159,7 +156,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 LocalDateTime.of(2016, 11, 27, 16, 0), LocalDateTime.of(2016, 11, 27, 17, 0));
         activityReport(users.get("sagan"), sports.get("cycling"),
                 LocalDateTime.of(2016, 11, 28, 10, 0), LocalDateTime.of(2016, 11, 28, 16, 0));
-        activityReport(users.get("sagan"), sports.get("Yoga"),
+        activityReport(users.get("sagan"), sports.get("yoga"),
                 LocalDateTime.of(2016, 11, 29, 10, 0), LocalDateTime.of(2016, 11, 29, 11, 0));
 
         // KOUKALOVA
@@ -177,7 +174,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 LocalDateTime.of(2016, 11, 28, 7, 25), LocalDateTime.of(2016, 11, 28, 7, 45));
         activityReport(users.get("koukalova"), sports.get("biatlon"),
                 LocalDateTime.of(2016, 11, 28, 15, 30), LocalDateTime.of(2016, 11, 28, 17, 0));
-        activityReport(users.get("koukalova"), sports.get("Yoga"),
+        activityReport(users.get("koukalova"), sports.get("yoga"),
                 LocalDateTime.of(2016, 11, 29, 10, 0), LocalDateTime.of(2016, 11, 29, 11, 0));
 
         // VITKOVA
@@ -195,14 +192,14 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 LocalDateTime.of(2016, 11, 28, 7, 25), LocalDateTime.of(2016, 11, 28, 7, 45));
         activityReport(users.get("vitkova"), sports.get("biatlon"),
                 LocalDateTime.of(2016, 11, 28, 15, 30), LocalDateTime.of(2016, 11, 28, 17, 0));
-        activityReport(users.get("vitkova"), sports.get("Yoga"),
+        activityReport(users.get("vitkova"), sports.get("yoga"),
                 LocalDateTime.of(2016, 11, 29, 10, 0), LocalDateTime.of(2016, 11, 29, 11, 0));
 
         LOGGER.info("All reports were loaded.");
     }
 
     private User user(String email, String name, String surname, String passwordHash,
-            UserRole role, Sex sex, int height, int weight, LocalDate dateOfBirth) {
+                      UserRole role, Sex sex, int height, int weight, LocalDate dateOfBirth) {
         User user = new User.Builder(email)
                 .setFirstName(name)
                 .setLastName(surname)
@@ -232,13 +229,18 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
 
         for (int i = 0; i < members.size(); i++) {
             team.addMember(members.get(i));
+            //set owning side
+            User user = members.get(i);
+            user.setTeam(team);
+            userService.update(user);
         }
         teamService.createTeam(team);
+
         return team;
     }
 
     private ActivityReport activityReport(User user, SportActivity sport,
-            LocalDateTime start, LocalDateTime end) {
+                                          LocalDateTime start, LocalDateTime end) {
         ActivityReport report = new ActivityReport();
         report.setUser(user);
         report.setSportActivity(sport);

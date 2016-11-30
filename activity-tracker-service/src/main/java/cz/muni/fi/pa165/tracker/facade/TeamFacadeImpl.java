@@ -48,8 +48,10 @@ public class TeamFacadeImpl implements TeamFacade {
         User leader = getExistingUserOrThrowException(teamDTO.getTeamLeaderId());
         team.setTeamLeader(leader);
         team.addMember(leader);
+        leader.setTeam(team);
 
         teamService.createTeam(team);
+        userService.update(leader);
         return team.getId();
     }
 

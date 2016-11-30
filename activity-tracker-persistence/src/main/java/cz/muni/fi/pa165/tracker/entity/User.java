@@ -219,7 +219,6 @@ public class User {
                 ", sex=" + sex +
                 ", height=" + height +
                 ", weight=" + weight +
-                ", activityReports=" + activityReports +
                 '}';
     }
 
