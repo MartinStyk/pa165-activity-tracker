@@ -74,23 +74,29 @@ public class SampleDataLoadingFacadeTest extends AbstractTestNGSpringContextTest
             assertNotNull(report.getUser());
             return report;
         }).map((report) -> {
-            assertNotNull(report.getSportActivity());
+            assertNotNull(report.getSportActivity(), "Sport is null in activity report of user " +
+                    report.getUser().getFirstName() + report.getUser().getLastName());
             return report;
         }).forEach((report) -> {
-            assertTrue(report.getBurnedCalories() > 0);
+            assertTrue(report.getBurnedCalories() > 0, "Calories are null in activity report of user " +
+                    report.getUser().getFirstName() + report.getUser().getLastName() +
+                    " of date " + report.getStartTime().toString());
         });
 
         List<TeamDTO> teamList = teamFacade.getAllTeams();
 
         teamList.stream().map((team) -> {
-            assertNotNull(team.getTeamLeader());
+            assertNotNull(team.getTeamLeader(), "Team leader is null in team "
+            + team.getName());
             return team;
         }).forEach((team) -> {
-            assertTrue(!team.getMembers().isEmpty());
+            assertTrue(!team.getMembers().isEmpty(), "There are no members in team "
+            + team.getName());
         });
 
         UserDTO admin = userFacade.findAll().stream().filter(a -> a.getRole().equals(UserRole.ADMIN)).findFirst().get();
-        assertTrue(userFacade.logIn(new UserAuthenticateDTO(admin.getId(), "admin")));
+        assertTrue(userFacade.logIn(new UserAuthenticateDTO(admin.getId(), "admin")),
+                "Admin is not login");
 
         LOGGER.debug("Test successfully finished.");
     }
