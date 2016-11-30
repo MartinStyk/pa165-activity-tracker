@@ -53,7 +53,7 @@ public class CaloriesServiceImpl implements CaloriesService {
             metabolicRate = (9.56 * user.getWeight()) + (1.85 * user.getHeight()) - (4.68 * userAge) + 655;
         }
 
-        double calorieBurn = (metabolicRate / 24) * sportActivity.getCaloriesFactor() * duration.toHours();
+        double calorieBurn = (metabolicRate / 24) * sportActivity.getCaloriesFactor() * duration.toMinutes() / 60;
 
         if (calorieBurn < 0) {
             throw new ActivityTrackerServiceException("Negative calories computed for user " + user + " sport "
