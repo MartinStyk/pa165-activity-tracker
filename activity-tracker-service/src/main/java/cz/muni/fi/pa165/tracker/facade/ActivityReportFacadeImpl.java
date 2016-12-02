@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,7 +73,7 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
 
     @Override
     public List<ActivityReportDTO> getAllActivityReports() {
-        return beanMappingService.mapTo(activityReportService.findAll(), ActivityReportDTO.class);
+        return performUsersTeamConversion(activityReportService.findAll());
     }
 
     @Override
@@ -90,13 +91,13 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
     @Override
     public List<ActivityReportDTO> getActivityReportsByUser(Long userId) {
         User user = getExistingUserOrThrowException(userId);
-        return beanMappingService.mapTo(activityReportService.findByUser(user), ActivityReportDTO.class);
+        return performUsersTeamConversion(activityReportService.findByUser(user));
     }
 
     @Override
     public List<ActivityReportDTO> getActivityReportsBySport(Long sportId) {
         SportActivity sportActivity = getExistingSportOrThrowException(sportId);
-        return beanMappingService.mapTo(activityReportService.findBySport(sportActivity), ActivityReportDTO.class);
+        return performUsersTeamConversion(activityReportService.findBySport(sportActivity));
     }
 
     @Override
@@ -104,8 +105,7 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
         User user = getExistingUserOrThrowException(userId);
         SportActivity activity = getExistingSportOrThrowException(sportId);
 
-        return beanMappingService.mapTo(activityReportService.findByUserAndSport(user, activity),
-                ActivityReportDTO.class);
+        return performUsersTeamConversion(activityReportService.findByUserAndSport(user, activity));
     }
 
     @Override
@@ -158,5 +158,23 @@ public class ActivityReportFacadeImpl implements ActivityReportFacade {
             throw new NonExistingEntityException("Sport does not exist. Id: " + id);
         }
         return sportActivity;
+    }
+
+    /**
+     * This is needed to translate team object into team name which is used in UserDTO
+     *
+     * @param activityReports entity list
+     * @return dto list with correctly set user team
+     */
+    private List<ActivityReportDTO> performUsersTeamConversion(List<ActivityReport> activityReports) {
+        List<ActivityReportDTO> activityReportDTOs = new ArrayList<>(activityReports.size());
+        for (ActivityReport report : activityReports) {
+            ActivityReportDTO dto = beanMappingService.mapTo(report, ActivityReportDTO.class);
+            if ((report.getUser()) != null && report.getUser().getTeam() != null) {
+                dto.getUser().setTeam(report.getUser().getTeam().getName());
+            }
+            activityReportDTOs.add(dto);
+        }
+        return activityReportDTOs;
     }
 }

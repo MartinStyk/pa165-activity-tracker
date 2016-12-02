@@ -2,14 +2,16 @@
 
 ### Rest API implemented for entity
 * User
+* ActivityReport (partial)
 
-##How to run
+## How to run
 * Run ``mvn clean install`` in top level project directory
 * Run ``mvn`` in activity-tracker-rest directory
 
-##Hot to test
+## How to test
 * Rest API is available at localhost:8080/pa165/rest
 
+#### User
 
 List all users
 ```
@@ -44,4 +46,25 @@ Update few attributes of user
 curl -i -X PUT -H "Content-Type: application/json" --data '{"firstName":"Petko"}' http://localhost:8080/pa165/rest/users/4
 ```
 
+#### ActivityReport
 
+List all reports
+```
+curl -i -X GET http://localhost:8080/pa165/rest/reports
+```
+Find reports by userId
+```
+curl -i -X GET http://localhost:8080/pa165/rest/reports?userId=2
+```
+Find reports by sportId
+```
+curl -i -X GET http://localhost:8080/pa165/rest/reports?sportId=4
+```
+Find reports by sportId and userId
+```
+curl -i -X GET http://localhost:8080/pa165/rest/reports?sportId=4&sportId=2
+```
+Find users by id
+```
+curl -i -X GET http://localhost:8080/pa165/rest/reports/20
+```

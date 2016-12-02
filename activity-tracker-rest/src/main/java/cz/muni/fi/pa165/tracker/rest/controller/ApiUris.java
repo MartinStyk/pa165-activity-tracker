@@ -6,6 +6,7 @@ package cz.muni.fi.pa165.tracker.rest.controller;
  */
 public class ApiUris {
     public static final String USER = "/users";
+    public static final String REPORT = "/reports";
 
     private ApiUris() {
     }

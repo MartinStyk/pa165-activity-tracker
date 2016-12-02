@@ -11,6 +11,8 @@ import cz.muni.fi.pa165.tracker.rest.exception.ExistingResourceException;
 import cz.muni.fi.pa165.tracker.rest.exception.InvalidResourceException;
 import cz.muni.fi.pa165.tracker.rest.exception.RequestedResourceNotFoundException;
 import cz.muni.fi.pa165.tracker.rest.exception.ResourceNotModifiedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,8 @@ import java.util.List;
 @RestController
 @RequestMapping(ApiUris.USER)
 public class UserRestController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ActivityReportRestController.class);
 
     @Inject
     private UserFacade userFacade;
@@ -53,7 +57,8 @@ public class UserRestController {
                 List<UserDTO> result = new ArrayList<>();
                 result.add(userFacade.findUserByEmail(email));
                 return result;
-            } catch (NonExistingEntityException e) {
+            } catch (NonExistingEntityException | IllegalArgumentException e) {
+                logger.error("Exception in findUsers()", e);
                 throw new RequestedResourceNotFoundException(e);
             }
         }
@@ -72,7 +77,8 @@ public class UserRestController {
     public final UserDTO findUserById(@PathVariable("id") long id) {
         try {
             return userFacade.findUserById(id);
-        } catch (NonExistingEntityException e) {
+        } catch (NonExistingEntityException | IllegalArgumentException e) {
+            logger.error("Exception in findUserById()", e);
             throw new RequestedResourceNotFoundException(e);
         }
     }
@@ -92,6 +98,7 @@ public class UserRestController {
             UserDTO userDTO = userFacade.findUserById(id);
             return teamFacade.getTeamByName(userDTO.getTeam());
         } catch (NonExistingEntityException | IllegalArgumentException e) {
+            logger.error("Exception in findUsersTeam()", e);
             throw new RequestedResourceNotFoundException(e);
         }
     }
@@ -111,7 +118,8 @@ public class UserRestController {
             UserDTO userDTO = new UserDTO();
             userDTO.setId(id);
             userFacade.removeUser(userDTO);
-        } catch (NonExistingEntityException e) {
+        } catch (NonExistingEntityException | IllegalArgumentException e) {
+            logger.error("Exception in deleteUser()", e);
             throw new RequestedResourceNotFoundException(e);
         }
     }
@@ -135,8 +143,10 @@ public class UserRestController {
             Long id = userFacade.createUser(user);
             return userFacade.findUserById(id);
         } catch (ActivityTrackerDataAccessException e) {
+            logger.error("ActivityTrackerDataAccessException in createUser()", e);
             throw new InvalidResourceException(e);
         } catch (Exception e) {
+            logger.error("Exception in createUser()", e);
             throw new ExistingResourceException(e);
         }
     }
@@ -164,6 +174,7 @@ public class UserRestController {
         try {
             existingUser = userFacade.findUserById(id);
         } catch (Exception e) {
+            logger.error("Exception in updateUser()", e);
             throw new RequestedResourceNotFoundException(e);
         }
 
@@ -171,7 +182,7 @@ public class UserRestController {
         try {
             userFacade.updateUser(toUpdateDTO);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception in updateUser()", e);
             throw new ResourceNotModifiedException(e);
         }
 
