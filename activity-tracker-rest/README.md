@@ -33,7 +33,7 @@ curl -i -X DELETE http://localhost:8080/pa165/rest/users/2
 ```
 Create new user
 ```
-curl -X POST -i -H "Content-Type: application/json" --data '{"email":"mstyk@redhat.com","firstName":"Martin","lastName":"Styk","passwordHash":"200aaa","dateOfBirth":"2008-02-15","role":"ADMIN","sex":"MALE","height":"111","weight":"100"}' http://localhost:8080/pa165/rest/users/create
+curl -X POST -i -H "Content-Type: application/json" --data '{"email":"mstyk@redhat.com","firstName":"Martin","lastName":"Styk","passwordHash":"200aaa","dateOfBirth":"2008-02-15","role":"ADMIN","sex":"MALE","height":"111","weight":"100"}' http://localhost:8080/pa165/rest/users
 ```
 Update many attributes of user
 ```

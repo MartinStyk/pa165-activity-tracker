@@ -118,9 +118,9 @@ public class    UserCreateDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserDTO)) return false;
+        if (!(o instanceof UserCreateDTO)) return false;
 
-        UserDTO user = (UserDTO) o;
+        UserCreateDTO user = (UserCreateDTO) o;
 
         return !(getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null);
     }

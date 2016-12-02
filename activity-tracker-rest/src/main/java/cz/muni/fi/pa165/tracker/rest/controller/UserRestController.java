@@ -121,16 +121,16 @@ public class UserRestController {
      * <p>
      * curl -X POST -i -H "Content-Type: application/json" --data '{"email":"mstyk@redhat.com","firstName":"Martin",
      * "lastName":"Styk","passwordHash":"200aaa","dateOfBirth":"2008-02-15","role":"ADMIN","sex":"MALE","height":"111",
-     * "weight":"100"}' http://localhost:8080/pa165/rest/users/create
+     * "weight":"100"}' http://localhost:8080/pa165/rest/users
      *
      * @param user UserCreateDTO with required fields for creation
      * @return the newly created DTO of user
      * @throws InvalidResourceException  if user can not be created because validation failures
      * @throws ExistingResourceException if user already exists
      */
-    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public final UserDTO createProduct(@RequestBody UserCreateDTO user) throws Exception {
+    public final UserDTO createUser(@RequestBody UserCreateDTO user) throws Exception {
         try {
             Long id = userFacade.createUser(user);
             return userFacade.findUserById(id);
@@ -159,7 +159,7 @@ public class UserRestController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public final UserDTO updateAlbum(@PathVariable("id") long id, @RequestBody UserDTO editedUser) throws Exception {
+    public final UserDTO updateUser(@PathVariable("id") long id, @RequestBody UserDTO editedUser) throws Exception {
         UserDTO existingUser = null;
         try {
             existingUser = userFacade.findUserById(id);

@@ -14,6 +14,13 @@ public class UserDTO extends UserCreateDTO {
 
     private int totalCalories;
 
+    public UserDTO() {
+    }
+
+    public UserDTO(long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
