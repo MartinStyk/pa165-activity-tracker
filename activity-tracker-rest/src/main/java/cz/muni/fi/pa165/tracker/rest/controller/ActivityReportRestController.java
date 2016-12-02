@@ -53,19 +53,20 @@ public class ActivityReportRestController {
         }
 
         try {
-            if (userId != null)
-                return activityReportFacade.getActivityReportsByUser(userId);
+            if (userId != null && sportId != null)
+                return activityReportFacade.getActivityReportsByUserAndSport(userId, sportId);
 
             if (sportId != null)
                 return activityReportFacade.getActivityReportsBySport(sportId);
 
-            return activityReportFacade.getActivityReportsByUserAndSport(userId, sportId);
+            if (userId != null)
+                return activityReportFacade.getActivityReportsByUser(userId);
 
         } catch (NonExistingEntityException | IllegalArgumentException e) {
             logger.error("Exception in getReports()", e);
             throw new RequestedResourceNotFoundException(e);
         }
-
+        return null;
     }
 
     /**
