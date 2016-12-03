@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cz.muni.fi.pa165</groupId>
@@ -17,11 +15,11 @@
             <email>422527@mail.muni.cz</email>
         </developer>
         <developer>
-            <name>Adam Laurenƒç√≠k</name>
+            <name>Adam LaurenËÌk</name>
             <email>445263@mail.muni.cz</email>
         </developer>
         <developer>
-            <name>Petra Ond≈ôejkov√°</name>
+            <name>Petra Ond¯ejkov·</name>
             <email>4082562mail.muni.cz</email>
         </developer>
         <developer>
@@ -41,9 +39,9 @@
         <module>activity-tracker-api</module>
         <module>activity-tracker-service</module>
         <module>activity-tracker-sample-data</module>
-        <module>activity-tracker-spring-mvc-web</module>
         <module>activity-tracker-rest</module>
-    </modules>
+    <module>activity-tracker-spring-mvc</module>
+  </modules>
 
     <dependencyManagement>
         <dependencies>
