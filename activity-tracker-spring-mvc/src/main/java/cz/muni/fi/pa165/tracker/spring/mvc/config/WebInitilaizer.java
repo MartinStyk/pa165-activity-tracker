@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.activity.tracker.spring.mvc.config;
+package cz.muni.fi.pa165.tracker.spring.mvc.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ public class WebInitilaizer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext sc) throws ServletException {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(Config.class);
+        ctx.register(SpringMvcConfig.class);
         ctx.setServletContext(sc);
         Dynamic servlet = sc.addServlet("dispatcher", new DispatcherServlet(ctx));
         servlet.addMapping("/");

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.muni.fi.pa165.activity.tracker.spring.mvc.controllers;
+package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
