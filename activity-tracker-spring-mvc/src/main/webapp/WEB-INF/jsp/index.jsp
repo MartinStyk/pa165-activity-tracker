@@ -4,16 +4,33 @@
     Author     : Adam
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-        <p>${msg}</p>
-    </body>
-</html>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" session="false" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="own" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<own:masterpage>
+    <jsp:attribute name="scripts">
+        <!--    This is how you include page-specific javascript files to the page. 
+            This section will be rendered at the very bottom pg the page after script tags
+            that include Javascript libraries like jQuery and jQuery UI,
+            so there is no need to include then on every page.-->
+        <script src="${pageContext.request.contextPath}/js/test.js"></script>
+    </jsp:attribute>
+    <jsp:attribute name="body">
+
+        <div class="jumbotron homepage">
+            <h1>Activity reports</h1>
+            <p class="lead">Welcome to our page</p>
+            <p>In order to use our application you need to sign in.</p>
+            <p align="right">
+                <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/login" role="button">
+                    Sign in
+                </a>
+            </p>
+        </div>
+
+    </jsp:attribute>
+</own:masterpage>
