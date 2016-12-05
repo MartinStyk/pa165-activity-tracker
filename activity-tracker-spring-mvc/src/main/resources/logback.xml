@@ -26,4 +26,5 @@
     <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper" level="off"/>
     <logger name="org.hibernate.jpa.internal.util.LogHelper" level="off"/>
     <logger name="org.hibernate.cfg.Environment" level="off"/>
+    <logger name="cz.muni.fi.pa165.tracker" level="debug"/>
 </configuration>
