@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- *
  * @author Adam Laurenčík
  */
 @Controller
-public class DefaultController {
+public class DefaultController extends ActivityTrackerController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(ModelMap map) {

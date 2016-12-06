@@ -25,11 +25,13 @@
             <h1><fmt:message key="application_name"/></h1>
             <p class="lead"><fmt:message key="index_welcome"/></p>
             <p><fmt:message key="index_text"/></p>
-            <p align="right">
+            <c:if test="${empty loggedUser}">
+             <p align="right">
                 <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/login" role="button">
                     <fmt:message key="sign_in"/>
                 </a>
-            </p>
+             </p>
+            </c:if>
         </div>
 
     </jsp:attribute>

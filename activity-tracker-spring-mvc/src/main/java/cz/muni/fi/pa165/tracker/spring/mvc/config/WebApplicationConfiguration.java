@@ -1,6 +1,9 @@
 package cz.muni.fi.pa165.tracker.spring.mvc.config;
 
 import cz.muni.fi.pa165.tracker.data.sample.SampleDataConfiguration;
+import cz.muni.fi.pa165.tracker.data.sample.SampleDataLoadingFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +18,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.validation.Validator;
+import java.io.IOException;
 
 /**
  * Configuration of Spring MVC
@@ -24,9 +30,14 @@ import javax.validation.Validator;
  */
 @Configuration
 @EnableWebMvc
-@Import({SampleDataConfiguration.class})
+@Import({SampleDataConfiguration.class, WebApplicationSecurityConfiguration.class})
 @ComponentScan("cz.muni.fi.pa165.tracker.spring.mvc")
-public class SpringMvcConfig extends WebMvcConfigurerAdapter {
+public class WebApplicationConfiguration extends WebMvcConfigurerAdapter {
+
+    private static final Logger log = LoggerFactory.getLogger(WebApplicationConfiguration.class);
+
+    @Inject
+    private SampleDataLoadingFacade sampleDataLoadingFacade;
 
     /**
      * Provides mapping from view names to JSP pages in WEB-INF/jsp directory.
@@ -72,5 +83,16 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("Texts");
         return messageSource;
+    }
+
+    /**
+     * We need to load data here, It is node on application startup. It can not be done in other configuration layer
+     * because, here we need to load users and determine their types in {@link WebApplicationSecurityConfiguration}
+     *
+     * @throws IOException
+     */
+    @PostConstruct
+    public void dataLoading() throws IOException {
+        sampleDataLoadingFacade.loadData();
     }
 }

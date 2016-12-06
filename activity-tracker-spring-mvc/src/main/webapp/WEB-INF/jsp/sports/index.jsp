@@ -24,14 +24,14 @@
                 <button class="btn btn-primary search-btn" type="submit"><i class="glyphicon glyphicon-search"></i>&nbsp;<fmt:message key="search"/></button>
             </form:form>
 
-          <%--   <c:if test="${isAdmin}"> --%>
+            <c:if test="${isAdmin}">
                 <p align="right">
                     <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/sports/create" role="button">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     <fmt:message key="sport.create"/>
                     </a>
                 </p>
-           <%--  </c:if> --%>
+             </c:if>
         </div>
 
         <div class="row">
@@ -41,10 +41,10 @@
                         <th><fmt:message key="num"/></th>
                         <th><fmt:message key="sport.name"/></th>
                         <th><fmt:message key="sport.caloriesFactor"/></th>
-                        <%--     <c:if test="${isAdmin}"> --%>
+                          <c:if test="${isAdmin}">
                             <th class="text-center"><fmt:message key="edit"/></th>
                             <th class="text-center"><fmt:message key="remove"/></th>
-                        <%--     </c:if> --%>
+                          </c:if>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,7 +55,7 @@
                             <td class="col-xs-3 lead-column"><c:out value="${sport.name}"/></td>
                             <td class="col-xs-3 text-center"><c:out value="${sport.caloriesFactor}"/></td>
 
-                          <%--  <c:if test="${isAdmin}"> --%>
+                            <c:if test="${isAdmin}">
                                 <form:form method="get" action="${pageContext.request.contextPath}/sports/update/${sport.id}" cssClass="form-horizontal">
                                     <td class="col-xs-1 text-center">
                                         <button class="btn btn-default" type="submit">
@@ -73,7 +73,7 @@
                                         </button>
                                     </td>
                                 </form:form>
-                          <%--  </c:if> --%>
+                            </c:if>
                         </tr>
                     </c:forEach>
             </table>

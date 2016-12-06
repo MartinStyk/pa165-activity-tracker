@@ -44,6 +44,9 @@ public class SampleDataLoadingFacadeTest extends AbstractTestNGSpringContextTest
     public ActivityReportFacade activityReportFacade;
 
     @Inject
+    public SampleDataLoadingFacade loadingFacade;
+
+    @Inject
     public TeamFacade teamFacade;
 
     @Inject
@@ -52,6 +55,7 @@ public class SampleDataLoadingFacadeTest extends AbstractTestNGSpringContextTest
     @Test
     public void createDataTest() {
         LOGGER.debug("Starting test...");
+        loadingFacade.loadData();
 
         assertTrue(sportActivityFacade.getAllSportActivities().size() > 0, "No sport activities. ");
         assertTrue(activityReportFacade.getAllActivityReports().size() > 0, "No activity records. ");
@@ -87,11 +91,11 @@ public class SampleDataLoadingFacadeTest extends AbstractTestNGSpringContextTest
 
         teamList.stream().map((team) -> {
             assertNotNull(team.getTeamLeader(), "Team leader is null in team "
-            + team.getName());
+                    + team.getName());
             return team;
         }).forEach((team) -> {
             assertTrue(!team.getMembers().isEmpty(), "There are no members in team "
-            + team.getName());
+                    + team.getName());
         });
 
         UserDTO admin = userFacade.findAll().stream().filter(a -> a.getRole().equals(UserRole.ADMIN)).findFirst().get();

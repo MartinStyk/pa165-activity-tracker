@@ -24,11 +24,11 @@ import java.util.List;
 
 /**
  * @author Martin Styk
- * @version 12.4.2016
+ * @version 5.12.2016
  */
 @Controller
 @RequestMapping(value = {"/sports"})
-public class SportController {
+public class SportController extends ActivityTrackerController {
 
     private static final Logger log = LoggerFactory.getLogger(SportController.class);
 
