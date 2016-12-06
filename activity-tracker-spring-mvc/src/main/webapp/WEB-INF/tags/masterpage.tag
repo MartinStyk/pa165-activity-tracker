@@ -39,13 +39,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="${pageContext.request.contextPath}">Activity Tracker</a>
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}"><fmt:message key="application_name"/></a>
                 <div id="navbar" class="collapse navbar-collapse pull-left">
                     <ul class="nav navbar-nav">
-                        <li><a href="${pageContext.request.contextPath}/reports">Reports</a></li>
-                        <li><a href="${pageContext.request.contextPath}/sports">Sports</a></li>
-                        <li><a href="${pageContext.request.contextPath}/teams">Teams</a></li>
-                        <li><a href="${pageContext.request.contextPath}/settings">Settings</a></li>
+                        <li><a href="${pageContext.request.contextPath}/reports"><fmt:message key="menu_reports"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/sports"><fmt:message key="menu_sports"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/teams"><fmt:message key="menu_teams"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/settings"><fmt:message key="menu_settings"/></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
                 <ul class="nav navbar-nav navbar-right pull-right">        
@@ -61,13 +61,13 @@
                                   <!--<p>Prihlaseny:</p>-->
                                   <p>Logged in:&nbsp;<span class="fullName">${userData.firstName}&nbsp;${userData.lastName}</span></p>
                                   <p>Email:&nbsp;<span class="userEmail">${userData.email}</span></p>                                  
-                                  <a href="${pageContext.request.contextPath}/logout">Log out</a>
+                                  <a href="${pageContext.request.contextPath}/logout"><fmt:message key="log_out"/></a>
                               </div>
                             </li>
 
                         </c:when>
                         <c:otherwise>
-                          <li><a href="${pageContext.request.contextPath}/login">Log in</a></li> 
+                          <li><a href="${pageContext.request.contextPath}/login"><fmt:message key="log_in"/></a></li> 
                         </c:otherwise>
                     </c:choose>
                 </ul>

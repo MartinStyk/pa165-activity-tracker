@@ -5,40 +5,32 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<own:masterpage title="Create Sport">
+<own:masterpage title="Create Report">
     <jsp:attribute name="body">
 
-        <a href="${pageContext.request.contextPath}/sports" class="btn btn-default" role="button">
+        <a href="${pageContext.request.contextPath}/reports" class="btn btn-default" role="button">
             <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
             <fmt:message key="back"/>
         </a>
 
         <div class="page-header">
             <h1>
-                <fmt:message key="sport.create"/>
+                <fmt:message key="reports.create"/>
             </h1>
         </div>
 
         <form:form method="POST"
-                   action="${pageContext.request.contextPath}/sports/create"
+                   action="${pageContext.request.contextPath}/reports/create"
                    acceptCharset=""
-                   modelAttribute="sportCreate"
+                   modelAttribute="reportCreate"
                    cssClass="form-horizontal">
 
 
             <div class="form-group ${name_error?'has-error':''}">
-                <form:label path="name" cssClass="col-sm-2 control-label"><fmt:message key="sport.name"/></form:label>
+                <form:label path="startTime" cssClass="col-sm-2 control-label"><fmt:message key="report.startTime"/></form:label>
                     <div class="col-sm-10">
-                    <form:input path="name" cssClass="form-control"/>
-                    <form:errors path="name" cssClass="help-block"/>
-                </div>
-            </div>
-
-            <div class="form-group ${caloriesFactor_error?'has-error':''}">
-                <form:label path="caloriesFactor" cssClass="col-sm-2 control-label"><fmt:message key="sport.caloriesFactor"/></form:label>
-                    <div class="col-sm-10">
-                    <form:input path="caloriesFactor" cssClass="form-control"/>
-                    <form:errors path="caloriesFactor" cssClass="help-block"/>
+                    <form:input path="startTime" cssClass="form-control"/>
+                    <form:errors path="startTime" cssClass="help-block"/>
                 </div>
             </div>
 

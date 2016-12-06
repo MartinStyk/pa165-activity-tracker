@@ -20,6 +20,12 @@
             <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>cz.muni.fi.pa165</groupId>
+            <artifactId>activity-tracker-api</artifactId>
+            <version>0.3-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>

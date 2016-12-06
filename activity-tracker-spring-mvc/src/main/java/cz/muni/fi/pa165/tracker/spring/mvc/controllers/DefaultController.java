@@ -19,7 +19,6 @@ public class DefaultController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(ModelMap map) {
-        map.put("msg", "FUNGUJE TO :)");
         return "index";
     }
 }

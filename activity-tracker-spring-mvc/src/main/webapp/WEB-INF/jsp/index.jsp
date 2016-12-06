@@ -22,12 +22,12 @@
     <jsp:attribute name="body">
 
         <div class="jumbotron homepage">
-            <h1>Activity reports</h1>
-            <p class="lead">Welcome to our page</p>
-            <p>In order to use our application you need to sign in.</p>
+            <h1><fmt:message key="application_name"/></h1>
+            <p class="lead"><fmt:message key="index_welcome"/></p>
+            <p><fmt:message key="index_text"/></p>
             <p align="right">
                 <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/login" role="button">
-                    Sign in
+                    <fmt:message key="sign_in"/>
                 </a>
             </p>
         </div>
