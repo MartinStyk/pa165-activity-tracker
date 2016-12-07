@@ -18,10 +18,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.validation.Validator;
-import java.io.IOException;
 
 /**
  * Configuration of Spring MVC
@@ -83,16 +81,5 @@ public class WebApplicationConfiguration extends WebMvcConfigurerAdapter {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("Texts");
         return messageSource;
-    }
-
-    /**
-     * We need to load data here, It is node on application startup. It can not be done in other configuration layer
-     * because, here we need to load users and determine their types in {@link WebApplicationSecurityConfiguration}
-     *
-     * @throws IOException
-     */
-    @PostConstruct
-    public void dataLoading() throws IOException {
-        sampleDataLoadingFacade.loadData();
     }
 }

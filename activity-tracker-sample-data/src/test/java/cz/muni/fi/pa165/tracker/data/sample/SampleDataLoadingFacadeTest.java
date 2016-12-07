@@ -44,9 +44,6 @@ public class SampleDataLoadingFacadeTest extends AbstractTestNGSpringContextTest
     public ActivityReportFacade activityReportFacade;
 
     @Inject
-    public SampleDataLoadingFacade loadingFacade;
-
-    @Inject
     public TeamFacade teamFacade;
 
     @Inject
@@ -55,7 +52,6 @@ public class SampleDataLoadingFacadeTest extends AbstractTestNGSpringContextTest
     @Test
     public void createDataTest() {
         LOGGER.debug("Starting test...");
-        loadingFacade.loadData();
 
         assertTrue(sportActivityFacade.getAllSportActivities().size() > 0, "No sport activities. ");
         assertTrue(activityReportFacade.getAllActivityReports().size() > 0, "No activity records. ");
