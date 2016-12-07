@@ -5,14 +5,14 @@ import cz.muni.fi.pa165.tracker.dto.SportActivityDTO;
 import cz.muni.fi.pa165.tracker.dto.SportActivityUpdateDTO;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.SportActivityFacade;
+import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueSportNameCreateValidator;
+import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueSportNameUpdateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,7 +36,10 @@ public class SportController extends ActivityTrackerController {
     private SportActivityFacade sportFacade;
 
     @Inject
-    private MessageSource messageSource;
+    private UniqueSportNameCreateValidator uniqueSportNameCreateValidator;
+
+    @Inject
+    private UniqueSportNameUpdateValidator uniqueSportNameUpdateValidator;
 
     /**
      * List sports in database.
@@ -50,7 +53,9 @@ public class SportController extends ActivityTrackerController {
      */
     @RequestMapping(value = {"", "/", "/index"}, method = RequestMethod.GET)
     public String index(Model model,
-                        @RequestParam(value = "sportName", required = false) String sportName) {
+                        @RequestParam(value = "sportName", required = false) String sportName,
+                        RedirectAttributes redirectAttributes,
+                        UriComponentsBuilder uriComponentsBuilder) {
 
         List<SportActivityDTO> sports = null;
 
@@ -62,6 +67,10 @@ public class SportController extends ActivityTrackerController {
                 sports.add(sportFacade.getSportActivityByName(sportName));
             } catch (NonExistingEntityException | IllegalArgumentException e) {
                 log.debug("Sport " + sportName + " not found", e);
+
+                redirectAttributes.addFlashAttribute("alert_warning", "Sport " + sportName +
+                        " not found, showing all sports.");
+                return "redirect:" + uriComponentsBuilder.path("/sports").build().encode().toUriString();
             }
         }
 
@@ -95,20 +104,15 @@ public class SportController extends ActivityTrackerController {
 
         log.debug("create sport({})", formData);
 
-        //if there are any validation errors forward back to the the form
         if (bindingResult.hasErrors()) {
             addValidationErrors(bindingResult, model);
             return "/sports/create";
         }
 
-        Long id = null;
-        try {
-            id = sportFacade.createSportActivity(formData);
-            redirectAttributes.addFlashAttribute("alert_success", "Sport with id " + id + " created");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "This sport can not be created");
-            log.error("Sport not created", e);
-        }
+        Long id = sportFacade.createSportActivity(formData);
+
+        redirectAttributes.addFlashAttribute("alert_success", "Sport with id " + id + " created");
+
         return "redirect:" + uriComponentsBuilder.path("/sports").buildAndExpand(id).encode().toUriString();
     }
 
@@ -151,17 +155,8 @@ public class SportController extends ActivityTrackerController {
             return "/sports/update";
         }
 
-        try {
-            sportFacade.updateSportActivity(formData);
-            redirectAttributes.addFlashAttribute("alert_success", "Sport " + formData.getName() + " updated");
-        } catch (NonExistingEntityException | IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Sport can not be updated, " +
-                    "because it doesn't exist");
-            log.error("Sport not updated", e);
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Sport can not be updated");
-            log.error("Sport not updated", e);
-        }
+        sportFacade.updateSportActivity(formData);
+        redirectAttributes.addFlashAttribute("alert_success", "Sport " + formData.getName() + " updated");
 
         return "redirect:" + uriBuilder.path("/sports").build().encode().toUriString();
     }
@@ -178,27 +173,22 @@ public class SportController extends ActivityTrackerController {
         try {
             sportFacade.removeSportActivity(id);
             redirectAttributes.addFlashAttribute("alert_success", "Sport with id " + id + " deleted");
-        } catch (NonExistingEntityException | IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Sport can not be deleted, " +
-                    "since it doesn't exist");
-            log.error("Sport not deleted", e);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Sport can not be deleted, " +
-                    "there are sport activities referencing it.");
-            log.error("Sport not deleted", e);
+            redirectAttributes.addFlashAttribute("alert_danger", "Sport with id " + id + " can not be deleted");
         }
-
         return "redirect:" + uriBuilder.path("/sports").toUriString();
     }
 
+    @InitBinder
+    protected void initUniqueConstrainBinder(WebDataBinder binder) {
 
-    protected void addValidationErrors(BindingResult bindingResult, Model model) {
-        for (ObjectError ge : bindingResult.getGlobalErrors()) {
-            log.error("ObjectError: {}", ge);
+        if (binder.getTarget() instanceof SportActivityCreateDTO
+                && !(binder.getTarget() instanceof SportActivityUpdateDTO)) {
+            binder.addValidators(uniqueSportNameCreateValidator);
         }
-        for (FieldError fe : bindingResult.getFieldErrors()) {
-            model.addAttribute(fe.getField() + "_error", true);
-            log.error("FieldError: {}", fe);
+
+        if (binder.getTarget() instanceof SportActivityUpdateDTO) {
+            binder.addValidators(uniqueSportNameUpdateValidator);
         }
     }
 }

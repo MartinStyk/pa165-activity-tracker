@@ -4,13 +4,16 @@ import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Parent controller for all applicaiton controllers
+ * Parent controller for all application controllers
  */
 public class ActivityTrackerController {
 
@@ -18,7 +21,7 @@ public class ActivityTrackerController {
     private UserFacade userFacade;
 
     @ModelAttribute("loggedUser")
-    public UserDTO getLoggedUser() {
+    protected UserDTO getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
@@ -35,8 +38,14 @@ public class ActivityTrackerController {
     }
 
     @ModelAttribute("isAdmin")
-    public boolean isUserAdmin(HttpServletRequest request) {
+    protected boolean isUserAdmin(HttpServletRequest request) {
         return request.isUserInRole("ROLE_ADMIN");
+    }
+
+    protected void addValidationErrors(BindingResult bindingResult, Model model) {
+        for (FieldError fe : bindingResult.getFieldErrors()) {
+            model.addAttribute(fe.getField() + "_error", true);
+        }
     }
 
 }
