@@ -50,17 +50,19 @@
                 </div><!--/.nav-collapse -->
                 <ul class="nav navbar-nav navbar-right pull-right">        
                     <c:choose>
-                        <c:when test="${not empty userData}">
+                        <c:when test="${not empty loggedUser}">
                             <li class="dropdown" id="menuLogin">
                               <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">
                                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                  <span class="userName">${userData.firstName}</span>
+                                  <span class="userName">${loggedUser.firstName}</span>
                                   <span class="caret"></span>
                               </a>
                               <div class="dropdown-menu" style="padding:17px;">
-                                  <!--<p>Prihlaseny:</p>-->
-                                  <p>Logged in:&nbsp;<span class="fullName">${userData.firstName}&nbsp;${userData.lastName}</span></p>
-                                  <p>Email:&nbsp;<span class="userEmail">${userData.email}</span></p>                                  
+                                  <p>Logged user:&nbsp;<span class="fullName">${loggedUser.firstName}&nbsp;${loggedUser.lastName}</span></p>
+                                  <p>Email:&nbsp;<span class="userEmail">${loggedUser.email}</span></p>
+                                  <c:if test="${isAdmin}">
+                                       <p><fmt:message key="admin_rights"/></p>
+                                  </c:if>
                                   <a href="${pageContext.request.contextPath}/logout"><fmt:message key="log_out"/></a>
                               </div>
                             </li>
