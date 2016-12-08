@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.tracker.dto;
 
 import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.time.LocalDate;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -23,9 +25,11 @@ public class    UserCreateDTO {
     private String passwordHash;
 
     @NotNull
+    @NotEmpty
     private String firstName;
 
     @NotNull
+    @NotEmpty
     private String lastName;
 
     @NotNull

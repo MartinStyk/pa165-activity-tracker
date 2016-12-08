@@ -108,7 +108,7 @@ footer .container .text-muted {
 
 /* Login button in navbar */
 #navLogin {
-    /*position: relative;*/
+    position: relative;
 }
 
 #navLogin .glyphicon-user {

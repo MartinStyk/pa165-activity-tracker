@@ -47,6 +47,7 @@ public class WebApplicationSecurityConfiguration extends WebSecurityConfigurerAd
                 .antMatchers("/sports/update/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/sports/remove/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/sports/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                .antMatchers("/settings/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
                 .and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/j_spring_security_check")

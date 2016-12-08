@@ -45,7 +45,6 @@
                         <li><a href="${pageContext.request.contextPath}/reports"><fmt:message key="menu_reports"/></a></li>
                         <li><a href="${pageContext.request.contextPath}/sports"><fmt:message key="menu_sports"/></a></li>
                         <li><a href="${pageContext.request.contextPath}/teams"><fmt:message key="menu_teams"/></a></li>
-                        <li><a href="${pageContext.request.contextPath}/settings"><fmt:message key="menu_settings"/></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
                 <ul class="nav navbar-nav navbar-right pull-right">        
@@ -63,6 +62,9 @@
                                   <c:if test="${isAdmin}">
                                        <p><fmt:message key="admin_rights"/></p>
                                   </c:if>
+
+                                  <a href="${pageContext.request.contextPath}/settings"><fmt:message key="menu_settings"/></a>
+
                                   <a href="${pageContext.request.contextPath}/logout"><fmt:message key="log_out"/></a>
                               </div>
                             </li>
