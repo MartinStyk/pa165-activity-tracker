@@ -1,6 +1,11 @@
 ﻿# pa165-activity-tracker [![Build Status](https://travis-ci.org/MartinStyk/pa165-activity-tracker.svg?branch=master)](https://travis-ci.org/MartinStyk/pa165-activity-tracker)
 This project was created as a part of course [FI:PA165 Enterprise Java applications](https://is.muni.cz/auth/predmet/fi/podzim2016/PA165) on Masaryk University, Brno, Czech Republic.
 
+##How to run
+* This project uses maven. Run command ``mvn clean install`` to build the project.
+* [More info about the Web app] (https://github.com/MartinStyk/pa165-activity-tracker/blob/master/activity-tracker-spring-mvc/README.md)
+* [More info about the Rest interface] (https://github.com/MartinStyk/pa165-activity-tracker/blob/master/activity-tracker-rest/README.md)
+
 ##Collaborators:
 * [Jan Grundmann](https://github.com/jangrundmann)  [:mag_right:](https://github.com/MartinStyk/pa165-activity-tracker/commits?author=jangrundmann)
 * [Adam Laurenčík](https://github.com/adamlaurencik)   [:mag_right:](https://github.com/MartinStyk/pa165-activity-tracker/commits?author=adamlaurencik)
@@ -26,9 +31,6 @@ V systemu budou 4 entity:
 * team (nazev, clenove)
 * sportovni aktivita (nazev...)
 * zaznam sportovni aktivity (cas, vzdalenost, doba trvani...)
-
-##How to run
-This project uses maven. Run command ``mvn clean install``
 
 ##Analysis models
 ###Use case diagram
