@@ -48,9 +48,9 @@
             </div>
 
             <div class="form-group ${email_error?'has-error':''}">
-                <form:label path="email" cssClass="col-sm-2 control-label"><fmt:message key="user.email"/></form:label>
+                <form:label path="email" cssClass="col-sm-2 control-label" style="display: none"><fmt:message key="user.email"/></form:label>
                 <div class="col-sm-10">
-                    <form:input path="email" cssClass="form-control"/>
+                    <form:input path="email" cssClass="form-control" style="display: none"/>
                     <form:errors path="email" cssClass="help-block"/>
                 </div>
             </div>
@@ -74,7 +74,7 @@
             <div class="form-group ${dateOfBirth_error?'has-error':''}">
                 <form:label path="dateOfBirth" cssClass="col-sm-2 control-label"><fmt:message key="user.dateOfBirth"/></form:label>
                 <div class="col-sm-10">
-                    <form:input path="dateOfBirth" cssClass="form-control" />
+                    <form:input path="dateOfBirth" type="date" value="${loggedUser.dateOfBirth}" cssClass="form-control" />
                     <form:errors path="dateOfBirth" cssClass="help-block"/>
                 </div>
             </div>
