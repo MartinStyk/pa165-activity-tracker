@@ -1,5 +1,8 @@
 package cz.muni.fi.pa165.tracker.dto;
 
+import cz.muni.fi.pa165.tracker.validation.PastTime;
+import cz.muni.fi.pa165.tracker.validation.TimeSequence;
+
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,15 +13,18 @@ import java.util.Objects;
  * @author Martin Styk
  * @version 07.11.2016
  */
+@TimeSequence(members = {"startTime", "endTime"})
 public class ActivityReportCreateDTO {
 
     @NotNull
     private Long userId;
 
     @NotNull
+    @PastTime
     private LocalDateTime startTime;
 
     @NotNull
+    @PastTime
     private LocalDateTime endTime;
 
     @NotNull

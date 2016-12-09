@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.tracker.dto;
 
 import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
+import cz.muni.fi.pa165.tracker.validation.PastDate;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public class    UserCreateDTO {
     private String lastName;
 
     @NotNull
+    @PastDate
     private LocalDate dateOfBirth;
 
     @NotNull

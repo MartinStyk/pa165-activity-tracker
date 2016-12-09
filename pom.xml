@@ -15,11 +15,11 @@
             <email>422527@mail.muni.cz</email>
         </developer>
         <developer>
-            <name>Adam Laurenèík</name>
+            <name>Adam Laurenï¿½ï¿½k</name>
             <email>445263@mail.muni.cz</email>
         </developer>
         <developer>
-            <name>Petra Ondøejková</name>
+            <name>Petra Ondï¿½ejkovï¿½</name>
             <email>4082562mail.muni.cz</email>
         </developer>
         <developer>
@@ -41,7 +41,8 @@
         <module>activity-tracker-sample-data</module>
         <module>activity-tracker-rest</module>
     <module>activity-tracker-spring-mvc</module>
-  </modules>
+        <module>activity-tracker-validation</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>

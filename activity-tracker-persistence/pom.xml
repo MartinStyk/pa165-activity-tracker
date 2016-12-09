@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>cz.muni.fi.pa165</groupId>
+            <artifactId>activity-tracker-validation</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.2.3.Final</version>
