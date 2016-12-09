@@ -11,6 +11,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <own:masterpage title="Settings">
+        <jsp:attribute name="scripts">
+        <script>
+            $(function () {
+                $("#datepicker").datepicker({ dateFormat: 'dd.mm.yy' });
+            });
+        </script>
+    </jsp:attribute>
     <jsp:attribute name="body">
 
             <a href="${pageContext.request.contextPath}" class="btn btn-default" role="button">
@@ -23,7 +30,6 @@
                    <fmt:message key="user.update"/>
                 </h1>
             </div>
-
             <form:form method="POST"
                    action="${pageContext.request.contextPath}/settings"
                    acceptCharset=""
@@ -74,7 +80,7 @@
             <div class="form-group ${dateOfBirth_error?'has-error':''}">
                 <form:label path="dateOfBirth" cssClass="col-sm-2 control-label"><fmt:message key="user.dateOfBirth"/></form:label>
                 <div class="col-sm-10">
-                    <form:input path="dateOfBirth" type="date" value="${loggedUser.dateOfBirth}" cssClass="form-control" />
+                    <form:input path="dateOfBirth" cssClass="form-control" id="datepicker"/>
                     <form:errors path="dateOfBirth" cssClass="help-block"/>
                 </div>
             </div>
