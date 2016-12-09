@@ -22,16 +22,27 @@
     <jsp:attribute name="body">
 
         <div class="jumbotron homepage">
-            <h1><fmt:message key="application_name"/></h1>
-            <p class="lead"><fmt:message key="index_welcome"/></p>
-            <p><fmt:message key="index_text"/></p>
-            <c:if test="${empty loggedUser}">
-             <p align="right">
-                <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/login" role="button">
-                    <fmt:message key="sign_in"/>
-                </a>
-             </p>
-            </c:if>
+            <c:choose>
+                <c:when test="${empty loggedUser}">
+                    <h1><fmt:message key="application_name"/></h1>
+                    <p class="lead"><fmt:message key="index_welcome"/></p>
+                    <p><fmt:message key="index_text"/></p>
+                    <p align="right">
+                        <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/login" role="button">
+                            <fmt:message key="sign_in"/>
+                        </a>
+                    </p>
+                </c:when>
+                <c:otherwise>
+                    <h1>
+                        <fmt:message key="index_hi">
+                            <fmt:param value="${loggedUser.firstName}"/>
+                        </fmt:message>
+                    </h1>
+                    <p><fmt:message key="index_textlogin"/></p>
+                </c:otherwise>
+            </c:choose>
+            
         </div>
 
     </jsp:attribute>
