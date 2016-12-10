@@ -46,20 +46,30 @@
                             <td class="col-xs-3 lead-column"><c:out value="${user.role}"/></td>
 
                             <c:if test="${isAdmin}">
-                                <form:form method="post" action="${pageContext.request.contextPath}/users/update/${user.id}" cssClass="form-horizontal">
-                                    <td class="col-xs-1 text-center">
-                                         <a href="${pageContext.request.contextPath}/users/makeAdmin/${user.id}" class="btn btn-default">Admin</a>
-                                    </td>
-                                </form:form>
-
-                                <form:form method="post" action="${pageContext.request.contextPath}/users/remove/${user.id}" cssClass="form-horizontal">
-                                    <td class="col-xs-1 text-center">
-                                        <button class="btn btn-default" type="submit">
-                                            <span class="sr-only"><fmt:message key="remove"/></span>
-                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                        </button>
-                                    </td>
-                                </form:form>
+                                <c:choose>
+                                <c:when test="${user.role !='ADMIN'}">
+                                    <form:form method="post" action="${pageContext.request.contextPath}/users/update/${user.id}" cssClass="form-horizontal">
+                                        <td class="col-xs-1 text-center">
+                                             <a href="${pageContext.request.contextPath}/users/makeAdmin/${user.id}" class="btn btn-default">Admin</a>
+                                        </td>
+                                    </form:form>
+                                </c:when>
+                                <c:otherwise>
+                                    <form:form method="post" action="${pageContext.request.contextPath}/users/update/${user.id}" cssClass="form-horizontal">
+                                            <td class="col-xs-1 text-center">
+                                                <a href="${pageContext.request.contextPath}/users/makeRegular/${user.id}" class="btn btn-default">Regular</a>
+                                            </td>
+                                     </form:form>
+                                </c:otherwise>
+                                </c:choose>
+                                    <form:form method="post" action="${pageContext.request.contextPath}/users/remove/${user.id}" cssClass="form-horizontal">
+                                        <td class="col-xs-1 text-center">
+                                             <button class="btn btn-default" type="submit">
+                                                <span class="sr-only"><fmt:message key="remove"/></span>
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                            </button>
+                                        </td>
+                                     </form:form>
                             </c:if>
                         </tr>
                     </c:forEach>

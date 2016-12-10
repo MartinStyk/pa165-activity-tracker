@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
@@ -74,13 +74,34 @@ public class UserController extends ActivityTrackerController {
         UserDTO updated = userFacade.findUserById(id);
         updated.setRole(UserRole.ADMIN);
         userFacade.updateUser(updated);
+
+        //in case user updates himselt, log him out
+        if (updated.getId().equals(getLoggedUser().getId())) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Your role was updated. Please log in.");
+            return "redirect:" + uriBuilder.path("/logout").toUriString();
+        }
+        return "redirect:" + uriBuilder.path("/users").toUriString();
+    }
+
+    @RequestMapping(value = {"/users/makeRegular/{id}"}, method = RequestMethod.GET)
+    public String makeRegular(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
+                              RedirectAttributes redirectAttributes) {
+        log.info("make regular from user with id", id);
+        UserDTO updated = userFacade.findUserById(id);
+        updated.setRole(UserRole.REGULAR);
+        userFacade.updateUser(updated);
+
+        //in case user updates himselt, log him out
+        if (updated.getId().equals(getLoggedUser().getId())) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Your role was updated. Please log in.");
+            return "redirect:" + uriBuilder.path("/logout").toUriString();
+        }
         return "redirect:" + uriBuilder.path("/users").toUriString();
     }
 
     @RequestMapping(value = "users/remove/{id}", method = RequestMethod.POST)
     public String remove(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
                          RedirectAttributes redirectAttributes) {
-
         try {
             userFacade.removeUser(userFacade.findUserById(id));
             redirectAttributes.addFlashAttribute("alert_success", "User with id " + id + " deleted");
