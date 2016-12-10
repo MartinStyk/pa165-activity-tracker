@@ -40,6 +40,10 @@ td.lead-column {
     font-weight:  bolder;
 }
 
+.navbar-brand{
+    font-weight: bold;
+}
+
 /* Login form styles
 -------------------------------------------------- */
 .form-signin {
