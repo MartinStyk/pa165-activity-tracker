@@ -106,6 +106,7 @@ public class UserController extends ActivityTrackerController {
             userFacade.removeUser(userFacade.findUserById(id));
             redirectAttributes.addFlashAttribute("alert_success", "User with id " + id + " deleted");
         } catch (Exception e) {
+            log.error("Could not delete " + e.getMessage(), e);
             redirectAttributes.addFlashAttribute("alert_danger", "User with id " + id + " can not be deleted");
         }
         return "redirect:" + uriBuilder.path("/users").toUriString();

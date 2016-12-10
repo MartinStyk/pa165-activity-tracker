@@ -174,6 +174,7 @@ public class SportController extends ActivityTrackerController {
             sportFacade.removeSportActivity(id);
             redirectAttributes.addFlashAttribute("alert_success", "Sport with id " + id + " deleted");
         } catch (Exception e) {
+            log.error("Could not delete " + e.getMessage(), e);
             redirectAttributes.addFlashAttribute("alert_danger", "Sport with id " + id + " can not be deleted");
         }
         return "redirect:" + uriBuilder.path("/sports").toUriString();
