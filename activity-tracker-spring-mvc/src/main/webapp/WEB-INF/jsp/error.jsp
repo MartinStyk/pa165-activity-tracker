@@ -12,10 +12,10 @@
         
         <c:choose>
             <c:when test="${not empty errorMessage}">
-                <p>${errMsg}</p>
+                <p>${errorMessage}</p>
             </c:when>
             <c:otherwise>
-                <fmt:message key="error.unknonw"/>
+                <fmt:message key="error.unknown"/>
             </c:otherwise>
         </c:choose>
     </jsp:attribute>
