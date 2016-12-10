@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"  crossorigin="anonymous">
         <!--custom css stylesheet-->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/site.css"  crossorigin="anonymous">
+        <link href="resources/css/site.css" rel="stylesheet">
         <!-- jquery themes -->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <jsp:invoke fragment="head"/>
@@ -57,16 +57,15 @@
                                   <span class="userName">${loggedUser.firstName}</span>
                                   <span class="caret"></span>
                               </a>
-                              <div class="dropdown-menu" style="padding:17px;">
+                              <div class="dropdown-menu" style="padding:27px; background-color: white">
                                   <p>Logged user:&nbsp;<span class="fullName">${loggedUser.firstName}&nbsp;${loggedUser.lastName}</span></p>
                                   <p>Email:&nbsp;<span class="userEmail">${loggedUser.email}</span></p>
                                   <c:if test="${isAdmin}">
                                        <p><fmt:message key="admin_rights"/></p>
                                   </c:if>
 
-                                  <a href="${pageContext.request.contextPath}/settings"><fmt:message key="menu_settings"/></a>
-
-                                  <a href="${pageContext.request.contextPath}/logout"><fmt:message key="log_out"/></a>
+                                  <a href="${pageContext.request.contextPath}/settings" class="btn btn-lg btn-primary btn-block"><fmt:message key="menu_settings"/></a>
+                                  <a href="${pageContext.request.contextPath}/logout" class="btn btn-lg btn-primary btn-block"><fmt:message key="log_out"/></a>
                               </div>
                             </li>
 
@@ -79,21 +78,6 @@
                 </div>
             </div>
         </nav>
-
-        <div class="container">
-            <!-- authenticated user info -->
-            <c:if test="${not empty authenticatedUser}">
-                <div class="row">
-                    <div class="col-xs-6 col-sm-8 col-md-9 col-lg-10"></div>
-                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <c:out value="${authenticatedUser.firstName} ${authenticatedUser.lastName}"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </c:if>
 
             <div class="container">
                 <!-- alerts -->

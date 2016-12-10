@@ -20,8 +20,12 @@ and open the template in the editor.
 .btn-jumbotron {
     margin-bottom: -1em;
 }
-.genresList .btn-primary{
-    margin-bottom: 20px;
+.dropdown-menu .btn-primary{
+    width: auto;
+    padding: 8px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: small;
 }
 
 .glyphicon-remove {
@@ -101,9 +105,10 @@ footer .container .text-muted {
     margin: 20px 0;
 }
 
-.loginFormCenter{
-    margin: 0 auto;
-    float: none;
+#loginForm {
+    margin: auto;
+    max-width: 200px;
+    padding: 10px;
 }
 
 /* Login button in navbar */

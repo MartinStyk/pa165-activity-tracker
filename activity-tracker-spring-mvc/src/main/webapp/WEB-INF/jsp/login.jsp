@@ -8,8 +8,8 @@
 <own:masterpage title="Login">
     <jsp:attribute name="body">
 
-        <div class="row">
-            <div class="col-md-6 col-sm-12 ${empty param.error ? 'loginFormCenter' : ''}">
+        <div css-class="loginForm">
+            <div css-class="form-control">
 
                 <form:form method="POST"
                            action="j_spring_security_check"
@@ -27,9 +27,9 @@
                     </c:if>
 
                     <label for="inputEmail" class="sr-only">Email address</label>
-                    <input type="email" name="user" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+                    <input type="email" name="user" id="inputEmail" class="form-control" placeholder="Email address" required="true" autofocus="true">
                     <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" name="pass" id="inputPassword" class="form-control" placeholder="Password" required="">
+                    <input type="password" name="pass" id="inputPassword" class="form-control" placeholder="Password" required="true">
 
                     <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message key="login.submit"/></button>
                 </form:form>
