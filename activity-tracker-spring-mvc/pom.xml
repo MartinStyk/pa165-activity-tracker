@@ -89,7 +89,6 @@
                 <configuration>
                     <path>/pa165</path> <!--We deploy rest API on this context-->
                     <ignorePackaging>true</ignorePackaging>
-                    <uriEncoding>utf-8</uriEncoding>
                 </configuration>
             </plugin>
             <plugin>
