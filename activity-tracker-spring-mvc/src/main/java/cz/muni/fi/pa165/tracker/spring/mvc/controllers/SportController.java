@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueSportNameCreateValida
 import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueSportNameUpdateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -173,9 +174,10 @@ public class SportController extends ActivityTrackerController {
         try {
             sportFacade.removeSportActivity(id);
             redirectAttributes.addFlashAttribute("alert_success", "Sport with id " + id + " deleted");
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error("Could not delete " + e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("alert_danger", "Sport with id " + id + " can not be deleted");
+            redirectAttributes.addFlashAttribute("alert_danger", "Sport with id " + id + " can not be deleted. " +
+                    "There are activities referencing it");
         }
         return "redirect:" + uriBuilder.path("/sports").toUriString();
     }

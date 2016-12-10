@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -105,9 +106,10 @@ public class UserController extends ActivityTrackerController {
         try {
             userFacade.removeUser(userFacade.findUserById(id));
             redirectAttributes.addFlashAttribute("alert_success", "User with id " + id + " deleted");
-        } catch (Exception e) {
-            log.error("Could not delete " + e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("alert_danger", "User with id " + id + " can not be deleted");
+        } catch (DataAccessException e) {
+            log.error("Could not delete user" + e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("alert_danger", "User with id " + id + " can not be deleted. " +
+                    "User is leader of team. Please change team leadership first.");
         }
         return "redirect:" + uriBuilder.path("/users").toUriString();
     }
