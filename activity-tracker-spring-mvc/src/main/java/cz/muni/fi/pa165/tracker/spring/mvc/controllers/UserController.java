@@ -63,7 +63,6 @@ public class UserController extends ActivityTrackerController {
 
     @RequestMapping(value = {"users", "users/"}, method = RequestMethod.GET)
     public String index(Model model) {
-        log.info("users()" + userFacade.findAll());
         model.addAttribute("users", userFacade.findAll());
         return "user/users";
     }

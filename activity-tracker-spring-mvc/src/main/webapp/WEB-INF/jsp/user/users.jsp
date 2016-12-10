@@ -62,6 +62,7 @@
                                      </form:form>
                                 </c:otherwise>
                                 </c:choose>
+                                <c:if test="${loggedUser.id!=user.id}">
                                     <form:form method="post" action="${pageContext.request.contextPath}/users/remove/${user.id}" cssClass="form-horizontal">
                                         <td class="col-xs-1 text-center">
                                             <button class="btn btn-default" type="submit">
@@ -70,6 +71,7 @@
                                             </button>
                                         </td>
                                     </form:form>
+                                </c:if>
                             </c:if>
                         </tr>
                     </c:forEach>
