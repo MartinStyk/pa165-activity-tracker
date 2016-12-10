@@ -45,6 +45,7 @@
                         <li><a href="${pageContext.request.contextPath}/reports"><fmt:message key="menu_reports"/></a></li>
                         <li><a href="${pageContext.request.contextPath}/sports"><fmt:message key="menu_sports"/></a></li>
                         <li><a href="${pageContext.request.contextPath}/teams"><fmt:message key="menu_teams"/></a></li>
+                        <li><a href="${pageContext.request.contextPath}/users"><fmt:message key="menu_users"/></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
                 <ul class="nav navbar-nav navbar-right pull-right">        
