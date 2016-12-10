@@ -64,12 +64,12 @@
                                 </c:choose>
                                     <form:form method="post" action="${pageContext.request.contextPath}/users/remove/${user.id}" cssClass="form-horizontal">
                                         <td class="col-xs-1 text-center">
-                                             <button class="btn btn-default" type="submit">
+                                            <button class="btn btn-default" type="submit">
                                                 <span class="sr-only"><fmt:message key="remove"/></span>
                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                             </button>
                                         </td>
-                                     </form:form>
+                                    </form:form>
                             </c:if>
                         </tr>
                     </c:forEach>

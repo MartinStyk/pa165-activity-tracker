@@ -104,6 +104,11 @@ public class UserController extends ActivityTrackerController {
     public String remove(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
                          RedirectAttributes redirectAttributes) {
         try {
+            if (id == getLoggedUser().getId()) {
+                log.error("Could not delete yourself");
+                redirectAttributes.addFlashAttribute("alert_danger", "You can't delete youself");
+                return "redirect:" + uriBuilder.path("/users").toUriString();
+            }
             userFacade.removeUser(userFacade.findUserById(id));
             redirectAttributes.addFlashAttribute("alert_success", "User with id " + id + " deleted");
         } catch (DataAccessException e) {
