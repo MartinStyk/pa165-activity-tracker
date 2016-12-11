@@ -165,29 +165,13 @@ footer .container .text-muted {
     padding-left: 10px;
 }
 
-.panelAlbums .panel-body a, .panelSongs .panel-body a, .panelMusicians .panel-body a{
+.allBurnCalories .panel-body a, BurnCalorieLastWeek .panel-body a, BurnCalorieLastMounth .panel-body a{
     display: block;
     margin: 15px 0;
     font-size: 1.2em;
-}
-.homepagePanels .panel{
-    min-height: 420px;
+    font-weight: bold;
 }
 
-.panelMusicians .panel-body a, .panelSongs .panel-body a{
-    margin: 8px 0;
-}
-
-.panelAlbums .panel-body img{
-    margin-right: 15px;
-}
-
-.homepagePanels .icon.microphone{
-    width: 22px;
-}
-.homepagePanels .icon.vinyl {
-    width: 24px;
-}
 .homepagePanels .glyphicon-music {
     font-size: 20px;
 }

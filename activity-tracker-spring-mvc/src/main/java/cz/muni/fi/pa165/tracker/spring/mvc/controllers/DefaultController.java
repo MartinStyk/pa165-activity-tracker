@@ -5,8 +5,10 @@
  */
 package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 
+import cz.muni.fi.pa165.tracker.facade.UserFacade;
+import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -16,8 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class DefaultController extends ActivityTrackerController {
 
+    @Inject
+    private UserFacade userFacade;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(ModelMap map) {
+    public String index(Model model) {
+        if (getLoggedUser() != null) {
+            model.addAttribute("statistics", userFacade.getStatistics(getLoggedUser()));
+        }
         return "index";
     }
 }
