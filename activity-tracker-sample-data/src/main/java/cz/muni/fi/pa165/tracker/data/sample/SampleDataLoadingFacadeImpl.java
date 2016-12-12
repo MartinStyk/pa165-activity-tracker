@@ -58,7 +58,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
                 Sex.MALE, 200, 90, LocalDate.ofYearDay(1000, 1)));
         users.put("hossa", user("marianHossa@gmail.com", "Marián", "Hossa", "hossa", UserRole.REGULAR,
                 Sex.MALE, 186, 94, LocalDate.ofYearDay(1979, 12)));
-        users.put("jagr", user("jaromirJagr@gmail.com", "Jaromír", "Járg", "jagr", UserRole.REGULAR,
+        users.put("jagr", user("jaromirJagr@gmail.com", "Jaromír", "Jágr", "jagr", UserRole.REGULAR,
                 Sex.MALE, 189, 104, LocalDate.ofYearDay(1972, 46)));
         users.put("sagan", user("peterSagan@gmail.com", "Peter", "Sagan", "sagan", UserRole.REGULAR,
                 Sex.MALE, 183, 74, LocalDate.ofYearDay(1990, 26)));
