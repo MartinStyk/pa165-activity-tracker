@@ -27,6 +27,51 @@
             </p>
             <%--  </c:if> --%>
         </div>
+        <c:if test="${not empty reports}">
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><fmt:message key="num"></fmt:message></th>
+                            <th><fmt:message key="reports.sport"></fmt:message></th>
+                            <th><fmt:message key="reports.start"></fmt:message></th>
+                            <th><fmt:message key="reports.end"></fmt:message></th>
+                            <th><fmt:message key="reports.burnedCalories"></fmt:message></th>
+                            <th class="text-center"><fmt:message key="edit"/></th>
+                            <th class="text-center"><fmt:message key="remove"/></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${reports}" var="report">
+                            <c:set var="count" value="${count+1}" scope="page"/>
+                            <tr>
+                                <td class="col-xs-1 lead-column">${count}</td>
+                                <td class="col-xs-2 lead-column"><c:out value="${report.sportActivity.name}"/></td>
+                                <td class="col-xs-2 lead-column"><c:out value="${report.startTime}"/></td>
+                                <td class="col-xs-2 lead-column"><c:out value="${report.endTime}"/></td>
+                                <td class="col-xs-2 lead-column"><c:out value="${report.burnedCalories}"/></td>                              
+                                <form:form method="get" action="${pageContext.request.contextPath}/reports/update/${report.id}" cssClass="form-horizontal">
+                                    <td class="col-xs-1 text-center">
+                                        <button class="btn btn-default" type="submit">
+                                            <span class="sr-only"><fmt:message key="edit"/></span>
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
+                                </form:form>
+                                <form:form method="post" action="${pageContext.request.contextPath}/reports/remove/${report.id}" cssClass="form-horizontal">
+                                    <td class="col-xs-1 text-center">
+                                        <button class="btn btn-default" type="submit">
+                                            <span class="sr-only"><fmt:message key="remove"/></span>
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
+                                </form:form>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </c:if>
 
     </jsp:attribute>
 </own:masterpage>

@@ -13,11 +13,28 @@
 
 <own:masterpage>
     <jsp:attribute name="scripts">
-        <!--    This is how you include page-specific javascript files to the page. 
-            This section will be rendered at the very bottom pg the page after script tags
-            that include Javascript libraries like jQuery and jQuery UI,
-            so there is no need to include then on every page.-->
-        <script src="${pageContext.request.contextPath}/js/test.js"></script>
+        <script>
+            var ctx = document.getElementById("sportsChart");
+                    var data = {
+                    datasets: [{
+                    data: [
+            <c:forEach items="${statistics.sportActivites}" var="sportActivityEntry" varStatus="loop">
+                ${sportActivityEntry.value}${!loop.last ? ',' : ''}
+            </c:forEach>
+                    ],
+                            label: 'Sports' // for legend
+                    }],
+                            labels: [
+            <c:forEach items="${statistics.sportActivites}" var="sportActivityEntry" varStatus="loop">
+                ${sportActivityEntry.key.name}${!loop.last ? ',' : ''}
+            </c:forEach>
+                            ]
+                    };
+                    var sportCharts = new Chart(ctx, {
+                    type: 'pie',
+                            data: data
+                    });
+        </script>
     </jsp:attribute>
     <jsp:attribute name="body">
 
@@ -32,7 +49,7 @@
                             <fmt:message key="sign_in"/>
                         </a>
                     </p>
-                    
+
                 </c:when>
                 <c:otherwise>
                     <h1>
@@ -47,11 +64,11 @@
                         <div class=" col-lg-4 col-md-4 col-sm-4 allBurnCalories">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                  <h3 class="panel-title">
-                                      <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
-                                           style="max-height:25px; max-width:25px"/>
-                                      <span><fmt:message key="user.totalCalories"/></span>
-                                  </h3>
+                                    <h3 class="panel-title">
+                                        <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
+                                             style="max-height:25px; max-width:25px"/>
+                                        <span><fmt:message key="user.totalCalories"/></span>
+                                    </h3>
                                 </div>
                                 <div class="panel-body">
                                     <span>${statistics.totalCalories}</span>
@@ -62,38 +79,57 @@
                         <div class=" col-lg-4 col-md-4 col-sm-4 BurnCalorieLastWeek">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                  <h3 class="panel-title">
-                                      <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
-                                           style="max-height:25px; max-width:25px"/>
-                                      <span><fmt:message key="user.caloriesLastWeek"/></span>
-                                  </h3>
+                                    <h3 class="panel-title">
+                                        <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
+                                             style="max-height:25px; max-width:25px"/>
+                                        <span><fmt:message key="user.caloriesLastWeek"/></span>
+                                    </h3>
                                 </div>
                                 <div class="panel-body">
                                     <span>${statistics.caloriesLastWeek}</span>
                                 </div>
                             </div>
                         </div>
- 
+
                         <div class=" col-lg-4 col-md-4 col-sm-4 BurnCalorieLastMounth">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                  <h3 class="panel-title">
-                                      <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
-                                           style="max-height:25px; max-width:25px"/>
-                                      <span><fmt:message key="user.caloriesLastMonth"/></span>
-                                  </h3>
+                                    <h3 class="panel-title">
+                                        <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
+                                             style="max-height:25px; max-width:25px"/>
+                                        <span><fmt:message key="user.caloriesLastMonth"/></span>
+                                    </h3>
                                 </div>
                                 <div class="panel-body">
                                     <span>${statistics.caloriesLastMonth}</span>
                                 </div>
                             </div>
                         </div>
- 
+
                     </div>
+                    <div class ="row homepagePanels">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <img class="icon calorie" src="http://www.freeiconspng.com/uploads/sport-activities-football-icon-6.png"
+                                             style="max-height:25px; max-width:25px"/>
+                                        <span><fmt:message key="sport.header"/></span>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <canvas id="sportsChart" width="400" height="400"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+
 
                 </c:otherwise>
             </c:choose>
-            
+
         </div>
 
     </jsp:attribute>

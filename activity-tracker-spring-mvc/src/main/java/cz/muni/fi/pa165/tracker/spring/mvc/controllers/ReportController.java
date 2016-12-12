@@ -3,8 +3,12 @@ package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportDTO;
 import cz.muni.fi.pa165.tracker.dto.ActivityReportUpdateDTO;
+import cz.muni.fi.pa165.tracker.dto.SportActivityDTO;
+import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.ActivityReportFacade;
+import cz.muni.fi.pa165.tracker.facade.SportActivityFacade;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -26,12 +30,15 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping(value = {"/reports"})
-public class ReportController {
+public class ReportController extends ActivityTrackerController {
 
     private static final Logger log = LoggerFactory.getLogger(SportController.class);
 
     @Inject
     private ActivityReportFacade activityReportFacade;
+
+    @Inject
+    private SportActivityFacade sportActivityFacade;
 
     @Inject
     private MessageSource messageSource;
@@ -44,7 +51,9 @@ public class ReportController {
      */
     @RequestMapping(value = {"", "/", "/index"}, method = RequestMethod.GET)
     public String index(Model model) {
-
+        UserDTO loggedInUser = getLoggedUser();
+        List<ActivityReportDTO> reports = activityReportFacade.getActivityReportsByUser(loggedInUser.getId());
+        model.addAttribute("reports", reports);
         return "reports/index";
     }
 
@@ -56,6 +65,8 @@ public class ReportController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
+        List<SportActivityDTO> sportActivities = sportActivityFacade.getAllSportActivities();
+        model.addAttribute("sportActivities", sportActivities);
         model.addAttribute("reportCreate", new ActivityReportCreateDTO());
         return "reports/create";
     }
@@ -100,8 +111,12 @@ public class ReportController {
     public String update(@PathVariable long id, Model model) {
         ActivityReportDTO found = activityReportFacade.getActivityReportById(id);
 
+        List<SportActivityDTO> sportActivities = sportActivityFacade.getAllSportActivities();
         ActivityReportUpdateDTO updateDTO = new ActivityReportUpdateDTO();
         updateDTO.setId(found.getId());
+        updateDTO.setEndTime(found.getEndTime());
+        updateDTO.setStartTime(found.getStartTime());
+        model.addAttribute("sportActivities", sportActivities);
         model.addAttribute("reportUpdate", found);
 
         return "reports/update";
@@ -152,7 +167,7 @@ public class ReportController {
 
         try {
             activityReportFacade.removeActivityReport(id);
-            redirectAttributes.addFlashAttribute("alert_success", "Report with id " + id + " deleted");
+            redirectAttributes.addFlashAttribute("alert_success", "Report deleted");
         } catch (NonExistingEntityException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("alert_danger", "Report can not be deleted, "
                     + "since it doesn't exist");
