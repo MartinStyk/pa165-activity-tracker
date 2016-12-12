@@ -7,6 +7,7 @@ package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 
 import cz.muni.fi.pa165.tracker.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.TeamDTO;
+import cz.muni.fi.pa165.tracker.dto.TeamUpdateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.TeamFacade;
@@ -145,7 +146,7 @@ public class TeamController extends ActivityTrackerController {
     public String update(@PathVariable long id, Model model) {
         TeamDTO found = teamFacade.getTeamById(id);
 
-        TeamDTO updateDTO = new TeamDTO();
+        TeamUpdateDTO updateDTO = new TeamUpdateDTO();
         updateDTO.setId(found.getId());
         updateDTO.setName(found.getName());
         updateDTO.setTeamLeader(found.getTeamLeader());
@@ -161,7 +162,7 @@ public class TeamController extends ActivityTrackerController {
      */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String update(
-            @Valid @ModelAttribute("teamUpdate") TeamDTO formData,
+            @Valid @ModelAttribute("teamUpdate") TeamUpdateDTO formData,
             BindingResult bindingResult,
             @PathVariable Long id,
             Model model,
@@ -169,7 +170,8 @@ public class TeamController extends ActivityTrackerController {
             UriComponentsBuilder uriBuilder) {
 
         log.debug("update team({})", formData);
-
+        formData.setTeamLeader(userFacade.findUserById(formData.getTeamLeaderId()));
+        formData.setMembers(teamFacade.getTeamById(id).getMembers());
         if (bindingResult.hasErrors()) {
             addValidationErrors(bindingResult, model);
             return "/teams/update";
@@ -208,7 +210,7 @@ public class TeamController extends ActivityTrackerController {
             binder.addValidators(uniqueTeamNameCreateValidator);
         }
 
-        if (binder.getTarget() instanceof TeamDTO) {
+        if (binder.getTarget() instanceof TeamUpdateDTO) {
             binder.addValidators(uniqueTeamNameUpdateValidator);
         }
     }

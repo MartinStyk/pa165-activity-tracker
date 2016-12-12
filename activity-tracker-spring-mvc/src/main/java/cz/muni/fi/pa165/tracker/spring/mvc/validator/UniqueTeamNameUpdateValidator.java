@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.tracker.spring.mvc.validator;
 
 import cz.muni.fi.pa165.tracker.dto.TeamDTO;
+import cz.muni.fi.pa165.tracker.dto.TeamUpdateDTO;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.TeamFacade;
 import org.springframework.validation.Errors;
@@ -23,7 +24,7 @@ public class UniqueTeamNameUpdateValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return TeamDTO.class.equals(clazz);
+        return TeamUpdateDTO.class.equals(clazz);
     }
 
     @Override

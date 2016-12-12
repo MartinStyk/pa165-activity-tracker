@@ -38,7 +38,7 @@
             <div class="form-group ${teamLeader_error?'has-error':''}">
                 <form:label path="teamLeader" cssClass="col-sm-2 control-label"><fmt:message key="team.teamLeader"/></form:label>
                 <div class="col-sm-10">
-                    <form:select path="teamLeader" cssClass="form-control">
+                    <form:select path="teamLeaderId" cssClass="form-control">
                         <c:forEach items="${teamUpdate.members}" var="m">
                             <form:option value="${m.id}"> ${m.email} </form:option>
                         </c:forEach>
