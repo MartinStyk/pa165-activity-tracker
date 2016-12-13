@@ -14,7 +14,7 @@
         <jsp:attribute name="scripts">
         <script>
             $(function () {
-                $("#datepicker").datetimepicker({ format: 'YYYY-MM-DD'});
+                $(".datepicker").datetimepicker({ format: 'DD.MM.YYYY'});
             });
         </script>
     </jsp:attribute>
@@ -80,7 +80,7 @@
             <div class="form-group ${dateOfBirth_error?'has-error':''}">
                 <form:label path="dateOfBirth" cssClass="col-sm-2 control-label"><fmt:message key="user.dateOfBirth"/></form:label>
                 <div class="col-sm-10">
-                    <form:input path="dateOfBirth" cssClass="form-control" id="datepicker"/>
+                    <form:input path="dateOfBirth" cssClass="form-control datepicker"/>
                     <form:errors path="dateOfBirth" cssClass="help-block"/>
                 </div>
             </div>

@@ -1,14 +1,10 @@
 package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 
-import cz.muni.fi.pa165.tracker.dto.ActivityReportCreateDTO;
-import cz.muni.fi.pa165.tracker.dto.ActivityReportDTO;
-import cz.muni.fi.pa165.tracker.dto.ActivityReportUpdateDTO;
-import cz.muni.fi.pa165.tracker.dto.SportActivityDTO;
-import cz.muni.fi.pa165.tracker.dto.UserDTO;
+import cz.muni.fi.pa165.tracker.dto.*;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.ActivityReportFacade;
 import cz.muni.fi.pa165.tracker.facade.SportActivityFacade;
-import java.util.List;
+import cz.muni.fi.pa165.tracker.spring.mvc.validator.TimeSequenceValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -16,13 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Adam Laurencik
@@ -83,7 +80,8 @@ public class ReportController extends ActivityTrackerController {
             UriComponentsBuilder uriComponentsBuilder) {
 
         log.debug("create report({})", formData);
-
+        List<SportActivityDTO> sportActivities = sportActivityFacade.getAllSportActivities();
+        model.addAttribute("sportActivities", sportActivities);
         //if there are any validation errors forward back to the the form
         if (bindingResult.hasErrors()) {
             addValidationErrors(bindingResult, model);
@@ -136,7 +134,8 @@ public class ReportController extends ActivityTrackerController {
             UriComponentsBuilder uriBuilder) {
 
         log.debug("update activityReport({})", formData);
-
+        List<SportActivityDTO> sportActivities = sportActivityFacade.getAllSportActivities();
+        model.addAttribute("sportActivities", sportActivities);
         if (bindingResult.hasErrors()) {
             addValidationErrors(bindingResult, model);
             return "/reports/update";
@@ -164,7 +163,7 @@ public class ReportController extends ActivityTrackerController {
      */
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public String remove(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
-            RedirectAttributes redirectAttributes) {
+                         RedirectAttributes redirectAttributes) {
 
         try {
             activityReportFacade.removeActivityReport(id);
@@ -183,12 +182,17 @@ public class ReportController extends ActivityTrackerController {
     }
 
     protected void addValidationErrors(BindingResult bindingResult, Model model) {
-        for (ObjectError ge : bindingResult.getGlobalErrors()) {
-            log.error("ObjectError: {}", ge);
-        }
         for (FieldError fe : bindingResult.getFieldErrors()) {
             model.addAttribute(fe.getField() + "_error", true);
             log.error("FieldError: {}", fe);
         }
     }
+
+    @InitBinder
+    protected void initTimeSequenceBinder(WebDataBinder binder) {
+
+        if (binder.getTarget() instanceof ActivityReportCreateDTO)
+            binder.addValidators(new TimeSequenceValidator());
+    }
+
 }

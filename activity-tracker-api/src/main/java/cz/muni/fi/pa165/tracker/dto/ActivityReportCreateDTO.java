@@ -13,7 +13,6 @@ import java.util.Objects;
  * @author Martin Styk
  * @version 07.11.2016
  */
-//@TimeSequence(members = {"startTime", "endTime"})
 public class ActivityReportCreateDTO {
 
     @NotNull
@@ -21,12 +20,12 @@ public class ActivityReportCreateDTO {
 
     @NotNull
     @PastTime
-    @DateTimeFormat(pattern = "DD.MM.YYYY HH:mm")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime startTime;
 
     @NotNull
     @PastTime
-    @DateTimeFormat(pattern = "DD.MM.YYYY HH:mm")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime endTime;
 
     @NotNull

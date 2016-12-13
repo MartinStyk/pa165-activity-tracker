@@ -36,7 +36,7 @@ public class UserCreateDTO {
 
     @NotNull
     @PastDate
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate dateOfBirth;
 
     @NotNull

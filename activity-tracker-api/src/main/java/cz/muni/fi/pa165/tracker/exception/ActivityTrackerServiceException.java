@@ -3,7 +3,8 @@ package cz.muni.fi.pa165.tracker.exception;
 /**
  * Exception representing failure on service layer
  * <p>
- * Created by mstyk on 11/9/16.
+ * @author Martin Styk
+ * @version 10.11.2016
  */
 public class ActivityTrackerServiceException extends RuntimeException {
 

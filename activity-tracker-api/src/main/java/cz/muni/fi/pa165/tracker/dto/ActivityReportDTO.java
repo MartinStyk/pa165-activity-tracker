@@ -22,11 +22,11 @@ public class ActivityReportDTO {
     private UserDTO user;
 
     @NotNull
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime startTime;
 
     @NotNull
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime endTime;
 
     @NotNull
