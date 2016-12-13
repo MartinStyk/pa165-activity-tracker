@@ -10,6 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 
 <own:masterpage title="Reports">
     <jsp:attribute name="body">
@@ -47,8 +48,8 @@
                             <tr>
                                 <td class="col-xs-1 lead-column">${count}</td>
                                 <td class="col-xs-2 lead-column"><c:out value="${report.sportActivity.name}"/></td>
-                                <td class="col-xs-2 lead-column"><c:out value="${report.startTime}"/></td>
-                                <td class="col-xs-2 lead-column"><c:out value="${report.endTime}"/></td>
+                                <td class="col-xs-2 lead-column"><javatime:format value="${report.startTime}" pattern="HH:mm dd.MM.yyyy"/></td>
+                                <td class="col-xs-2 lead-column"><javatime:format value="${report.endTime}" pattern="HH:mm dd.MM.yyyy"/></td>
                                 <td class="col-xs-2 lead-column"><c:out value="${report.burnedCalories}"/></td>                              
                                 <form:form method="get" action="${pageContext.request.contextPath}/reports/update/${report.id}" cssClass="form-horizontal">
                                     <td class="col-xs-1 text-center">
