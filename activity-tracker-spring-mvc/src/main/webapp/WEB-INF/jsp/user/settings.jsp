@@ -14,7 +14,7 @@
         <jsp:attribute name="scripts">
         <script>
             $(function () {
-                $("#datepicker").datepicker({ dateFormat: 'dd.mm.yy' });
+                $("#datepicker").datetimepicker({ format: 'YYYY-MM-DD'});
             });
         </script>
     </jsp:attribute>

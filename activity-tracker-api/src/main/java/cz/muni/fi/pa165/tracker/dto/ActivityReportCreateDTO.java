@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.tracker.dto;
 
 import cz.muni.fi.pa165.tracker.validation.PastTime;
-import cz.muni.fi.pa165.tracker.validation.TimeSequence;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author Martin Styk
  * @version 07.11.2016
  */
-@TimeSequence(members = {"startTime", "endTime"})
+//@TimeSequence(members = {"startTime", "endTime"})
 public class ActivityReportCreateDTO {
 
     @NotNull
@@ -21,10 +21,12 @@ public class ActivityReportCreateDTO {
 
     @NotNull
     @PastTime
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startTime;
 
     @NotNull
     @PastTime
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endTime;
 
     @NotNull

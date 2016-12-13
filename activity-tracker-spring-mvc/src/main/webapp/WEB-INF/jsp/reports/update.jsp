@@ -36,14 +36,14 @@
             <div class="form-group ${name_error?'has-error':''}">
                 <form:label path="startTime" cssClass="col-sm-2 control-label"><fmt:message key="reports.start"/>:</form:label>
                     <div class="col-sm-10">
-                    <form:input path="startTime" cssClass="form-control datepicker"/>
+                    <form:input path="startTime" cssClass="form-control"/>
                     <form:errors path="startTime" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${name_error?'has-error':''}">
                 <form:label path="endTime" cssClass="col-sm-2 control-label"><fmt:message key="reports.end"/>:</form:label>
                     <div class="col-sm-10">
-                    <form:input path="endTime" cssClass="form-control datepicker"/>
+                    <form:input path="endTime" cssClass="form-control"/>
                     <form:errors path="endTime" cssClass="help-block"/>
                 </div>
             </div>

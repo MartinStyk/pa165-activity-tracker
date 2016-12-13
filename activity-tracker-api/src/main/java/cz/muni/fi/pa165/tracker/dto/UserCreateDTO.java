@@ -4,11 +4,12 @@ import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.validation.PastDate;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 
 /**
  * DTO for creating User.
@@ -16,7 +17,7 @@ import javax.validation.constraints.Pattern;
  * @author Petra Ondřejková
  * @version 09.11. 2016
  */
-public class    UserCreateDTO {
+public class UserCreateDTO {
 
     @NotNull
     @Pattern(regexp = ".+@.+\\....?")
@@ -35,6 +36,7 @@ public class    UserCreateDTO {
 
     @NotNull
     @PastDate
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateOfBirth;
 
     @NotNull

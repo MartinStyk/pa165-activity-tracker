@@ -32,7 +32,7 @@ import javax.validation.Valid;
 @RequestMapping(value = {"/reports"})
 public class ReportController extends ActivityTrackerController {
 
-    private static final Logger log = LoggerFactory.getLogger(SportController.class);
+    private static final Logger log = LoggerFactory.getLogger(ReportController.class);
 
     @Inject
     private ActivityReportFacade activityReportFacade;

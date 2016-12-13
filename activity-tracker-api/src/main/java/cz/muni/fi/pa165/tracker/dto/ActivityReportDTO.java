@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.tracker.dto;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -20,9 +22,11 @@ public class ActivityReportDTO {
     private UserDTO user;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startTime;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endTime;
 
     @NotNull
