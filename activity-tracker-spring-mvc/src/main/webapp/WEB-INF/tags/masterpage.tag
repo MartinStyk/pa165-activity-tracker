@@ -107,7 +107,7 @@
         <!-- footer -->
         <footer class="footer">
             <div class="container" align="center">
-                <p class="text-muted">&copy;&nbsp;<%=java.time.Year.now().toString()%>&nbsp; Jan Grudman, Adam Laurenčík, Petra Ondřejková, Martin Styk</p>
+                <p class="text-muted">&copy;&nbsp;<%=java.time.Year.now().toString()%>&nbsp; Jan Grudman, Adam LaurenÄÃ­k, Petra OndÅejkovÃ¡, Martin Styk</p>
             </div>
         </footer>
             
@@ -116,7 +116,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
         <script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/a549aa8780dbda16f6cff545aeabc3d71073911e/src/js/bootstrap-datetimepicker.js"></script>
         
         <!-- include JavaScript custom files -->
