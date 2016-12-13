@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 
+import cz.muni.fi.pa165.tracker.dto.UserCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
@@ -61,6 +62,32 @@ public class UserController extends ActivityTrackerController {
         return "redirect:";
     }
 
+    @RequestMapping(value = {"register", "register/"}, method = RequestMethod.GET)
+    public String register(Model model) {
+        model.addAttribute("newUser", new UserCreateDTO());
+        return "user/register";
+    }
+
+    @RequestMapping(value = {"register", "register/"}, method = RequestMethod.POST)
+    public String register(
+            @Valid @ModelAttribute("newUser") UserCreateDTO formData,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        log.debug("register user({})", formData);
+
+        if (bindingResult.hasErrors()) {
+            addValidationErrors(bindingResult, model);
+            return "user/register";
+        }
+
+        userFacade.createUser(formData);
+        redirectAttributes.addFlashAttribute("alert_success", "User " + formData.getEmail() + " was created");
+
+        return "redirect:/login";
+    }
+
     @RequestMapping(value = {"users", "users/"}, method = RequestMethod.GET)
     public String index(Model model) {
         model.addAttribute("users", userFacade.findAll());
@@ -69,7 +96,7 @@ public class UserController extends ActivityTrackerController {
 
     @RequestMapping(value = {"/users/makeAdmin/{id}"}, method = RequestMethod.GET)
     public String makeAdmin(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
-                         RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) {
         log.info("make admin from user with id", id);
         UserDTO updated = userFacade.findUserById(id);
         updated.setRole(UserRole.ADMIN);

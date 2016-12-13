@@ -72,7 +72,8 @@
 
                         </c:when>
                         <c:otherwise>
-                          <li><a href="${pageContext.request.contextPath}/login"><fmt:message key="log_in"/></a></li> 
+                          <li><a href="${pageContext.request.contextPath}/login"><fmt:message key="log_in"/></a></li>
+                          <li><a href="${pageContext.request.contextPath}/register"><fmt:message key="user_register"/></a></li>
                         </c:otherwise>
                     </c:choose>
                 </ul>

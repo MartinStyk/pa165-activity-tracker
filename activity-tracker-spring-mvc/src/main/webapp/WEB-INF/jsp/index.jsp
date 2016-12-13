@@ -91,6 +91,9 @@
                         <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/login" role="button">
                             <fmt:message key="sign_in"/>
                         </a>
+                        <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/register" role="button">
+                            <fmt:message key="user_register"/>
+                        </a>
                     </p>
 
                 </c:when>
