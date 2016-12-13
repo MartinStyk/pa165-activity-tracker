@@ -5,11 +5,11 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<own:masterpage title="Create Report">
+<own:masterpage title="Update Report">
     <jsp:attribute name="scripts">
         <script>
             $(function () {
-                $(".datepicker").datepicker({dateFormat: 'dd.mm.yy '});
+                $(".datepicker").datetimepicker();
             });
         </script>
     </jsp:attribute>
@@ -22,12 +22,12 @@
 
         <div class="page-header">
             <h1>
-                <fmt:message key="reports.create"/>
+                <fmt:message key="reports.update"/>
             </h1>
         </div>
 
         <form:form method="POST"
-                   action="${pageContext.request.contextPath}/reports/create"
+                   action="${pageContext.request.contextPath}/reports/update/${reportUpdate.id}"
                    acceptCharset=""
                    modelAttribute="reportUpdate"
                    cssClass="form-horizontal">
