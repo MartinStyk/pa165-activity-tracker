@@ -14,26 +14,69 @@
 <own:masterpage>
     <jsp:attribute name="scripts">
         <script>
-            var ctx = document.getElementById("sportsChart");
-                    var data = {
-                    datasets: [{
-                    data: [
-            <c:forEach items="${statistics.sportActivites}" var="sportActivityEntry" varStatus="loop">
+            function hashString(str){
+            var hash = 0;
+            if (str.length == 0) return hash;
+            for (i = 0; i < str.length; i++) {
+            char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash;
+            }
+            function stringToColorCode(str) {
+            return '#' + ('000000' + (hashString(str) * 0xFFFFFF << 0).toString(16)).slice( - 6);
+            }
+            var sportsCtx = document.getElementById("sportsChart");
+            var sportsData = {
+            datasets: [{
+            data: [
+            <c:forEach items="${statistics.sportActivities}" var="sportActivityEntry" varStatus="loop">
                 ${sportActivityEntry.value}${!loop.last ? ',' : ''}
             </c:forEach>
-                    ],
-                            label: 'Sports' // for legend
-                    }],
-                            labels: [
-            <c:forEach items="${statistics.sportActivites}" var="sportActivityEntry" varStatus="loop">
-                ${sportActivityEntry.key.name}${!loop.last ? ',' : ''}
+            ],
+                    backgroundColor: [
+            <c:forEach items="${statistics.sportActivities}" var="sportActivityEntry" varStatus="loop">
+                    stringToColorCode("${sportActivityEntry.key.name}")${!loop.last ? ',' : ''}
             </c:forEach>
-                            ]
-                    };
-                    var sportCharts = new Chart(ctx, {
-                    type: 'pie',
-                            data: data
-                    });
+                    ],
+                    label: 'Sports' // for legend
+            }],
+                    labels: [
+            <c:forEach items="${statistics.sportActivities}" var="sportActivityEntry" varStatus="loop">
+                    "${sportActivityEntry.key.name}"${!loop.last ? ',' : ''}
+            </c:forEach>
+                    ]
+            };
+            var sportChart = new Chart(sportsCtx, {
+            type: 'pie',
+                    data: sportsData
+            });
+            var caloriesCtx = document.getElementById("caloriesChart");
+            var caloriesData = {
+            datasets: [{
+            data: [
+            <c:forEach items="${statistics.caloriesForActivities}" var="sportActivityEntry" varStatus="loop">
+                ${sportActivityEntry.value}${!loop.last ? ',' : ''}
+            </c:forEach>
+            ],
+                    backgroundColor: [
+            <c:forEach items="${statistics.caloriesForActivities}" var="sportActivityEntry" varStatus="loop">
+                    stringToColorCode("${sportActivityEntry.key.name}")${!loop.last ? ',' : ''}
+            </c:forEach>
+                    ],
+                    label: 'Sports' // for legend
+            }],
+                    labels: [
+            <c:forEach items="${statistics.caloriesForActivities}" var="sportActivityEntry" varStatus="loop">
+                    "${sportActivityEntry.key.name}"${!loop.last ? ',' : ''}
+            </c:forEach>
+                    ]
+            };
+            var caloriesChart = new Chart(caloriesCtx, {
+            type: 'pie',
+                    data: caloriesData
+            });
         </script>
     </jsp:attribute>
     <jsp:attribute name="body">
@@ -108,22 +151,48 @@
 
                     </div>
                     <div class ="row homepagePanels">
-                        <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         <img class="icon calorie" src="http://www.freeiconspng.com/uploads/sport-activities-football-icon-6.png"
                                              style="max-height:25px; max-width:25px"/>
-                                        <span><fmt:message key="sport.header"/></span>
+                                        <span><fmt:message key="user.sportsData"/></span>
                                     </h3>
                                 </div>
                                 <div class="panel-body">
+                                    <c:choose>
+                                        <c:when test="${not empty statistics.sportActivities}">                                           
                                     <canvas id="sportsChart" width="400" height="400"></canvas>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <h2> <fmt:message key="user.noData"></fmt:message></h2>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <img class="icon calorie" src="http://www.freeiconspng.com/uploads/sport-activities-football-icon-6.png"
+                                             style="max-height:25px; max-width:25px"/>
+                                        <span><fmt:message key="user.caloriesData"/></span>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <c:choose>
+                                        <c:when test="${not empty statistics.sportActivities}">                                           
+                                    <canvas id="caloriesChart" width="400" height="400"></canvas>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h2> <fmt:message key="user.noData"></fmt:message></h2>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 

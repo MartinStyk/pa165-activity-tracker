@@ -39,14 +39,16 @@ public class UserRestController {
     private TeamFacade teamFacade;
 
     /**
-     * Get list of all users, or get list of users coresponding to given email address
-     * (in case email parameter is specified).
+     * Get list of all users, or get list of users coresponding to given email
+     * address (in case email parameter is specified).
      * <p>
-     * curl -i -X GET http://localhost:8080/pa165/rest/users
-     * curl -i -X GET http://localhost:8080/pa165/rest/users?email={value}
+     * curl -i -X GET http://localhost:8080/pa165/rest/users curl -i -X GET
+     * http://localhost:8080/pa165/rest/users?email={value}
      *
-     * @return list of all users registered in system, or list of users corresponding to given email
-     * @throws RequestedResourceNotFoundException if user requested by email is not found
+     * @return list of all users registered in system, or list of users
+     * corresponding to given email
+     * @throws RequestedResourceNotFoundException if user requested by email is
+     * not found
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final List<UserDTO> findUsers(@RequestParam(value = "email", required = false) String email) {
@@ -71,7 +73,8 @@ public class UserRestController {
      *
      * @param id user identifier as path variable
      * @return DTO of requested user
-     * @throws RequestedResourceNotFoundException if user does not exist in database
+     * @throws RequestedResourceNotFoundException if user does not exist in
+     * database
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final UserDTO findUserById(@PathVariable("id") long id) {
@@ -90,7 +93,8 @@ public class UserRestController {
      *
      * @param id user identifier as path variable
      * @return DTO of requested user
-     * @throws RequestedResourceNotFoundException if user does not exist in database
+     * @throws RequestedResourceNotFoundException if user does not exist in
+     * database
      */
     @RequestMapping(value = "/{id}/team", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public final TeamDTO findUsersTeam(@PathVariable("id") long id) {
@@ -127,13 +131,15 @@ public class UserRestController {
     /**
      * Create a new user by POST method.
      * <p>
-     * curl -X POST -i -H "Content-Type: application/json" --data '{"email":"mstyk@redhat.com","firstName":"Martin",
+     * curl -X POST -i -H "Content-Type: application/json" --data
+     * '{"email":"mstyk@redhat.com","firstName":"Martin",
      * "lastName":"Styk","passwordHash":"200aaa","dateOfBirth":"2008-02-15","role":"ADMIN","sex":"MALE","height":"111",
      * "weight":"100"}' http://localhost:8080/pa165/rest/users
      *
      * @param user UserCreateDTO with required fields for creation
      * @return the newly created DTO of user
-     * @throws InvalidResourceException  if user can not be created because validation failures
+     * @throws InvalidResourceException if user can not be created because
+     * validation failures
      * @throws ExistingResourceException if user already exists
      */
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -152,20 +158,22 @@ public class UserRestController {
     }
 
     /**
-     * Updates user by PUT method.
-     * Updates only fields specified in editedUser
+     * Updates user by PUT method. Updates only fields specified in editedUser
      * <p>
-     * curl -i -X PUT -H "Content-Type: application/json" --data '{"email":"peterSagan@gmail.com","firstName":"Peter",
+     * curl -i -X PUT -H "Content-Type: application/json" --data
+     * '{"email":"peterSagan@gmail.com","firstName":"Peter",
      * "lastName":"Sagan","passwordHash":"200aaa","dateOfBirth":"1990-01-28","role":"ADMIN","sex":"MALE","height":"111",
-     * "weight":"100","team":"Rychle holky"}' http://localhost:8080/pa165/rest/users/4
+     * "weight":"100","team":"Rychle holky"}'
+     * http://localhost:8080/pa165/rest/users/4
      * <p>
-     * curl -i -X PUT -H "Content-Type: application/json" --data '{"email":"peterSagan@gmail.com","firstName":"Petko"}'
+     * curl -i -X PUT -H "Content-Type: application/json" --data
+     * '{"email":"peterSagan@gmail.com","firstName":"Petko"}'
      * http://localhost:8080/pa165/rest/users/4
      *
-     * @param id         user id as a path variable
+     * @param id user id as a path variable
      * @param editedUser UserDTO with required fields for update
      * @throws RequestedResourceNotFoundException if user does not exist
-     * @throws ResourceNotModifiedException       if user can not be updated
+     * @throws ResourceNotModifiedException if user can not be updated
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -196,13 +204,13 @@ public class UserRestController {
         UserDTO result = new UserDTO();
         result.setId(existing.getId());
         result.setTotalCalories(existing.getTotalCalories());
-        result.setPasswordHash((toUpdate.getPasswordHash() == null) ? existing.getPasswordHash() :
-                toUpdate.getPasswordHash());
+        result.setPasswordHash((toUpdate.getPasswordHash() == null) ? existing.getPasswordHash()
+                : toUpdate.getPasswordHash());
         result.setEmail((toUpdate.getEmail() == null) ? existing.getEmail() : toUpdate.getEmail());
         result.setFirstName((toUpdate.getFirstName() == null) ? existing.getFirstName() : toUpdate.getFirstName());
         result.setLastName((toUpdate.getLastName() == null) ? existing.getLastName() : toUpdate.getLastName());
-        result.setDateOfBirth((toUpdate.getDateOfBirth() == null) ? existing.getDateOfBirth() :
-                toUpdate.getDateOfBirth());
+        result.setDateOfBirth((toUpdate.getDateOfBirth() == null) ? existing.getDateOfBirth()
+                : toUpdate.getDateOfBirth());
         result.setRole((toUpdate.getRole() == null) ? existing.getRole() : toUpdate.getRole());
         result.setSex((toUpdate.getSex() == null) ? existing.getSex() : toUpdate.getSex());
         result.setHeight((toUpdate.getHeight() < 1) ? existing.getHeight() : toUpdate.getHeight());
