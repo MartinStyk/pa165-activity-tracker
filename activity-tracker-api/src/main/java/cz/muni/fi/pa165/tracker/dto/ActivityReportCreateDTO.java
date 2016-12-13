@@ -21,12 +21,12 @@ public class ActivityReportCreateDTO {
 
     @NotNull
     @PastTime
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "DD.MM.YYYY HH:mm")
     private LocalDateTime startTime;
 
     @NotNull
     @PastTime
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "DD.MM.YYYY HH:mm")
     private LocalDateTime endTime;
 
     @NotNull

@@ -9,7 +9,7 @@
     <jsp:attribute name="scripts">
         <script>
             $(function () {
-                $(".datepicker").datetimepicker();
+                $(".datepicker").datetimepicker({ format: 'DD.MM.YYYY HH:mm'});
             });
         </script>
     </jsp:attribute>
@@ -36,15 +36,27 @@
             <div class="form-group ${name_error?'has-error':''}">
                 <form:label path="startTime" cssClass="col-sm-2 control-label"><fmt:message key="reports.start"/>:</form:label>
                     <div class="col-sm-10">
-                    <form:input path="startTime" cssClass="form-control"/>
+                    <form:input path="startTime" cssClass="form-control datepicker"/>
                     <form:errors path="startTime" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${name_error?'has-error':''}">
                 <form:label path="endTime" cssClass="col-sm-2 control-label"><fmt:message key="reports.end"/>:</form:label>
                     <div class="col-sm-10">
-                    <form:input path="endTime" cssClass="form-control"/>
+                    <form:input path="endTime" cssClass="form-control datepicker"/>
                     <form:errors path="endTime" cssClass="help-block"/>
+                </div>
+            </div>
+            <div class="form-group ${name_error?'has-error':''}">
+                <form:label path="sportActivityId" cssClass="col-sm-2 control-label"><fmt:message key="reports.sport"/>:</form:label>
+                    <div class="col-sm-10">
+                    <form:select path="sportActivityId" cssClass="form-control" >
+                        <c:forEach items="${sportActivities}" var="sport">
+                            <form:option value="${sport.id}">${sport.name}</form:option>
+                        </c:forEach>
+                    </form:select>                         
+                    <form:input type="hidden" path="userId" value="${loggedUser.id}"/>
+                    <form:errors path="sportActivityId" cssClass="help-block"/>
                 </div>
             </div>
             <button class="btn btn-primary createBtn center-block allow-vertical-space" type="submit"><fmt:message key="submit"/></button>
