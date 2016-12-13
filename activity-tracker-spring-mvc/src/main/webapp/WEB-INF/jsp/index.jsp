@@ -99,25 +99,73 @@
                 </c:when>
                 <c:otherwise>
                     <h1>
-                        <fmt:message key="index_hi">
+                        <fmt:message key="index_dashoard">
                             <fmt:param value="${loggedUser.firstName}"/>
                         </fmt:message>
                     </h1>
-                    <p><fmt:message key="index_textlogin"/></p>
+                    <p><fmt:message key="index_subtext_dashboard"/></p>
 
+                    <div class="row homepagePanels">
+
+                    <div class=" col-lg-4 col-md-4 col-sm-4 allBurnCalories">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <img class="icon calorie" src="resources/img/Calories-Burned-White.png"
+                                         style="max-height:25px; max-width:25px"/>
+                                    <span><fmt:message key="user.totalCalories"/></span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <span><c:out value="${statistics.totalCalories}"/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-4 col-md-4 col-sm-4 BurnCalorieLastWeek">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <img class="icon calorie" src="resources/img/Calories-Burned-White.png"
+                                         style="max-height:25px; max-width:25px"/>
+                                    <span><fmt:message key="user.caloriesLastWeek"/></span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <span><c:out value="${statistics.caloriesLastWeek}"/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-4 col-md-4 col-sm-4 BurnCalorieLastMounth">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <img class="icon calorie" src="resources/img/Calories-Burned-White.png"
+                                         style="max-height:25px; max-width:25px"/>
+                                    <span><fmt:message key="user.caloriesLastMonth"/></span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <span><c:out value="${statistics.caloriesLastMonth}"/></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                     <div class="row homepagePanels">
 
                         <div class=" col-lg-4 col-md-4 col-sm-4 allBurnCalories">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
+                                        <img class="icon calorie" src="resources/img/Sport-Activities-White.png"
                                              style="max-height:25px; max-width:25px"/>
-                                        <span><fmt:message key="user.totalCalories"/></span>
+                                        <span><fmt:message key="user.totalActivities"/></span>
                                     </h3>
                                 </div>
                                 <div class="panel-body">
-                                    <span>${statistics.totalCalories}</span>
+                                    <span><c:out value="${statistics.totalSportActivities}"/></span>
                                 </div>
                             </div>
                         </div>
@@ -126,13 +174,13 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
+                                        <img class="icon calorie" src="resources/img/Sport-Activities-White.png"
                                              style="max-height:25px; max-width:25px"/>
-                                        <span><fmt:message key="user.caloriesLastWeek"/></span>
+                                        <span><fmt:message key="user.activitiesLastWeek"/></span>
                                     </h3>
                                 </div>
                                 <div class="panel-body">
-                                    <span>${statistics.caloriesLastWeek}</span>
+                                    <span><c:out value="${statistics.sportActivitiesLastWeek}"/></span>
                                 </div>
                             </div>
                         </div>
@@ -141,24 +189,25 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        <img class="icon calorie" src="http://calcuworld.com/wp-content/uploads/2013/02/Calories-Burned-150x150.png"
+                                        <img class="icon calorie" src="resources/img/Sport-Activities-White.png"
                                              style="max-height:25px; max-width:25px"/>
-                                        <span><fmt:message key="user.caloriesLastMonth"/></span>
+                                        <span><fmt:message key="user.activitiesLastMonth"/></span>
                                     </h3>
                                 </div>
                                 <div class="panel-body">
-                                    <span>${statistics.caloriesLastMonth}</span>
+                                    <span><c:out value="${statistics.sportActivitiesLastMonth}"/></span>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+
                     <div class ="row homepagePanels">
                         <div class="col-md-6">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        <img class="icon calorie" src="http://www.freeiconspng.com/uploads/sport-activities-football-icon-6.png"
+                                        <img class="icon calorie" src="resources/img/Sport-Activities-White.png"
                                              style="max-height:25px; max-width:25px"/>
                                         <span><fmt:message key="user.sportsData"/></span>
                                     </h3>
@@ -179,7 +228,7 @@
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
-                                        <img class="icon calorie" src="http://www.freeiconspng.com/uploads/sport-activities-football-icon-6.png"
+                                        <img class="icon calorie" src="resources/img/Calories-Burned-White.png"
                                              style="max-height:25px; max-width:25px"/>
                                         <span><fmt:message key="user.caloriesData"/></span>
                                     </h3>

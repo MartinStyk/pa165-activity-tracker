@@ -17,7 +17,7 @@
         <meta name="_csrf" th:content="${_csrf.token}"/>
         <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-        <title><c:out value="${title}"/></title>
+        <title><fmt:message key="application_name"/></title>
         <!-- bootstrap css -->
         <!--<link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" crossorigin="anonymous">
@@ -27,9 +27,12 @@
         <link href="resources/css/site.css" rel="stylesheet">
         <!-- jquery themes -->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <!--Icon-->
+        <link rel="shortcut icon" href="resources/img/Calories-Burned.png">
+        <link rel="apple-touch-icon" href="resources/img/Calories-Burned.png">
         <jsp:invoke fragment="head"/>
     </head>
-    <body>
+    <body class="body">
         <!-- navigation bar -->
         <nav class="navbar navbar-inverse navbar-static-top">
             <div class="container">
