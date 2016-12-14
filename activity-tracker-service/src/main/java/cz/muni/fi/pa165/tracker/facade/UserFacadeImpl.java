@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Class implemented user facade.
@@ -192,5 +193,10 @@ public class UserFacadeImpl implements UserFacade {
         );
 
         return statisticsDTO;
+    }
+
+    @Override
+    public List<UserDTO> getUsersWithoutTeam() {
+        return findAll().stream().filter(s -> s.getTeam() == null).collect(Collectors.toList());
     }
 }

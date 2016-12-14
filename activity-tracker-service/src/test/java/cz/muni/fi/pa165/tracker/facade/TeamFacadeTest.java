@@ -358,6 +358,32 @@ public class TeamFacadeTest  extends AbstractTestNGSpringContextTests {
         assertEquals(dtoList.size(), 0);
     }
 
+    @Test
+    public void removeUserFromTeam() {
+        when(userService.findById(2l)).thenReturn(new User());
+        TeamDTO removeDTO = new TeamDTO();
+        removeDTO.setId(1L);
+        removeDTO.setName("TEAM");
+        List<UserDTO> members = Arrays.asList(leaderDTO, new UserDTO(2));
+        removeDTO.setMembers(members);
+
+        teamFacade.removeUserFromTeam(removeDTO, new UserDTO(2));
+        verify(userService, atLeast(1)).update(new User());
+    }
+
+    @Test
+    public void addUserToTeam() {
+        when(userService.findById(2l)).thenReturn(new User());
+        TeamDTO removeDTO = new TeamDTO();
+        removeDTO.setId(1L);
+        removeDTO.setName("TEAM");
+        List<UserDTO> members = Arrays.asList(leaderDTO);
+        removeDTO.setMembers(members);
+
+        teamFacade.addUserToTeam(removeDTO, new UserDTO(2));
+        verify(userService, atLeast(1)).update(new User());
+    }
+
     private void assertDeepEquals(User user1, User user2) {
         assertEquals(user1.getDateOfBirth(), user2.getDateOfBirth());
         assertEquals(user1.getPasswordHash(), user2.getPasswordHash());

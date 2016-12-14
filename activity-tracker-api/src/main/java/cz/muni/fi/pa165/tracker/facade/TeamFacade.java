@@ -7,6 +7,7 @@ package cz.muni.fi.pa165.tracker.facade;
 
 import cz.muni.fi.pa165.tracker.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.TeamDTO;
+import cz.muni.fi.pa165.tracker.dto.UserDTO;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 
 import java.util.List;
@@ -69,4 +70,19 @@ public interface TeamFacade {
      * @throws IllegalArgumentException if team is null
      */
     void removeTeam(TeamDTO team);
+
+
+    /**
+     * Remove user from team
+     * @param teamDTO
+     * @param userDTO
+     */
+    void removeUserFromTeam(TeamDTO teamDTO, UserDTO userDTO);
+
+    /**
+     * Add user to team
+     * @param teamDTO
+     * @param userDTO
+     */
+    void addUserToTeam(TeamDTO teamDTO, UserDTO userDTO);
 }

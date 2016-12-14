@@ -136,6 +136,35 @@ public class TeamFacadeImpl implements TeamFacade {
         teamService.removeTeam(team);
     }
 
+    @Override
+    public void removeUserFromTeam(TeamDTO teamDTO, UserDTO userDTO) {
+        if (teamDTO == null) {
+            throw new IllegalArgumentException("TeamDTO is null");
+        }
+        if (teamService.findTeamById(teamDTO.getId()) == null) {
+            throw new NonExistingEntityException("Team doesn't exist");
+        }
+        User user = getExistingUserOrThrowException(userDTO.getId());
+        user.setTeam(null);
+
+        userService.update(user);
+    }
+
+    @Override
+    public void addUserToTeam(TeamDTO teamDTO, UserDTO userDTO) {
+        if (teamDTO == null) {
+            throw new IllegalArgumentException("TeamDTO is null");
+        }
+        Team team = teamService.findTeamById(teamDTO.getId());
+        if (team == null) {
+            throw new NonExistingEntityException("Team doesn't exist");
+        }
+        User user = getExistingUserOrThrowException(userDTO.getId());
+        user.setTeam(team);
+
+        userService.update(user);
+    }
+
     /**
      * @param id user id
      * @return existing user

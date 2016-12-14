@@ -89,4 +89,10 @@ public interface UserFacade {
      */
     UserStatisticsDTO getStatistics(UserDTO userDTO);
 
+    /**
+     * List users without team.
+     * @return list of users not contained in any team.
+     */
+    List<UserDTO> getUsersWithoutTeam();
+
 }
