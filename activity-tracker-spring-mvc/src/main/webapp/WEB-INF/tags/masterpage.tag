@@ -111,7 +111,7 @@
         <!-- footer -->
         <footer class="footer">
             <div class="container" align="center">
-                <p class="text-muted">&copy;&nbsp;<%=java.time.Year.now().toString()%>&nbsp; Jan Grudman, Adam Laurenčík, Petra Ondřejková, Martin Styk</p>
+                <p class="text-muted">&copy;&nbsp;<%=java.time.Year.now().toString()%>&nbsp; Jan Grundmann, Adam Laurenčík, Petra Ondřejková, Martin Styk</p>
             </div>
         </footer>
             

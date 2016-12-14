@@ -14,6 +14,7 @@ import cz.muni.fi.pa165.tracker.facade.TeamFacade;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
 import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueTeamNameCreateValidator;
 import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueTeamNameUpdateValidator;
+import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -202,6 +204,80 @@ public class TeamController extends ActivityTrackerController {
         return "redirect:" + uriBuilder.path("/teams").toUriString();
     }
 
+    /**
+     * Removes user from team with given id
+     *
+     * @param model
+     */
+    @RequestMapping(value = "/update/{teamId}/removeUser/{userId}", method = RequestMethod.POST)
+    public String removeUser(@PathVariable long teamId, @PathVariable long userId,
+                             Model model, UriComponentsBuilder uriBuilder,
+                             RedirectAttributes redirectAttributes) {
+
+        UserDTO removeUser = userFacade.findUserById(userId);
+        TeamDTO updateTeam = teamFacade.getTeamById(teamId);
+
+        if (updateTeam.getTeamLeader().getId() == userId) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Can't remove team leader");
+        } else {
+            List<UserDTO> members = updateTeam.getMembers();
+            members.remove(removeUser);
+            updateTeam.setMembers(members);
+            teamFacade.updateTeam(updateTeam);
+            removeUser.setTeam(null);
+            userFacade.updateUser(removeUser);
+            redirectAttributes.addFlashAttribute("alert_success", "User removed from team");
+        }
+
+        return "redirect:" + uriBuilder.path("/teams/update/" + teamId).toUriString();
+    }
+
+    /**
+     * Add users to team
+     *
+     * @param model
+     */
+    @RequestMapping(value = "/addUsers/{teamId}", method = RequestMethod.GET)
+    public String addUsers(@PathVariable long teamId,  Model model) {
+        TeamDTO currentTeam = teamFacade.getTeamById(teamId);
+        List<UserDTO> withoutTeam = userFacade.findAll();
+        withoutTeam.removeIf(s -> s.getTeam() != null);
+        TeamDTO tempTeam = new TeamDTO();
+        tempTeam.setMembers(withoutTeam);
+        model.addAttribute("users", tempTeam);
+        model.addAttribute("currentTeam", currentTeam);
+        return ("/teams/addUsers");
+    }
+
+    /**
+     * Add users to team
+     *
+     * @param model
+     */
+    @RequestMapping(value = "/addUsers/{teamId}", method = RequestMethod.POST)
+    public String addUsers(@PathVariable long teamId,
+                             Model model,
+                             UriComponentsBuilder uriBuilder,
+                             RedirectAttributes redirectAttributes,
+                             @RequestBody String body) {
+        String[] idS = body.split("[&]*members=|[&]*[_]+members=[\\d]*");
+        TeamDTO team = teamFacade.getTeamById(teamId);
+        List<UserDTO> members = team.getMembers();
+        UserDTO user;
+        for (String id : idS) {
+            try {
+                user = userFacade.findUserById(Long.parseLong(id));
+                user.setTeam(team.getName());
+                userFacade.updateUser(user);
+                members.add(user);
+            } catch (Exception e) {
+                log.error("Could not add user " + e.getMessage(), e);
+            }
+        }
+        team.setMembers(members);
+        return "redirect:" + uriBuilder.path("/teams/update/" + teamId).toUriString();
+    }
+
     @InitBinder
     protected void initUniqueConstrainBinder(WebDataBinder binder) {
 
@@ -213,10 +289,5 @@ public class TeamController extends ActivityTrackerController {
         if (binder.getTarget() instanceof TeamUpdateDTO) {
             binder.addValidators(uniqueTeamNameUpdateValidator);
         }
-    }
-
-    @ModelAttribute
-    public void populateDropdownValues(Model model) {
-        model.addAttribute("users", userFacade.findAll());
     }
 }
