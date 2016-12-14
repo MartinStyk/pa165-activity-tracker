@@ -53,7 +53,7 @@
                         <tr>
                             <td class="col-xs-1 lead-column">${count}.</td>
                             <td class="col-xs-3 lead-column"><c:out value="${sport.name}"/></td>
-                            <td class="col-xs-3 text-center"><c:out value="${sport.caloriesFactor}"/></td>
+                            <td class="col-xs-1"><c:out value="${sport.caloriesFactor}"/></td>
 
                             <c:if test="${isAdmin}">
                                 <form:form method="get" action="${pageContext.request.contextPath}/sports/update/${sport.id}" cssClass="form-horizontal">
