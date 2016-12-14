@@ -7,6 +7,7 @@ package cz.muni.fi.pa165.tracker.service;
 
 import cz.muni.fi.pa165.tracker.dao.TeamDao;
 import cz.muni.fi.pa165.tracker.entity.Team;
+import cz.muni.fi.pa165.tracker.entity.User;
 import cz.muni.fi.pa165.tracker.exception.TranslatePersistenceExceptions;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class TeamServiceImpl implements TeamService {
 
     @Inject
     private TeamDao teamDao;
+
+    @Inject
+    private UserService userService;
 
     @Override
     public void createTeam(Team team) {
@@ -65,6 +69,12 @@ public class TeamServiceImpl implements TeamService {
         if (team == null) {
             throw new IllegalArgumentException("Team is null");
         }
+        //remove users from team
+        for (User user : team.getMembers()) {
+            user.setTeam(null);
+            userService.update(user);
+        }
+
         teamDao.remove(team);
     }
 }

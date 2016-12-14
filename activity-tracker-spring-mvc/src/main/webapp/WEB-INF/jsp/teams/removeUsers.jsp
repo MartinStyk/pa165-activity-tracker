@@ -5,7 +5,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<own:masterpage title="Add Members">
+<own:masterpage title="Remove Members">
     <jsp:attribute name="body">
 
         <a href="${pageContext.request.contextPath}/teams/detail/${currentTeam.id}" class="btn btn-default" role="button">
@@ -15,12 +15,12 @@
 
         <div class="page-header">
             <h1>
-                <fmt:message key="team.addUser"/>
+                <fmt:message key="team.removeUser"/>
             </h1>
         </div>
 
         <form:form method="POST"
-                   action="${pageContext.request.contextPath}/teams/addUsers/${currentTeam.id}"
+                   action="${pageContext.request.contextPath}/teams/removeUsers/${currentTeam.id}"
                    acceptCharset=""
                    modelAttribute="users"
                    cssClass="form-horizontal">
@@ -28,7 +28,7 @@
             <div class="form-group ${addUsers_error?'has-error':''}">
                 <div class="col-sm-10">
                                        
-                    <form:select multiple="true" size="10" path="members" items="${users.members}" itemLabel="email" itemValue="id"/>
+                    <form:select multiple="true" size="5" path="members" items="${users.members}" itemLabel="email" itemValue="id"/>
                     <form:errors path="members" cssClass="help-block"/>
                 </div>
             </div>

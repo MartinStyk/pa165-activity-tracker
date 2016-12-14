@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
@@ -43,6 +44,9 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
 
     @Mock
     private TeamDao teamDao;
+
+    @Mock
+    private UserService userService;
 
     private TeamService teamService;
 
@@ -126,6 +130,7 @@ public class TeamServiceTest extends AbstractTestNGSpringContextTests {
 
         teamService = factory.getProxy();
         ReflectionTestUtils.setField(teamService, "teamDao", teamDao);
+        ReflectionTestUtils.setField(teamService, "userService", userService);
     }
 
     @BeforeMethod(dependsOnMethods = "initTeams")

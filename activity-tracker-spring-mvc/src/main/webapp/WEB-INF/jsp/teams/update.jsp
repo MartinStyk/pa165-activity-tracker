@@ -8,7 +8,7 @@
 <own:masterpage title="Update Team">
     <jsp:attribute name="body">
 
-            <a href="${pageContext.request.contextPath}/teams" class="btn btn-default" role="button">
+            <a href="${pageContext.request.contextPath}/teams/detail/${teamUpdate.id}" class="btn btn-default" role="button">
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
                 <fmt:message key="back"/>
             </a>
@@ -53,45 +53,7 @@
             </div>
 
             <div class="form-group ${members_error?'has-error':''}">
-                <form:label path="members" cssClass="col-sm-2 control-label"><fmt:message key="team.members"/></form:label>
-                <div class="col-sm-10">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th><fmt:message key="user.firstName"/></th>
-                                <th><fmt:message key="user.lastName"/></th>
-                                <th><fmt:message key="user.email"/></th>
-                                <th><fmt:message key="remove"/></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${teamUpdate.members}" var="u">
-                                <tr>
-                                    <td><c:out value="${u.firstName}"/></td>
-                                    <td><c:out value="${u.lastName}"/></td>
-                                    <td><c:out value="${u.email}"/></td>
-                                    <td><c:out value="${u.id}"/></td>
-                                    <td>
-                                        <form method="post" action="${pageContext.request.contextPath}/teams/update/${teamUpdate.id}/removeUser/${u.id}" cssClass="form-horizontal">
-                                            <td class="col-xs-1 text-center">
-                                                <button class="btn btn-default" type="submit">
-                                                    <span class="sr-only"><fmt:message key="remove"/></span>
-                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                </button>
-                                            </td>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-                <p>
-                    <a class="col-sm-2 btn btn-primary updateBtn" href="${pageContext.request.contextPath}/teams/addUsers/${teamUpdate.id}" role="button">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    <fmt:message key="team.addUser"/>
-                    </a>
-                </p>
+                <form:label path="members" cssClass="col-sm-2 control-label" style="display: none"><fmt:message key="team.members"/></form:label>
             </div>
                         
 

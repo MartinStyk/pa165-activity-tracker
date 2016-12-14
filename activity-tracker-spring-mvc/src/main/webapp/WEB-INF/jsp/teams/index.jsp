@@ -14,58 +14,61 @@
             <h1><fmt:message key="team.header"/></h1>
             <p class="lead"><fmt:message key="team.subheader"/></p>
 
-            <form:form method="GET"
-                   action="${pageContext.request.contextPath}/teams/index"
-                   acceptCharset=""
-                   cssClass="form-inline">
 
-                <fmt:message key="team_name_placeholder" var="teamNamePlaceholder"/>
-                <input name="teamName" value="${param.name}" class="form-control" autocomplete="off" placeholder="${teamNamePlaceholder}"/>
-                <button class="btn btn-primary search-btn" type="submit"><i class="glyphicon glyphicon-search"></i>&nbsp;<fmt:message key="search"/></button>
-            </form:form>
+             <form:form method="GET"
+                        action="${pageContext.request.contextPath}/teams/index"
+                        acceptCharset=""
+                        cssClass="form-inline">
 
-            <c:if test="${loggedUser.id==team.teamLeader.id}">
-                <p align="right">
-                    <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/teams/update/${team.id}" role="button">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    <fmt:message key="team.update"/>
-                    </a>
-                </p>
-             </c:if>
+                     <fmt:message key="team_name_placeholder" var="teamNamePlaceholder"/>
+                     <input name="teamName" value="${param.name}" class="form-control" autocomplete="off" placeholder="${teamNamePlaceholder}"/>
+                     <button class="btn btn-primary search-btn" type="submit"><i class="glyphicon glyphicon-search"></i>&nbsp;<fmt:message key="search"/></button>
+                 </form:form>
+                 <c:if test="${isUserInTeam}">
+                     <p align="right">
+                         <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/teams/create" role="button">
+                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                         <fmt:message key="team.create"/>
+                         </a>
+                     </p>
+                  </c:if>
+             </div>
 
-             <c:if test="${empty team}">
-                <p align="right">
-                    <a class="btn btn-lg btn-success btn-jumbotron" href="${pageContext.request.contextPath}/teams/create" role="button">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    <fmt:message key="team.create"/>
-                    </a>
-                </p>
-             </c:if>
-        </div>
-        
-        <c:if test="${not empty team}">
-            <div class="row">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th><fmt:message key="num"/></th>
-                            <th><fmt:message key="user.firstName"/></th>
-                            <th><fmt:message key="user.lastName"/></th>
-                            <th><fmt:message key="user.email"/></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${team.members}" var="member">
-                            <c:set var="count" value="${count + 1}" scope="page"/>
-                            <tr>
-                                <td class="col-xs-1 lead-column">${count}.</td>
-                                <td class="col-xs-3 lead-column"><c:out value="${member.firstName}"/></td>
-                                <td class="col-xs-3 lead-column"><c:out value="${member.lastName}"/></td>
-                                <td class="col-xs-3 lead-column"><c:out value="${member.email}"/></td>
-                            </tr>
-                        </c:forEach>
-                </table>
-            </div>
-        </c:if>
-    </jsp:attribute>
-</own:masterpage>
+             <div class="row">
+                 <table class="table">
+                     <thead>
+                         <tr>
+                             <th><fmt:message key="num"/></th>
+                             <th><fmt:message key="team.name"/></th>
+                             <th><fmt:message key="team.teamLeader"/></th>
+                               <c:if test="${isAdmin || (loggedUser.id == team.teamLeader.id)}">
+                                 <th class="text-center"><fmt:message key="remove"/></th>
+                               </c:if>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <c:forEach items="${teams}" var="team">
+                             <c:set var="count" value="${count + 1}" scope="page"/>
+                             <tr>
+                                 <td class="col-xs-1 lead-column">${count}.</td>
+                                 <td class="col-xs-3 lead-column"><a href="${pageContext.request.contextPath}/teams/detail/${team.id}" >
+                                        <c:out value="${team.name}"/></a></td>
+                                 <td class="col-xs-3 "><c:out value="${team.teamLeader.firstName}"/> <c:out value=" ${team.teamLeader.lastName}"/></td>
+
+                                 <c:if test="${isAdmin || (loggedUser.id == team.teamLeader.id)}">
+                                     <form:form method="post" action="${pageContext.request.contextPath}/teams/remove/${team.id}" cssClass="form-horizontal">
+                                         <td class="col-xs-1 text-center">
+                                             <button class="btn btn-default" type="submit">
+                                                 <span class="sr-only"><fmt:message key="remove"/></span>
+                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                             </button>
+                                         </td>
+                                     </form:form>
+                                 </c:if>
+                             </tr>
+                         </c:forEach>
+                 </table>
+             </div>
+
+         </jsp:attribute>
+     </own:masterpage>

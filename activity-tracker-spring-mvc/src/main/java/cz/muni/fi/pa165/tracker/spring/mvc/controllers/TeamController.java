@@ -9,6 +9,7 @@ import cz.muni.fi.pa165.tracker.dto.TeamCreateDTO;
 import cz.muni.fi.pa165.tracker.dto.TeamDTO;
 import cz.muni.fi.pa165.tracker.dto.TeamUpdateDTO;
 import cz.muni.fi.pa165.tracker.dto.UserDTO;
+import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.TeamFacade;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
@@ -16,6 +17,7 @@ import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueTeamNameCreateValidat
 import cz.muni.fi.pa165.tracker.spring.mvc.validator.UniqueTeamNameUpdateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,7 +54,7 @@ public class TeamController extends ActivityTrackerController {
     private UniqueTeamNameUpdateValidator uniqueTeamNameUpdateValidator;
 
     /**
-     * Shows user's team.
+     * Shows all teams..
      *
      * @param model
      * @param teamName if specified, team with given name is returned
@@ -62,37 +65,40 @@ public class TeamController extends ActivityTrackerController {
                         @RequestParam(value = "teamName", required = false) String teamName,
                         RedirectAttributes redirectAttributes,
                         UriComponentsBuilder uriComponentsBuilder) {
-        UserDTO loggedUser = getLoggedUser();
-        TeamDTO team;
-        if (teamName == null || teamName.isEmpty()) {
-            if (loggedUser.getTeam() == null || loggedUser.getTeam().isEmpty()) {
-                team = null;
-            } else {
-                try {
-                    team = teamFacade.getTeamByName(loggedUser.getTeam());
-                } catch (NonExistingEntityException | IllegalArgumentException e) {
-                    log.debug("Team " + loggedUser.getTeam() + " not found", e);
 
-                    redirectAttributes.addFlashAttribute("alert_warning", "Team " + loggedUser.getTeam() +
-                            " not found.");
-                    return "redirect:" + uriComponentsBuilder.path("/teams").build().encode().toUriString();
-                }
-            }
+        List<TeamDTO> teams = null;
+        if (teamName == null || teamName.isEmpty()) {
+            teams = teamFacade.getAllTeams();
         } else {
+            teams = new ArrayList<>();
             try {
-                team = teamFacade.getTeamByName(teamName);
+                teams.add(teamFacade.getTeamByName(teamName));
             } catch (NonExistingEntityException | IllegalArgumentException e) {
                 log.debug("Team " + teamName + " not found", e);
 
-                redirectAttributes.addFlashAttribute("alert_warning", "Team " + teamName +
-                        " not found.");
+                redirectAttributes.addFlashAttribute("alert_warning", "Team " + teamName + " not found.");
                 return "redirect:" + uriComponentsBuilder.path("/teams").build().encode().toUriString();
             }
         }
-
-        model.addAttribute("team", team);
+        model.addAttribute("teams", teams);
+        model.addAttribute("isUserInTeam", userFacade.getUsersWithoutTeam().contains(getLoggedUser()));
 
         return "teams/index";
+    }
+
+    /**
+     * Team detail page
+     *
+     * @return jsp template team/create
+     */
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public String detail(@PathVariable long id, Model model) {
+
+        TeamDTO team = teamFacade.getTeamById(id);
+        log.debug("team detail({})", team);
+
+        model.addAttribute("team", team);
+        return "teams/detail";
     }
 
     /**
@@ -139,7 +145,13 @@ public class TeamController extends ActivityTrackerController {
      * @return jsp template team/update
      */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String update(@PathVariable long id, Model model) {
+    public String update(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
+        if (!checkEditPermissions(id)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Permission denied.");
+            return "redirect:/teams/detail/" + id;
+        }
+
+
         TeamDTO found = teamFacade.getTeamById(id);
 
         TeamUpdateDTO updateDTO = new TeamUpdateDTO();
@@ -166,7 +178,12 @@ public class TeamController extends ActivityTrackerController {
             RedirectAttributes redirectAttributes,
             UriComponentsBuilder uriBuilder) {
 
+        if (!checkEditPermissions(id)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+            return "redirect:/teams/detail/" + id;
+        }
         log.debug("update team({})", formData);
+
         formData.setTeamLeader(userFacade.findUserById(formData.getTeamLeaderId()));
         formData.setMembers(teamFacade.getTeamById(id).getMembers());
         if (bindingResult.hasErrors()) {
@@ -177,7 +194,7 @@ public class TeamController extends ActivityTrackerController {
         teamFacade.updateTeam(formData);
         redirectAttributes.addFlashAttribute("alert_success", "Team " + formData.getName() + " updated");
 
-        return "redirect:" + uriBuilder.path("/teams").build().encode().toUriString();
+        return "redirect:" + uriBuilder.path("/teams/detail/" + id).build().encode().toUriString();
     }
 
     /**
@@ -188,11 +205,17 @@ public class TeamController extends ActivityTrackerController {
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public String remove(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
                          RedirectAttributes redirectAttributes) {
+        if (!checkEditPermissions(id)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+            return "redirect:/teams/";
+        }
+
+        log.debug("remove team({})", id);
 
         try {
             teamFacade.removeTeam(teamFacade.getTeamById(id));
             redirectAttributes.addFlashAttribute("alert_success", "Team with id " + id + " deleted");
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error("Could not delete " + e.getMessage(), e);
             redirectAttributes.addFlashAttribute("alert_danger", "Team with id " + id + " can not be deleted");
         }
@@ -204,22 +227,44 @@ public class TeamController extends ActivityTrackerController {
      *
      * @param model
      */
-    @RequestMapping(value = "/update/{teamId}/removeUser/{userId}", method = RequestMethod.POST)
-    public String removeUser(@PathVariable long teamId, @PathVariable long userId,
-                             Model model, UriComponentsBuilder uriBuilder,
-                             RedirectAttributes redirectAttributes) {
-
-        UserDTO user = userFacade.findUserById(userId);
-        TeamDTO team = teamFacade.getTeamById(teamId);
-
-        if (team.getTeamLeader().getId() == userId) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Can't remove team leader");
-            return "redirect:" + uriBuilder.path("/teams/update/" + teamId).toUriString();
+    @RequestMapping(value = "/removeUsers/{teamId}", method = RequestMethod.GET)
+    public String removeUser(@PathVariable long teamId, Model model, RedirectAttributes redirectAttributes) {
+        if (!checkEditPermissions(teamId)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+            return "redirect:/teams/detail/" + teamId;
         }
-        teamFacade.removeUserFromTeam(team, user);
-        redirectAttributes.addFlashAttribute("alert_success", "User removed from team");
 
-        return "redirect:" + uriBuilder.path("/teams/update/" + teamId).toUriString();
+        TeamDTO currentTeam = teamFacade.getTeamById(teamId);
+
+        //prepare all team members except leader - we can not remove him
+        List<UserDTO> members = currentTeam.getMembers();
+        members.remove(currentTeam.getTeamLeader());
+
+        TeamDTO tempTeam = new TeamDTO();
+        tempTeam.setMembers(members);
+
+        model.addAttribute("users", tempTeam);
+        model.addAttribute("currentTeam", currentTeam);
+        return "/teams/removeUsers";
+    }
+
+    @RequestMapping(value = "/removeUsers/{teamId}", method = RequestMethod.POST)
+    public String removeUser(@PathVariable long teamId, UriComponentsBuilder uriBuilder, @RequestBody String body,
+                             RedirectAttributes redirectAttributes) {
+        if (!checkEditPermissions(teamId)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+            return "redirect:/teams/detail/" + teamId;
+        }
+
+        String[] idS = body.split("[&]*members=|[&]*[_]+members=[\\d]*");
+
+        TeamDTO team = teamFacade.getTeamById(teamId);
+        for (String id : idS) {
+            if (!id.isEmpty())
+                teamFacade.removeUserFromTeam(team, new UserDTO(Long.parseLong(id)));
+        }
+
+        return "redirect:" + uriBuilder.path("/teams/detail/" + teamId).toUriString();
     }
 
     /**
@@ -228,7 +273,12 @@ public class TeamController extends ActivityTrackerController {
      * @param model
      */
     @RequestMapping(value = "/addUsers/{teamId}", method = RequestMethod.GET)
-    public String addUsers(@PathVariable long teamId, Model model) {
+    public String addUsers(@PathVariable long teamId, Model model, RedirectAttributes redirectAttributes) {
+        if (!checkEditPermissions(teamId)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+            return "redirect:/teams/detail/" + teamId;
+        }
+
         TeamDTO currentTeam = teamFacade.getTeamById(teamId);
         List<UserDTO> withoutTeam = userFacade.getUsersWithoutTeam();
         TeamDTO tempTeam = new TeamDTO();
@@ -242,9 +292,13 @@ public class TeamController extends ActivityTrackerController {
      * Add users to team
      */
     @RequestMapping(value = "/addUsers/{teamId}", method = RequestMethod.POST)
-    public String addUsers(@PathVariable long teamId,
-                           UriComponentsBuilder uriBuilder,
-                           @RequestBody String body) {
+    public String addUsers(@PathVariable long teamId, UriComponentsBuilder uriBuilder, @RequestBody String body,
+                           RedirectAttributes redirectAttributes) {
+        if (!checkEditPermissions(teamId)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+            return "redirect:/teams/detail/" + teamId;
+        }
+
         String[] idS = body.split("[&]*members=|[&]*[_]+members=[\\d]*");
         TeamDTO team = teamFacade.getTeamById(teamId);
         for (String id : idS) {
@@ -252,7 +306,7 @@ public class TeamController extends ActivityTrackerController {
                 teamFacade.addUserToTeam(team, new UserDTO(Long.parseLong(id)));
         }
 
-        return "redirect:" + uriBuilder.path("/teams/update/" + teamId).toUriString();
+        return "redirect:" + uriBuilder.path("/teams/detail/" + teamId).toUriString();
     }
 
     @InitBinder
@@ -267,4 +321,13 @@ public class TeamController extends ActivityTrackerController {
             binder.addValidators(uniqueTeamNameUpdateValidator);
         }
     }
+
+    private boolean checkEditPermissions(long teamId) {
+        return checkEditPermissions(teamFacade.getTeamById(teamId));
+    }
+
+    private boolean checkEditPermissions(TeamDTO team) {
+        return team.getTeamLeader().equals(getLoggedUser()) || getLoggedUser().getRole().equals(UserRole.ADMIN);
+    }
+
 }
