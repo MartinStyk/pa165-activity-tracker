@@ -27,11 +27,11 @@ curl -i -X GET http://localhost:8080/pa165/rest/users/4
 ```
 Find team of user
 ```
-curl -i -X GET http://localhost:8080/pa165/rest/users/4/team
+curl -i -X GET http://localhost:8080/pa165/rest/users/5/team
 ```
 Delete user
 ```
-curl -i -X DELETE http://localhost:8080/pa165/rest/users/2
+curl -i -X DELETE http://localhost:8080/pa165/rest/users/4
 ```
 Create new user
 ```
@@ -66,5 +66,5 @@ curl -i -X GET http://localhost:8080/pa165/rest/reports?sportId=4&sportId=2
 ```
 Find report by id
 ```
-curl -i -X GET http://localhost:8080/pa165/rest/reports/20
+curl -i -X GET http://localhost:8080/pa165/rest/reports/5
 ```
