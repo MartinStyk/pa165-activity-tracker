@@ -115,7 +115,8 @@ public class ReportController extends ActivityTrackerController {
         updateDTO.setId(found.getId());
         updateDTO.setEndTime(found.getEndTime());
         updateDTO.setStartTime(found.getStartTime());
-        model.addAttribute("sportActivities", sportActivities);
+        updateDTO.setSportActivityId(found.getSportActivity().getId());
+
         model.addAttribute("sportActivities", sportActivities);
         model.addAttribute("reportUpdate", updateDTO);
 
