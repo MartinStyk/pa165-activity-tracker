@@ -24,6 +24,7 @@ public class UserCreateDTO {
     private String email;
 
     @NotNull
+    @NotEmpty
     private String passwordHash;
 
     @NotNull
