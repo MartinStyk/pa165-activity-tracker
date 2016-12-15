@@ -59,7 +59,7 @@ public class UserController extends ActivityTrackerController {
         userFacade.updateUser(formData);
         redirectAttributes.addFlashAttribute("alert_success", "User " + formData.getEmail() + " was updated");
 
-        return "redirect:";
+        return "redirect:/";
     }
 
     @RequestMapping(value = {"register", "register/"}, method = RequestMethod.GET)

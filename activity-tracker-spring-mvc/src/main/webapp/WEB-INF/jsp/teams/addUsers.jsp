@@ -26,9 +26,9 @@
                    cssClass="form-horizontal">
 
             <div class="form-group ${addUsers_error?'has-error':''}">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                                        
-                    <form:select multiple="true" size="10" path="members" items="${users.members}" itemLabel="email" itemValue="id"/>
+                    <form:select multiple="true"  class="form-control" path="members" items="${users.members}" itemLabel="email" itemValue="id"/>
                     <form:errors path="members" cssClass="help-block"/>
                 </div>
             </div>
