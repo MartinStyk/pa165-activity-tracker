@@ -55,11 +55,13 @@
                                     </form:form>
                                 </c:when>
                                 <c:otherwise>
-                                    <form:form method="post" action="${pageContext.request.contextPath}/users/update/${user.id}" cssClass="form-horizontal">
-                                            <td class="col-xs-1 text-center">
-                                                <a href="${pageContext.request.contextPath}/users/makeRegular/${user.id}" class="btn btn-default">Regular</a>
-                                            </td>
-                                     </form:form>
+                                    <c:if test="${loggedUser.id!=user.id}">
+                                        <form:form method="post" action="${pageContext.request.contextPath}/users/update/${user.id}" cssClass="form-horizontal">
+                                                <td class="col-xs-1 text-center">
+                                                    <a href="${pageContext.request.contextPath}/users/makeRegular/${user.id}" class="btn btn-default">Regular</a>
+                                                </td>
+                                         </form:form>
+                                    </c:if>
                                 </c:otherwise>
                                 </c:choose>
                                 <c:if test="${loggedUser.id!=user.id}">
