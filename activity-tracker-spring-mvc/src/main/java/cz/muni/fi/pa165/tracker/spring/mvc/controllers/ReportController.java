@@ -89,13 +89,13 @@ public class ReportController extends ActivityTrackerController {
         }
 
         Long id = null;
-        try {
-            id = activityReportFacade.createActivityReport(formData);
-            redirectAttributes.addFlashAttribute("alert_success", "Activity report with id " + id + " created");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "This activity can not be created");
-            log.error("Activity not created", e);
+
+        if (formData.getUserId() != getLoggedUser().getId()) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Create permission denied.");
+            return "redirect:/";
         }
+        id = activityReportFacade.createActivityReport(formData);
+        redirectAttributes.addFlashAttribute("alert_success", "Activity report with id " + id + " created");
         return "redirect:" + uriComponentsBuilder.path("/reports").buildAndExpand(id).encode().toUriString();
     }
 
@@ -142,17 +142,17 @@ public class ReportController extends ActivityTrackerController {
         }
 
         try {
+            if (formData.getUserId() != getLoggedUser().getId()) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Update permission denied.");
+                return "redirect:/";
+            }
             activityReportFacade.updateActivityReport(formData);
             redirectAttributes.addFlashAttribute("alert_success", "Report " + formData.getId() + " updated");
         } catch (NonExistingEntityException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("alert_danger", "Report can not be updated, "
                     + "because it doesn't exist");
             log.error("Report not updated", e);
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Report can not be updated");
-            log.error("Report not updated", e);
         }
-
         return "redirect:" + uriBuilder.path("/reports").build().encode().toUriString();
     }
 
@@ -163,7 +163,7 @@ public class ReportController extends ActivityTrackerController {
      */
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public String remove(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder,
-                         RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
 
         try {
             activityReportFacade.removeActivityReport(id);
@@ -172,12 +172,7 @@ public class ReportController extends ActivityTrackerController {
             redirectAttributes.addFlashAttribute("alert_danger", "Report can not be deleted, "
                     + "since it doesn't exist");
             log.error("Report not deleted", e);
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("alert_danger", "Report can not be deleted, "
-                    + "there are Report activities referencing it.");
-            log.error("Report not deleted", e);
         }
-
         return "redirect:" + uriBuilder.path("/reports").toUriString();
     }
 
@@ -191,8 +186,9 @@ public class ReportController extends ActivityTrackerController {
     @InitBinder
     protected void initTimeSequenceBinder(WebDataBinder binder) {
 
-        if (binder.getTarget() instanceof ActivityReportCreateDTO)
+        if (binder.getTarget() instanceof ActivityReportCreateDTO) {
             binder.addValidators(new TimeSequenceValidator());
+        }
     }
 
 }
