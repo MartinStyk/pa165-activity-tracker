@@ -34,25 +34,5 @@
             </div>
             <button class="btn btn-primary createBtn center-block allow-vertical-space" type="submit"><fmt:message key="submit"/></button>
         </form:form>
-<%--        <div class="form-group ${addUsers_error?'has-error':''}">
-            <div class="col-sm-10">
-                <select name="members" >
-                    <options items="">
-                    <c:forEach items="${users}" var="user">
-                        <option value="${user.id}" label="${user.email}"
-                    </c:forEach>
-                </select>                  
-                <input type="submit" value="Submit" />
-                
-                
-                                <form:select path="id" cssClass="form-control">
-                                        <c:forEach items="${users}" var="user">
-                                            <form:option value="${user.id}"> ${user.email} </form:option>
-                                        </c:forEach>
-                                    </form:select>
-                                  <form:errors path="users" cssClass="help-block"/>
-            </div>
-        </div>
---%>
     </jsp:attribute>
 </own:masterpage>

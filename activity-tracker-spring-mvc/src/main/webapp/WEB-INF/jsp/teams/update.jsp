@@ -55,16 +55,7 @@
             <div class="form-group ${members_error?'has-error':''}">
                 <form:label path="members" cssClass="col-sm-2 control-label" style="display: none"><fmt:message key="team.members"/></form:label>
             </div>
-                        
-
-    <%--    <div class="form-group ${userEmail_error?'has-error':''}">
-                <form path="userEmail" cssClass="col-sm-2 control-label"><fmt:message key="team.addUser"/></form>
-                <div class="col-sm-10">
-                    <form:input path="userEmail" cssClass="form-control"/>
-                    <form:errors path="userEmail" cssClass="help-block"/>
-                </div>
-            </div>
-    --%>    
+            
             <div>
                 <p>
                     <button class="btn btn-primary createBtn center-block allow-vertical-space" type="submit"><fmt:message key="submit"/></button>

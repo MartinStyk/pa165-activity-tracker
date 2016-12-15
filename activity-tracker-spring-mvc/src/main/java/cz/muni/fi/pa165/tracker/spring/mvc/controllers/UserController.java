@@ -135,7 +135,7 @@ public class UserController extends ActivityTrackerController {
             redirectAttributes.addFlashAttribute("alert_danger", "You can't delete youself");
             return "redirect:" + uriBuilder.path("/users").toUriString();
         }
-        
+
         try {
             userFacade.removeUser(userFacade.findUserById(id));
             redirectAttributes.addFlashAttribute("alert_success", "User with id " + id + " deleted");
