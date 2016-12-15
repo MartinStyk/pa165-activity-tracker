@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.tracker.spring.mvc.controllers;
 
 import cz.muni.fi.pa165.tracker.dto.*;
-import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.ActivityReportFacade;
 import cz.muni.fi.pa165.tracker.facade.SportActivityFacade;
 import cz.muni.fi.pa165.tracker.spring.mvc.validator.TimeSequenceValidator;
