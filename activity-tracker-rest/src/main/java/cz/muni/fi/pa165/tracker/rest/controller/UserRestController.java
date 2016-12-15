@@ -7,12 +7,10 @@ import cz.muni.fi.pa165.tracker.exception.ActivityTrackerDataAccessException;
 import cz.muni.fi.pa165.tracker.exception.NonExistingEntityException;
 import cz.muni.fi.pa165.tracker.facade.TeamFacade;
 import cz.muni.fi.pa165.tracker.facade.UserFacade;
-import cz.muni.fi.pa165.tracker.rest.exception.ExistingResourceException;
-import cz.muni.fi.pa165.tracker.rest.exception.InvalidResourceException;
-import cz.muni.fi.pa165.tracker.rest.exception.RequestedResourceNotFoundException;
-import cz.muni.fi.pa165.tracker.rest.exception.ResourceNotModifiedException;
+import cz.muni.fi.pa165.tracker.rest.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,6 +123,9 @@ public class UserRestController {
         } catch (NonExistingEntityException | IllegalArgumentException e) {
             logger.error("Exception in deleteUser()", e);
             throw new RequestedResourceNotFoundException(e);
+        } catch (DataAccessException e) {
+            logger.error("Constrain violation in deleteUser()", e);
+            throw new ResourceCanNotBeDeleted(e);
         }
     }
 
