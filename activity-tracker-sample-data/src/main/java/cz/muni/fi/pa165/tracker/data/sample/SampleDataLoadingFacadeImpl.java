@@ -81,7 +81,7 @@ public class SampleDataLoadingFacadeImpl implements SampleDataLoadingFacade {
         sports.put("aerobics", sportActivity("Aerobics", 6.83));
         sports.put("swimming", sportActivity("Swimming", 5.22));
         sports.put("yoga", sportActivity("Yoga", 3.00));
-        sports.put("workout", sportActivity("Wourking out", 2.50));
+        sports.put("workout", sportActivity("Working out", 2.50));
 
         LOGGER.info("All sports were loaded.");
     }

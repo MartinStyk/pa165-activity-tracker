@@ -62,7 +62,7 @@ curl -i -X GET http://localhost:8080/pa165/rest/reports?sportId=4
 ```
 Find reports by sportId and userId
 ```
-curl -i -X GET http://localhost:8080/pa165/rest/reports?sportId=4&sportId=2
+curl -i -X GET http://localhost:8080/pa165/rest/reports?sportId=4&userId=5
 ```
 Find report by id
 ```
