@@ -33,7 +33,7 @@
             <form:form method="POST"
                    action="${pageContext.request.contextPath}/settings"
                    acceptCharset=""
-                   modelAttribute="loggedUser"
+                   modelAttribute="user"
                    cssClass="form-horizontal">
           
                 

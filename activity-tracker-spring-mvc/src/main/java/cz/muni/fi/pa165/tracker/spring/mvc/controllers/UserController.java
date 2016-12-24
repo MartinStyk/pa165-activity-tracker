@@ -35,13 +35,16 @@ public class UserController extends ActivityTrackerController {
 
     @RequestMapping(value = {"settings", "settings/"}, method = RequestMethod.GET)
     public String settings(Model model) {
-        log.debug("update userUpdate({})", getLoggedUser());
+        UserDTO user = getLoggedUser();
+        log.debug("update userUpdate({})", user);
+
+        model.addAttribute("user", user);
         return "user/settings";
     }
 
     @RequestMapping(value = {"settings", "settings/"}, method = RequestMethod.POST)
     public String settings(
-            @Valid @ModelAttribute("loggedUser") UserDTO formData,
+            @Valid @ModelAttribute("user") UserDTO formData,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
