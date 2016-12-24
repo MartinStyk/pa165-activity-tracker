@@ -5,6 +5,8 @@
  */
 package cz.muni.fi.pa165.tracker.dto;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotNull;
  */
 public class TeamCreateDTO {
 
+    @NotBlank
     @NotNull
     private String name;
 
