@@ -5,7 +5,7 @@
     <parent>
         <artifactId>activity-tracker</artifactId>
         <groupId>cz.muni.fi.pa165</groupId>
-        <version>0.3</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>cz.muni.fi.pa165</groupId>
             <artifactId>activity-tracker-service</artifactId>
-            <version>0.3</version>
+            <version>0.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
