@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.tracker.dto;
 import cz.muni.fi.pa165.tracker.enums.Sex;
 import cz.muni.fi.pa165.tracker.enums.UserRole;
 import cz.muni.fi.pa165.tracker.validation.PastDate;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
@@ -24,15 +24,17 @@ public class UserCreateDTO {
     private String email;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String passwordHash;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "The name can only contain letters")
     private String firstName;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "The name can only contain letters")
     private String lastName;
 
     @NotNull

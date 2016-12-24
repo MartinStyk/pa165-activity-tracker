@@ -1,10 +1,10 @@
 package cz.muni.fi.pa165.tracker.dto;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
-import java.util.Objects;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * DTO for creating SportActivity
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class SportActivityCreateDTO {
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @Min(1)
