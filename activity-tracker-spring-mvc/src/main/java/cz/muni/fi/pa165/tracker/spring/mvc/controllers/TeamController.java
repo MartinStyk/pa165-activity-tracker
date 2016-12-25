@@ -66,6 +66,8 @@ public class TeamController extends ActivityTrackerController {
                         RedirectAttributes redirectAttributes,
                         UriComponentsBuilder uriComponentsBuilder) {
 
+        teamName = getUtf8RequestParam(teamName);
+
         List<TeamDTO> teams = null;
         if (teamName == null || teamName.isEmpty()) {
             teams = teamFacade.getAllTeams();

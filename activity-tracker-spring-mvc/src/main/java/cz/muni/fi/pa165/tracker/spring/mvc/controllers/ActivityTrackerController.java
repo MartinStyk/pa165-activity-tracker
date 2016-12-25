@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Parent controller for all application controllers
@@ -46,6 +47,17 @@ public class ActivityTrackerController {
         for (FieldError fe : bindingResult.getFieldErrors()) {
             model.addAttribute(fe.getField() + "_error", true);
         }
+    }
+
+    protected String getUtf8RequestParam(String iso8859String) {
+        String utf8String = null;
+
+        if (iso8859String != null) {
+            byte[] bytes = iso8859String.getBytes(StandardCharsets.ISO_8859_1);
+            utf8String = new String(bytes, StandardCharsets.UTF_8);
+        }
+
+        return utf8String;
     }
 
 }

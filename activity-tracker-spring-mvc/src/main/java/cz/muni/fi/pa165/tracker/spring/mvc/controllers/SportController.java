@@ -58,6 +58,8 @@ public class SportController extends ActivityTrackerController {
                         RedirectAttributes redirectAttributes,
                         UriComponentsBuilder uriComponentsBuilder) {
 
+        sportName = getUtf8RequestParam(sportName);
+
         List<SportActivityDTO> sports = null;
 
         if (sportName == null || sportName.isEmpty()) {
