@@ -62,8 +62,8 @@
                                   <span class="caret"></span>
                               </a>
                               <div class="dropdown-menu" style="padding:27px; background-color: white">
-                                  <p>Logged user:&nbsp;<span class="fullName">${loggedUser.firstName}&nbsp;${loggedUser.lastName}</span></p>
-                                  <p>Email:&nbsp;<span class="userEmail">${loggedUser.email}</span></p>
+                                  <p><fmt:message key="menu_user"/>&nbsp;<span class="fullName">${loggedUser.firstName}&nbsp;${loggedUser.lastName}</span></p>
+                                  <p><fmt:message key="menu_email"/>&nbsp;<span class="userEmail">${loggedUser.email}</span></p>
                                   <c:if test="${isAdmin}">
                                        <p><fmt:message key="admin_rights"/></p>
                                   </c:if>
