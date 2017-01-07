@@ -5,7 +5,7 @@
     <parent>
         <artifactId>activity-tracker</artifactId>
         <groupId>cz.muni.fi.pa165</groupId>
-        <version>0.4-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>cz.muni.fi.pa165</groupId>
             <artifactId>activity-tracker-sample-data</artifactId>
-            <version>0.4-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

@@ -5,7 +5,7 @@
     <groupId>cz.muni.fi.pa165</groupId>
     <artifactId>activity-tracker</artifactId>
     <packaging>pom</packaging>
-    <version>0.4-SNAPSHOT</version>
+    <version>1.0</version>
 
     <name>Activity Tracker Parent</name>
 
@@ -40,7 +40,7 @@
         <module>activity-tracker-service</module>
         <module>activity-tracker-sample-data</module>
         <module>activity-tracker-rest</module>
-    <module>activity-tracker-spring-mvc</module>
+        <module>activity-tracker-spring-mvc</module>
         <module>activity-tracker-validation</module>
     </modules>
 
